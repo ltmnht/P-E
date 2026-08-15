@@ -1955,7 +1955,7 @@
     </div>
     <div style="display:flex; align-items:center; gap:10px;">
       <div class="sfx-toggle" id="homeBtn" title="Về màn hình chọn hội thoại" style="display:none;">🏠</div>
-      <div class="sfx-toggle" id="sfxToggle" title="Toggle sound effects">🔊</div>
+      <div class="sfx-toggle" id="sfxToggle" title="Tắt/bật âm thanh & giọng đọc AI">🔊</div>
     </div>
   </div>
 
@@ -3925,6 +3925,7 @@ sfxToggle.addEventListener('click', ()=>{
   sfxOn = !sfxOn;
   sfxToggle.textContent = sfxOn ? '🔊' : '🔇';
   if(sfxOn){ ensureCtx(); sfx.tap(); }
+  else if(window.speechSynthesis){ window.speechSynthesis.cancel(); }
 });
 
 /* ================= Karaoke-style word highlight ================= */
@@ -3960,6 +3961,7 @@ function clearKaraoke(){
 let speechToken = 0;
 function speak(text){
   try{
+    if(!sfxOn) return;
     if(!('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
     clearKaraoke();
