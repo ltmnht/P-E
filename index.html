@@ -4267,6 +4267,7 @@ const isAndroid = /Android/i.test(navigator.userAgent);
 let recognition = null;
 let isRecording = false;
 let mediaRecorder = null;
+let recordSafetyTimer = null;
 let recordedChunks = [];
 let myAudioURL = null;
 let micStream = null; // reused across recordings so we only ask permission once per session
@@ -5081,8 +5082,15 @@ async function startRecording(){
 
   recognition = new SpeechRecognitionCtor();
   recognition.lang = 'en-US';
+  recognition.continuous = true;
   recognition.interimResults = false;
   recognition.maxAlternatives = 1;
+
+  // continuous mode means the browser won't auto-stop after a short pause,
+  // so give the learner a generous window to say a full sentence, then stop
+  // automatically as a safety net (in case they forget to tap the mic again).
+  clearTimeout(recordSafetyTimer);
+  recordSafetyTimer = setTimeout(()=>{ stopRecording(); }, 20000);
 
   let finalTranscript = '';
 
@@ -5107,6 +5115,7 @@ async function startRecording(){
   };
   recognition.onend = ()=>{
     isRecording = false;
+    clearTimeout(recordSafetyTimer);
     micBtn.classList.remove('recording');
     setMicIdle();
     sfx.recordStop();
