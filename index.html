@@ -4935,36 +4935,75 @@ function renderComparison(targetWords, matched){
   }).join(' ');
 }
 
+// ---- Phrase-chunking for "Luyện từng cụm" ----
+// Chunks should break at natural pause points (punctuation) and BEFORE
+// connector words (and/but/because/at/for/to...) rather than after them,
+// so each chunk reads as a self-contained, grammatical phrase instead of
+// a dangling fragment like "...movies and" or "...games at".
+const CHUNK_MIN = 2;       // avoid tiny 1-word chunks
+const CHUNK_SOFT_MAX = 6;  // prefer breaking around this length
+const CHUNK_HARD_MAX = 8;  // force a break if a chunk grows past this
+
+// Words that should start a NEW chunk (subordinators, coordinators, relatives)
+const CHUNK_BREAK_BEFORE_STRONG = new Set([
+  'and','but','or','so','because','although','though','while','when','if',
+  'where','since','unless','until','before','after'
+]);
+// Prepositions: only used to break once a chunk is already fairly long,
+// so short prepositional phrases ("at 7 a.m.") aren't chopped needlessly.
+const CHUNK_BREAK_BEFORE_PREP = new Set([
+  'at','in','on','with','for','to','from','about','into','over','under',
+  'between','during','without','through','of','by'
+]);
+
 function splitIntoChunks(text){
 
   const words = text.trim().split(/\s+/).filter(Boolean);
 
-  if(words.length <= 3){
+  if(words.length <= 4){
     return [text.trim()];
   }
 
   const chunks = [];
   let current = [];
 
-  words.forEach((word, index) => {
+  for(let i = 0; i < words.length; i++){
 
-    current.push(word);
+    current.push(words[i]);
+    const isLast = i === words.length - 1;
+    if(isLast) continue;
 
-    const clean = word.toLowerCase().replace(/[.,!?]/g,'');
+    const word = words[i];
+    const nextClean = words[i+1].toLowerCase().replace(/[.,!?;:]/g,'');
+    const endsSentenceOrPause = /[,;:.!?]$/.test(word);
+    const len = current.length;
 
-    const shouldBreak =
-      current.length >= 3 &&
-      (
-        /[.,!?]$/.test(word) ||
-        ['and','but','because','so','then','at','in','on','with','for','to'].includes(clean) ||
-        current.length >= 5
-      );
+    let shouldBreak = false;
+
+    if(len >= CHUNK_HARD_MAX){
+      shouldBreak = true;
+    } else if(len >= CHUNK_MIN){
+      if(endsSentenceOrPause){
+        shouldBreak = true;
+      } else if(CHUNK_BREAK_BEFORE_STRONG.has(nextClean)){
+        shouldBreak = true;
+      } else if(len >= CHUNK_SOFT_MAX && CHUNK_BREAK_BEFORE_PREP.has(nextClean)){
+        shouldBreak = true;
+      }
+    }
+
+    // Don't strand a too-short remainder at the very end of the sentence —
+    // fold it into the current chunk instead of creating a lonely 1-word tail.
+    const remaining = words.length - (i + 1);
+    if(shouldBreak && remaining > 0 && remaining < CHUNK_MIN){
+      shouldBreak = false;
+    }
 
     if(shouldBreak){
       chunks.push(current.join(' '));
       current = [];
     }
-  });
+  }
 
   if(current.length){
     chunks.push(current.join(' '));
@@ -4975,6 +5014,8 @@ function splitIntoChunks(text){
 
 function normalizeChunks(chunks){
 
+  if(chunks.length <= 1) return chunks;
+
   const result = [];
 
   chunks.forEach(chunk => {
@@ -4982,7 +5023,7 @@ function normalizeChunks(chunks){
     const words = chunk.split(/\s+/).filter(Boolean);
 
     if(
-      words.length <= 1 &&
+      words.length < CHUNK_MIN &&
       result.length > 0
     ){
       result[result.length - 1] += ' ' + chunk;
