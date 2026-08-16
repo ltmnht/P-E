@@ -1231,9 +1231,6 @@
     100%{ transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1) rotate(var(--rot)); opacity:0; }
   }
 
-  @media (prefers-reduced-motion: reduce){
-    *{ animation: none !important; transition: none !important; }
-  }
   .comparison-label{
   margin-top: 14px;
 }
@@ -3891,9 +3888,58 @@ function ensureCtx(){
     const Ctor = window.AudioContext || window.webkitAudioContext;
     if(Ctor) actx = new Ctor();
   }
-  if(actx && actx.state === 'suspended') actx.resume();
+  if(actx && actx.state !== 'running'){
+    // iOS Safari/Chrome can leave the context "suspended" even after resume()
+    // is called once, so just fire-and-retry rather than assuming it worked.
+    actx.resume().catch(()=>{});
+  }
   return actx;
 }
+
+/* ---- iOS Safari & Chrome-on-iOS lock WebAudio + SpeechSynthesis behind a
+   real user gesture much more strictly than desktop/Android. A plain
+   resume() often silently fails there. Playing one silent buffer and
+   speaking one empty utterance inside the very first tap/touch fully
+   unlocks both APIs for the rest of the session. ---- */
+let audioUnlockedIOS = false;
+function unlockAudioForIOS(){
+  if(audioUnlockedIOS) return;
+  audioUnlockedIOS = true;
+  try{
+    const ctx = ensureCtx();
+    if(ctx){
+      const buffer = ctx.createBuffer(1, 1, 22050);
+      const src = ctx.createBufferSource();
+      src.buffer = buffer;
+      src.connect(ctx.destination);
+      if(src.start) src.start(0); else if(src.noteOn) src.noteOn(0);
+    }
+  }catch(e){}
+  try{
+    if('speechSynthesis' in window){
+      const warm = new SpeechSynthesisUtterance(' ');
+      warm.volume = 0;
+      window.speechSynthesis.speak(warm);
+      window.speechSynthesis.cancel();
+    }
+  }catch(e){}
+}
+document.addEventListener('touchend', unlockAudioForIOS, {passive:true});
+document.addEventListener('click', unlockAudioForIOS);
+
+/* ---- Some iOS builds populate the voice list asynchronously after the
+   page loads, so the very first speak() call can go out with no voice
+   selected and produce no sound. Cache the list once it's ready and pick
+   an English voice explicitly instead of relying on the default. ---- */
+let cachedVoices = [];
+function refreshVoices(){
+  if('speechSynthesis' in window) cachedVoices = window.speechSynthesis.getVoices();
+}
+if('speechSynthesis' in window){
+  refreshVoices();
+  window.speechSynthesis.onvoiceschanged = refreshVoices;
+}
+
 function tone(freq, start, dur, type='sine', peakGain=0.18){
   const ctx = ensureCtx();
   if(!ctx || !sfxOn) return;
@@ -3975,6 +4021,10 @@ function speak(text){
     const u = new SpeechSynthesisUtterance(text);
     u.lang = 'en-US';
     u.rate = 0.92;
+    if(cachedVoices.length){
+      const v = cachedVoices.find(v => v.lang === 'en-US') || cachedVoices.find(v => v.lang && v.lang.startsWith('en'));
+      if(v) u.voice = v;
+    }
     u.onstart = ()=>{
       if(myToken !== speechToken) return;
       currentSpeakingAvatar = speakingAvatar;
