@@ -3164,6 +3164,904 @@ body{ background: linear-gradient(180deg, var(--sky-pale) 0%, var(--cream) 55%) 
     scroll-behavior:auto !important;
   }
 }
+
+/* =====================================================================
+   EFB CLUB — header, logo, quick actions & responsive layout upgrade
+   ===================================================================== */
+
+/* ---- sticky glass header ---- */
+.efb-header{
+  position:sticky;
+  top:0;
+  z-index:60;
+  width:min(1040px, 100%) !important;
+  margin:calc(-1 * env(safe-area-inset-top, 0px)) auto 10px !important;
+  padding:calc(10px + env(safe-area-inset-top, 0px)) 14px 10px;
+  gap:12px;
+  background:rgba(255,255,255,.78);
+  -webkit-backdrop-filter:saturate(1.4) blur(14px);
+  backdrop-filter:saturate(1.4) blur(14px);
+  border:1px solid rgba(139,95,199,.14);
+  border-radius:0 0 22px 22px;
+  box-shadow:0 10px 28px -16px rgba(94,60,150,.45);
+}
+.efb-brand{ display:flex; align-items:center; gap:12px; min-width:0; }
+.efb-logo{
+  width:48px; height:48px; flex-shrink:0;
+  filter:drop-shadow(0 6px 10px rgba(122,79,194,.35));
+}
+.efb-logo svg{ width:100%; height:100%; display:block; }
+.efb-wordmark{ display:flex; flex-direction:column; gap:2px; min-width:0; }
+.efb-wordmark .title{
+  font-family:'Be Vietnam Pro', -apple-system, 'Segoe UI', Roboto, sans-serif !important;
+  font-size:24px; font-weight:900; line-height:1; letter-spacing:.4px; gap:7px;
+}
+.efb-w1{ color:#5B3A96 !important; }
+.efb-w2{
+  color:#fff !important;
+  background:linear-gradient(135deg,#A97BE0,#7A4FC2);
+  padding:3px 9px 3px; border-radius:9px;
+  font-size:.82em; letter-spacing:1.2px;
+}
+.efb-wordmark .subtitle{
+  font-size:11px; letter-spacing:1.1px; color:#7D6A9E; white-space:nowrap;
+  overflow:hidden; text-overflow:ellipsis;
+}
+
+/* ---- quick actions (Home + Sound) ---- */
+.efb-actions{ display:flex; align-items:center; gap:10px; flex-shrink:0; }
+.efb-btn{
+  appearance:none; -webkit-appearance:none;
+  display:inline-flex; align-items:center; justify-content:center; gap:9px;
+  min-height:48px; min-width:48px; padding:0 18px 0 14px;
+  border-radius:999px;
+  border:1.5px solid rgba(139,95,199,.28);
+  background:#fff; color:#5B3A96;
+  font-family:'Be Vietnam Pro', -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size:14px; font-weight:700; line-height:1.1; text-align:left;
+  cursor:pointer;
+  box-shadow:0 6px 14px -8px rgba(94,60,150,.5);
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+  transition:transform .16s cubic-bezier(.32,.72,0,1), background .16s ease, box-shadow .16s ease;
+}
+.efb-btn:hover{ background:#F4ECFD; transform:translateY(-1px); }
+.efb-btn:active{ transform:scale(.95); }
+.efb-btn:focus-visible{ outline:3px solid #8B5FC7; outline-offset:3px; }
+.efb-ico{ width:24px; height:24px; flex-shrink:0; }
+.efb-label{ display:flex; flex-direction:column; gap:1px; white-space:nowrap; }
+.efb-btn{ white-space:nowrap; }
+.efb-label-main{ font-size:14px; }
+.efb-state{ font-size:11.5px; font-weight:700; color:#2E8B57; }
+.efb-home{
+  background:linear-gradient(135deg,#A97BE0,#7A4FC2); color:#fff; border-color:transparent;
+}
+.efb-home:hover{ background:linear-gradient(135deg,#B58CEB,#8657CC); }
+.efb-sound .efb-ico-off{ display:none; }
+.efb-sound.is-muted .efb-ico-on{ display:none; }
+.efb-sound.is-muted .efb-ico-off{ display:block; }
+.efb-sound.is-muted{ background:#F1EDF6; color:#6B6280; border-color:rgba(107,98,128,.3); }
+.efb-sound.is-muted .efb-state{ color:#B3453F; }
+
+/* ---- desktop: use the extra room ---- */
+@media (min-width:900px){
+  .stage{ padding-top:0 !important; }
+  .menu-screen{ width:min(960px, 92vw) !important; }
+  .scene{ width:min(760px, 90vw) !important; }
+  .card{ padding:46px 44px 34px !important; }
+  .line-text{ font-size:clamp(24px, 2.1vw, 30px) !important; }
+  .controls{ gap:18px !important; }
+  .menu-grid{ grid-template-columns:repeat(auto-fill, minmax(190px, 1fr)) !important; gap:16px !important; }
+}
+@media (min-width:1280px){
+  .menu-screen{ width:min(1080px, 90vw) !important; }
+  .scene{ width:min(820px, 70vw) !important; }
+}
+
+/* ---- tablets / large phones ---- */
+@media (max-width:760px){
+  .efb-header{ padding-left:12px; padding-right:12px; }
+  .efb-logo{ width:42px; height:42px; }
+  .efb-wordmark .title{ font-size:20px; }
+}
+
+/* ---- phones (Android): header slim, actions become a thumb-friendly bottom dock ---- */
+@media (max-width:640px){
+  .stage{ padding:0 14px calc(84px + env(safe-area-inset-bottom, 0px)) !important; }
+  /* backdrop-filter would make the header the containing block of the fixed dock,
+     so it is switched off here and replaced by a near-solid background. */
+  .efb-header{
+    border-radius:0 0 20px 20px; margin-bottom:8px !important;
+    -webkit-backdrop-filter:none; backdrop-filter:none;
+    background:rgba(255,255,255,.96);
+  }
+  .efb-wordmark .subtitle{ font-size:10px; letter-spacing:.8px; }
+
+  /* actions: no big dock — Home sits bottom-left, Sound is a small round icon bottom-right */
+  .efb-actions{
+    position:fixed;
+    left:0; right:0;
+    bottom:calc(12px + env(safe-area-inset-bottom, 0px));
+    z-index:90;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:0 14px;
+    background:none; border:0; box-shadow:none;
+    pointer-events:none;
+  }
+  .efb-actions .efb-btn{ pointer-events:auto; }
+  .efb-btn{ min-height:44px; padding:0 16px 0 12px; font-size:14px; box-shadow:0 8px 18px -8px rgba(74,45,125,.55); }
+  .efb-home .efb-label{ font-size:14px; }
+  .efb-sound{
+    width:44px; height:44px; min-width:44px; padding:0 !important; gap:0;
+    opacity:.92;
+  }
+  .efb-sound .efb-label{ display:none; }
+  .efb-sound .efb-ico{ width:22px; height:22px; }
+  .pe-toast{ bottom:calc(76px + env(safe-area-inset-bottom, 0px)) !important; }
+}
+
+/* very small phones: icon + short text, no wrapping */
+@media (max-width:360px){
+  .efb-btn{ padding:0 14px 0 12px; gap:7px; }
+  .efb-label-main{ font-size:13.5px; }
+  .efb-wordmark .subtitle{ display:none; }
+}
+
+/* landscape phones: keep the dock out of the way of the content */
+@media (max-height:480px) and (orientation:landscape){
+  .efb-header{ position:static; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .efb-btn{ transition:none !important; }
+}
+
+/* =====================================================================
+   v3 REDESIGN — clean premium base + playful, game-like touches
+   (overrides everything above; markup/IDs/JS untouched)
+   ===================================================================== */
+:root{--p:#7C4DDB;--pd:#5B33B8;--pl:#F1EAFF;--ink3:#2A2140;--mute:#6F6590;--line:#E7DEFA;--ok:#2FB67C;--r:22px;}
+html body{
+  background:radial-gradient(900px 420px at 50% -140px,#E6D9FF 0%,transparent 72%),#FAF8FF !important;
+  color:var(--ink3) !important;
+}
+.bg-blob,.deco,.greeting-mascot,.path-start,.path-finish,.level-connector,.path-svg,.path-mascot,.level-badge-num{display:none !important;}
+@keyframes v3up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes v3wave{0%,60%,100%{transform:rotate(0)}10%,30%{transform:rotate(16deg)}20%,40%{transform:rotate(-10deg)}}
+@keyframes v3bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes v3ring{0%{box-shadow:0 0 0 0 rgba(124,77,219,.45)}100%{box-shadow:0 0 0 22px rgba(124,77,219,0)}}
+
+/* ---------- layout rhythm ---------- */
+.menu-screen{gap:16px !important;}
+.menu-screen>*{animation:v3up .5s cubic-bezier(.2,.8,.2,1) both;}
+.menu-screen>*:nth-child(2){animation-delay:.05s}.menu-screen>*:nth-child(3){animation-delay:.1s}
+.menu-screen>*:nth-child(4){animation-delay:.15s}.menu-screen>*:nth-child(5){animation-delay:.2s}
+.menu-screen>*:nth-child(n+6){animation-delay:.25s}
+
+/* ---------- header ---------- */
+.efb-header{background:rgba(255,255,255,.86) !important;border:0 !important;border-bottom:1px solid var(--line) !important;border-radius:0 0 24px 24px !important;box-shadow:0 12px 30px -22px rgba(91,51,184,.6) !important;}
+.efb-btn{border-bottom-width:3px !important;border-color:var(--line) !important;}
+.efb-home{background:linear-gradient(180deg,#8A5CF0,#6A3FD0) !important;border-color:#4C2A9E !important;color:#fff !important;}
+
+/* ---------- hero greeting ---------- */
+.menu-greeting{
+  position:relative;overflow:hidden;width:100%;text-align:left !important;
+  background:linear-gradient(135deg,#8A5CF0 0%,#6A3FD0 60%,#5B33B8 100%) !important;
+  border:0 !important;border-radius:28px !important;padding:26px 24px 24px !important;
+  box-shadow:0 20px 38px -20px rgba(91,51,184,.8) !important;
+}
+.menu-greeting::after{content:"";position:absolute;right:-46px;bottom:-60px;width:190px;height:190px;border-radius:50%;background:rgba(255,255,255,.13);}
+.menu-greeting::before{content:"";position:absolute;right:70px;top:-34px;width:90px;height:90px;border-radius:50%;background:rgba(255,255,255,.09);}
+.menu-greeting h1{color:#fff !important;font-size:clamp(22px,4.4vw,32px) !important;font-weight:900 !important;margin:0 0 6px !important;max-width:80%;}
+.menu-greeting p{color:rgba(255,255,255,.9) !important;font-size:14.5px !important;margin:0 !important;max-width:78%;line-height:1.5;}
+.big-wave{position:absolute !important;right:22px;top:16px;font-size:46px !important;z-index:1;transform-origin:70% 70%;animation:v3wave 2.6s ease-in-out infinite !important;}
+
+/* ---------- stat / progress surfaces ---------- */
+.study-progress,.practice-stats,.pe-dashboard,.level-progress-card{
+  background:#fff !important;border:1px solid var(--line) !important;border-radius:var(--r) !important;
+  box-shadow:0 12px 28px -22px rgba(91,51,184,.55) !important;width:100%;
+}
+.study-progress-label,.practice-stats-title,.pe-dashboard-title{color:var(--ink3) !important;font-weight:800 !important;}
+.study-progress-count,.level-progress-count{background:var(--pl) !important;color:var(--pd) !important;border-radius:99px !important;font-weight:800 !important;}
+.study-progress-msg{color:var(--mute) !important;}
+.study-progress-track,.pe-goal-track,.level-progress-track,.resume-track{height:12px !important;border-radius:99px !important;background:#EFE9FB !important;overflow:hidden;}
+.study-progress-fill,.pe-goal-fill,.resume-fill{background:linear-gradient(90deg,#8A5CF0,#C79BFF) !important;border-radius:99px !important;}
+.practice-stat-card,.pe-mini-stat{background:var(--pl) !important;border:0 !important;border-radius:18px !important;box-shadow:none !important;}
+.practice-stat-value,.pe-mini-value{color:var(--pd) !important;font-weight:900 !important;}
+.practice-stat-label,.pe-mini-label{color:var(--mute) !important;}
+.pe-level-badge{background:linear-gradient(180deg,#8A5CF0,#6A3FD0) !important;color:#fff !important;border-bottom:3px solid #4C2A9E !important;border-radius:99px !important;box-shadow:none !important;}
+.pe-achievements-toggle,.pe-reset{border-radius:16px !important;border:1.5px solid var(--line) !important;background:#fff !important;color:var(--pd) !important;box-shadow:none !important;font-weight:700;}
+
+/* ---------- level sections ---------- */
+.learning-level{
+  --lv:#7C4DDB;width:100%;overflow:hidden;
+  background:#fff !important;border:1px solid var(--line) !important;border-radius:28px !important;
+  box-shadow:0 14px 32px -24px rgba(91,51,184,.6) !important;
+}
+#levelBeginner{--lv:#2FB67C}#levelElementary{--lv:#F5A524}#levelIntermediate{--lv:#F0589A}
+.learning-level::before,.learning-level::after{display:none !important;}
+.learning-level.open{border-color:color-mix(in srgb,var(--lv) 45%,var(--line)) !important;}
+.level-header{background:transparent !important;border:0 !important;padding:16px 18px !important;}
+.level-icon{width:54px !important;height:54px !important;border-radius:17px !important;display:grid !important;place-items:center;font-size:28px !important;
+  background:color-mix(in srgb,var(--lv) 15%,#fff) !important;box-shadow:inset 0 -4px 0 color-mix(in srgb,var(--lv) 28%,transparent) !important;}
+.level-eyebrow{color:var(--lv) !important;font-weight:800 !important;font-size:11px !important;letter-spacing:.9px;text-transform:uppercase;}
+.level-title{color:var(--ink3) !important;font-weight:800 !important;font-size:17px !important;}
+.level-description{color:var(--mute) !important;font-size:13px !important;line-height:1.45;}
+.level-chevron{color:var(--lv) !important;background:color-mix(in srgb,var(--lv) 12%,#fff) !important;border-radius:50% !important;}
+.level-progress-card{margin:0 16px 4px !important;width:auto !important;box-shadow:none !important;background:color-mix(in srgb,var(--lv) 6%,#fff) !important;border-color:color-mix(in srgb,var(--lv) 18%,#fff) !important;}
+.level-progress-fill{background:var(--lv) !important;border-radius:99px !important;}
+
+/* ---------- lesson cards ---------- */
+.menu-grid{display:grid !important;grid-template-columns:repeat(auto-fill,minmax(235px,1fr)) !important;gap:14px !important;padding:12px 16px 18px !important;}
+.menu-card{
+  position:relative;display:flex !important;flex-direction:column !important;align-items:flex-start !important;gap:10px !important;
+  padding:16px !important;background:#fff !important;border:1.5px solid var(--line) !important;border-bottom-width:4px !important;
+  border-radius:20px !important;box-shadow:none !important;cursor:pointer;
+  transition:transform .18s cubic-bezier(.32,.72,0,1),border-color .18s,background .18s !important;
+  animation:v3up .45s cubic-bezier(.2,.8,.2,1) both;
+}
+.menu-card:nth-child(2){animation-delay:.04s}.menu-card:nth-child(3){animation-delay:.08s}
+.menu-card:nth-child(4){animation-delay:.12s}.menu-card:nth-child(5){animation-delay:.16s}.menu-card:nth-child(n+6){animation-delay:.2s}
+.menu-card:hover:not(.locked){transform:translateY(-3px) !important;border-color:var(--lv) !important;}
+.menu-card:active:not(.locked){transform:translateY(1px) scale(.985) !important;border-bottom-width:2px !important;opacity:1 !important;}
+.menu-emoji{width:48px !important;height:48px !important;border-radius:15px !important;display:grid !important;place-items:center;font-size:26px !important;
+  background:color-mix(in srgb,var(--lv) 14%,#fff) !important;box-shadow:none !important;border:0 !important;}
+.menu-info{width:100%;display:flex;flex-direction:column;gap:6px;}
+.menu-title{color:var(--ink3) !important;font-weight:800 !important;font-size:15.5px !important;line-height:1.3;}
+.menu-desc{color:var(--mute) !important;font-size:12.5px !important;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.menu-badge{align-self:flex-start;background:color-mix(in srgb,var(--lv) 14%,#fff) !important;color:color-mix(in srgb,var(--lv) 70%,#000) !important;border-radius:99px !important;font-weight:800 !important;font-size:11px !important;padding:3px 10px !important;border:0 !important;}
+.menu-set-stats{background:#FAF8FF !important;border:0 !important;border-radius:12px !important;padding:8px 10px !important;box-shadow:none !important;}
+.menu-set-stats-label{display:none !important;}
+.menu-set-status{font-size:11.5px !important;font-weight:700;color:var(--mute) !important;}
+.menu-arrow{position:absolute !important;right:14px;top:16px;color:var(--lv) !important;opacity:.55;font-weight:900;transition:transform .18s;}
+.menu-card:hover:not(.locked) .menu-arrow{transform:translateX(3px);opacity:1;}
+.menu-card.completed{border-color:var(--ok) !important;background:#F3FCF8 !important;}
+.menu-card.current-node{border-color:var(--lv) !important;box-shadow:0 0 0 4px color-mix(in srgb,var(--lv) 18%,transparent) !important;}
+.menu-card.locked{opacity:.55;background:#F7F4FC !important;filter:grayscale(.35);}
+.menu-lock{position:absolute !important;right:12px;bottom:12px;top:auto !important;font-size:15px;}
+.menu-inprogress-fill{background:var(--lv) !important;border-radius:99px;}
+
+/* ---------- practice screen ---------- */
+.practice-screen{width:100%;}
+.progress-wrap{width:min(560px,92vw) !important;max-width:none !important;flex-wrap:nowrap !important;gap:5px !important;margin:14px 0 18px !important;}
+.dot{flex:1 1 0 !important;width:auto !important;height:8px !important;min-width:4px;border-radius:99px !important;background:#E7DEFA !important;}
+.dot.done{background:linear-gradient(90deg,#8A5CF0,#B58CFF) !important;}
+.dot.current{background:var(--ok) !important;flex:2.4 1 0 !important;}
+.avatar-wrap .avatar{filter:drop-shadow(0 8px 10px rgba(91,51,184,.22));}
+.avatar.active{animation:v3bob .8s ease-in-out infinite !important;}
+.speech-tail{background:var(--ink3) !important;color:#fff !important;border-radius:99px !important;font-weight:700;}
+.card{
+  background:#fff !important;border:1.5px solid var(--line) !important;border-bottom-width:5px !important;border-radius:30px !important;
+  box-shadow:0 26px 44px -30px rgba(91,51,184,.6) !important;
+}
+.card.pear-turn{border-color:#CDB8F7 !important;background:linear-gradient(180deg,#fff,#F7F2FF) !important;}
+.card.egg-turn{border-color:#FFD58A !important;background:linear-gradient(180deg,#fff,#FFF8E8) !important;}
+.card-tag,.speaker-badge{border-radius:99px !important;font-weight:800 !important;}
+.line-text{color:var(--ink3) !important;font-weight:700 !important;}
+.line-translation-text{color:#4B3F78 !important;}
+.vi-toggle{border-radius:99px !important;background:var(--pl) !important;color:var(--pd) !important;border:1.5px solid var(--line) !important;font-weight:800 !important;}
+
+/* buttons: chunky, game-like press */
+.icon-btn,.mini-btn,.restart-btn,.chunk-btn{
+  border-radius:18px !important;border:1.5px solid var(--line) !important;border-bottom-width:4px !important;
+  background:#fff !important;color:var(--pd) !important;font-weight:800 !important;box-shadow:none !important;
+}
+.icon-btn:active,.mini-btn:active,.restart-btn:active,.chunk-btn:active{transform:translateY(2px) scale(.97) !important;border-bottom-width:2px !important;opacity:1 !important;}
+.icon-btn.prevnext{background:var(--pl) !important;color:var(--pd) !important;}
+.icon-btn.speak{background:linear-gradient(180deg,#9A6CFF,#7C4DDB) !important;border-color:#5B33B8 !important;color:#fff !important;}
+.mini-btn.mini-sky,.mini-btn.mini-pear{background:linear-gradient(180deg,#9A6CFF,#7C4DDB) !important;border-color:#5B33B8 !important;color:#fff !important;}
+.mini-btn.mini-blush{background:#FFF0F5 !important;border-color:#F4B6CB !important;color:#C23A6B !important;}
+.practice-panel{border-radius:28px !important;background:#fff !important;border:1.5px solid var(--line) !important;box-shadow:0 20px 40px -30px rgba(91,51,184,.55) !important;}
+.mic-btn{background:linear-gradient(180deg,#9A6CFF,#6A3FD0) !important;border:0 !important;border-bottom:5px solid #4C2A9E !important;color:#fff !important;border-radius:50% !important;}
+.mic-btn:not(.recording){animation:v3ring 2.2s ease-out infinite !important;}
+.mic-btn.recording{background:linear-gradient(180deg,#FF6B8B,#E23C66) !important;border-bottom-color:#A4204A !important;}
+.mic-btn:active{transform:translateY(3px) scale(.96) !important;border-bottom-width:2px !important;}
+.result-box,.score-card,.tips-box,.pronunciation-focus{border-radius:22px !important;border:1px solid var(--line) !important;background:#fff !important;box-shadow:0 14px 30px -24px rgba(91,51,184,.5) !important;}
+
+/* ---------- modals & toast ---------- */
+.resume-modal,.pe-confirm-modal{border-radius:28px !important;border:0 !important;box-shadow:0 30px 70px -20px rgba(42,33,64,.55) !important;background:#fff !important;}
+.resume-overlay,.pe-confirm-overlay{background:rgba(42,33,64,.45) !important;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
+.pe-toast{background:var(--ink3) !important;border-radius:16px !important;font-family:inherit !important;}
+
+/* ---------- responsive ---------- */
+@media (min-width:900px){
+  .menu-grid{grid-template-columns:repeat(3,1fr) !important;}
+  .menu-greeting{padding:32px 34px !important;}
+}
+@media (max-width:640px){
+  .menu-grid{grid-template-columns:1fr !important;padding:10px 12px 16px !important;}
+  .menu-card{flex-direction:row !important;align-items:center !important;gap:12px !important;}
+  .menu-info{gap:5px;}
+  .menu-arrow{top:50%;transform:translateY(-50%);}
+  .menu-card:hover:not(.locked) .menu-arrow{transform:translateY(-50%);}
+  .menu-greeting{padding:22px 18px !important;border-radius:24px !important;}
+  .big-wave{font-size:38px !important;right:16px;}
+  .level-header{padding:14px !important;}
+  .level-progress-card{margin:0 12px 2px !important;}
+}
+
+.pe-goal{background:var(--pl) !important;border:0 !important;border-radius:16px !important;color:var(--pd) !important;}
+.pe-goal-track{background:#fff !important;}
+.pe-dashboard-top{align-items:center;}
+
+.menu-card{min-width:0 !important;max-width:100% !important;overflow:hidden;box-sizing:border-box;}
+.menu-info{flex:1 1 auto;min-width:0 !important;max-width:100%;}
+.menu-desc,.menu-title{overflow-wrap:anywhere;}
+.menu-set-stats{width:100% !important;max-width:100% !important;box-sizing:border-box;}
+.menu-card .menu-emoji,.menu-card.current-node .menu-emoji,.menu-card.completed .menu-emoji{flex-shrink:0;border:0 !important;outline:0 !important;box-shadow:none !important;}
+@media (max-width:640px){.menu-card{padding-right:36px !important;}}
+
+@media (max-width:640px){.menu-info{width:auto !important;flex:1 1 0 !important;}}
+@media (prefers-reduced-motion:reduce){
+  .menu-card,.menu-screen>*,.big-wave,.mic-btn,.avatar.active{animation:none !important;}
+}
+
+/* =====================================================================
+   FINAL PASS — smooth animation + wide device compatibility
+   Rule: only animate transform/opacity; no permanent will-change;
+   no backdrop-filter on scrolling/animated surfaces. Loaded last.
+   ===================================================================== */
+
+/* ---- scrolling & touch ---- */
+html{
+  overflow-x:hidden;
+  -webkit-text-size-adjust:100%; text-size-adjust:100%;
+  overscroll-behavior-y:contain;   /* replaces the old non-passive JS touchmove hack */
+}
+/* html+body both overflow-x:hidden turns body into a scroll container on iOS
+   (breaks sticky header + momentum scroll). Only html clips now. */
+body{ overflow-x:visible !important; -webkit-tap-highlight-color:transparent; }
+button,[role="button"],.menu-card,.efb-btn,.icon-btn,.mic-btn,.card{
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+.stage{ min-height:100vh; min-height:100dvh; }
+
+/* ---- screens: one cheap fade, no per-child stagger ---- */
+.menu-screen>*, .menu-card, .menu-grid .menu-card, .learning-level{ animation:none !important; }
+.menu-screen, .practice-screen{
+  animation: screenEnter .22s ease-out backwards !important;
+  will-change:auto !important;
+}
+@keyframes screenEnter{
+  from{ opacity:0; transform:translate3d(0,8px,0); }
+  to{ opacity:1; transform:none; }
+}
+.card, .card.line-changing, .resume-modal, .pe-confirm-modal, .pe-toast,
+.xp-fly, .menu-check, .score-badge, .mic-btn.recording{ will-change:auto !important; }
+
+/* ---- accordion: grid-rows transition (robust, no JS height) ---- */
+.level-body{
+  display:grid !important;
+  grid-template-rows:0fr;
+  max-height:none !important;
+  overflow:visible !important;
+  opacity:0;
+  visibility:hidden;
+  transition: grid-template-rows .3s cubic-bezier(.32,.72,0,1), opacity .22s ease, visibility 0s linear .3s !important;
+}
+.learning-level.open .level-body{
+  grid-template-rows:1fr;
+  opacity:1;
+  visibility:visible;
+  transition: grid-template-rows .3s cubic-bezier(.32,.72,0,1), opacity .22s ease, visibility 0s !important;
+}
+.level-body-inner{ min-height:0; overflow:hidden; }
+
+/* ---- dialogue card: no 3D flip, crossfade only ---- */
+.card-perspective{ perspective:none !important; }
+.card{ transform-style:flat !important; transition: transform .16s ease, border-color .25s ease !important; }
+
+/* ---- mic: ring is a pseudo-element animated with transform/opacity
+   (box-shadow keyframes repaint every frame) ---- */
+.mic-btn{ position:relative; animation:none !important; }
+.mic-btn::after{
+  content:""; position:absolute; inset:0; border-radius:50%;
+  border:3px solid rgba(124,77,219,.5);
+  opacity:0; pointer-events:none; transform:scale(1);
+}
+.mic-btn:not(.recording)::after{ animation: micRing 2.4s ease-out infinite; }
+.mic-btn.recording::after{ border-color:rgba(226,60,102,.65); animation: micRing 1.1s ease-out infinite; }
+@keyframes micRing{
+  0%{ opacity:.7; transform:scale(1); }
+  100%{ opacity:0; transform:scale(1.55); }
+}
+
+/* ---- avatars: no filter transitions; bob only while actually talking ---- */
+.avatar, .avatar-wrap .avatar{
+  filter:none !important;
+  opacity:.5;
+  transform:scale(.9) translate3d(0,6px,0);
+  transition: transform .3s cubic-bezier(.34,1.56,.64,1), opacity .3s ease !important;
+}
+.avatar.active{
+  opacity:1;
+  transform:scale(1.2) translate3d(0,0,0);
+  animation:none !important;
+}
+.avatar.talking{ animation: avatarTalk .8s ease-in-out infinite !important; }
+@keyframes avatarTalk{
+  0%,100%{ transform:scale(1.2) translate3d(0,0,0); }
+  50%{ transform:scale(1.2) translate3d(0,-8px,0); }
+}
+
+/* ---- greeting wave: a couple of times, not forever ---- */
+.big-wave{ animation: v3wave 2.6s ease-in-out 2 !important; }
+
+/* ---- backdrop-filter is the #1 cause of scroll jank on Android/low-end iPhones ---- */
+.efb-header, .topbar, .resume-overlay, .pe-confirm-overlay, .pe-toast,
+.resume-modal, .pe-confirm-modal{
+  -webkit-backdrop-filter:none !important;
+  backdrop-filter:none !important;
+}
+.efb-header{ background:rgba(255,255,255,.97) !important; }
+.resume-overlay, .pe-confirm-overlay{ background:rgba(42,33,64,.5) !important; }
+
+/* ---- touch devices: no sticky hover lift after a tap ---- */
+@media (hover:none){
+  .menu-card:hover:not(.locked){ transform:none !important; }
+  .efb-btn:hover, .icon-btn:hover, .mini-btn:hover{ transform:none !important; }
+}
+
+/* ---- older Android WebView / iOS < 16.2: color-mix() unsupported ---- */
+@supports not (color: color-mix(in srgb, red 50%, blue)){
+  .learning-level{ background:#fff !important; }
+  .learning-level.open{ border-color:#CDB8F7 !important; }
+  .menu-emoji, .level-icon, .level-chevron, .menu-badge{ background:#F1EAFF !important; box-shadow:none !important; }
+  .menu-badge{ color:#5B33B8 !important; }
+  .menu-card.completed .menu-emoji{ background:#E3F7EE !important; }
+  .menu-card.current-node{ box-shadow:0 0 0 4px rgba(124,77,219,.18) !important; border-color:#7C4DDB !important; }
+  .level-progress-card{ background:#FAF8FF !important; border-color:#E7DEFA !important; }
+  .level-progress-fill, .menu-inprogress-fill{ background:#7C4DDB !important; }
+}
+/* ---- no dvh / no inset support fallbacks are handled above (vh first, dvh second) ---- */
+
+@media (prefers-reduced-motion: reduce){
+  .mic-btn::after, .avatar.talking, .big-wave{ animation:none !important; }
+  .level-body, .learning-level.open .level-body{ transition:none !important; }
+}
+
+/* ===== Level tabs: home = 3 level cards, tap = dedicated view with its dialogues ===== */
+.level-body{ grid-template-rows:1fr !important; opacity:1 !important; visibility:visible !important; transition:none !important; }
+.learning-level .menu-grid{ display:none !important; }
+.menu-screen.in-level .learning-level.active-level .menu-grid{ display:grid !important; }
+.learning-level .path-start, .learning-level .path-finish{ display:none !important; }
+
+/* home: whole card is tappable, chevron points right */
+.menu-screen:not(.in-level) .learning-level{ cursor:pointer; transition: transform .16s ease, border-color .2s ease !important; }
+.menu-screen:not(.in-level) .learning-level:active{ transform:scale(.985); }
+.menu-screen:not(.in-level) .level-chevron{ transform:rotate(-90deg) !important; }
+
+/* level view: hide everything except the chosen level */
+.level-back{
+  display:none; align-self:flex-start; align-items:center; gap:6px;
+  min-height:44px; padding:0 16px 0 10px;
+  border-radius:999px; border:1.5px solid var(--line, #E7DEFA); border-bottom-width:3px;
+  background:#fff; color:#5B33B8; font-weight:800; font-size:14px; cursor:pointer;
+  touch-action:manipulation;
+}
+.level-back:active{ transform:scale(.96); }
+.menu-screen.in-level .level-back{ display:inline-flex; }
+.menu-screen.in-level > :not(.learning-level):not(.level-back){ display:none !important; }
+.menu-screen.in-level .learning-level:not(.active-level){ display:none !important; }
+.menu-screen.in-level .level-header{ cursor:default; pointer-events:none; }
+.menu-screen.in-level .level-chevron{ display:none; }
+
+@media (max-width:640px){ .efb-sound{ margin-left:auto; } }
+
+/* =====================================================================
+   DASHBOARD LAYOUT — sidebar + card grid (desktop), single column (mobile)
+   ===================================================================== */
+html body{ background:radial-gradient(900px 520px at 75% -120px,#E8DCFF 0%,transparent 70%),#F6F2FD !important; }
+
+/* ---- sidebar (desktop only) ---- */
+.sidebar{ display:none; }
+@media (min-width:1024px){
+  .sidebar{
+    display:flex; flex-direction:column; position:fixed; z-index:50;
+    top:16px; left:16px; bottom:16px; width:232px; padding:20px 14px 14px;
+    border-radius:26px; color:#fff;
+    background:linear-gradient(180deg,#38236F 0%,#1F1245 100%);
+    box-shadow:0 24px 50px -24px rgba(31,18,69,.75);
+    overflow-y:auto;
+  }
+  body.in-practice .sidebar{ display:none; }
+  body:not(.in-practice) .stage{ padding-left:272px !important; padding-right:24px !important; }
+  body:not(.in-practice) .efb-header{ display:none !important; }
+}
+.sb-brand{ display:flex; align-items:center; gap:10px; padding:0 6px 18px; }
+.sb-logo{ width:40px; height:40px; flex-shrink:0; }
+.sb-logo svg{ width:100%; height:100%; display:block; }
+.sb-name{ font-size:17px; font-weight:800; letter-spacing:.4px; line-height:1.1; }
+.sb-sub{ font-size:11px; opacity:.65; margin-top:2px; }
+.sb-label{ font-size:11px; font-weight:700; letter-spacing:1.2px; opacity:.45; padding:14px 8px 8px; }
+.sb-nav{ display:flex; flex-direction:column; gap:4px; }
+.sb-item{
+  display:flex; align-items:center; gap:12px; width:100%; min-height:44px; padding:0 10px;
+  border:0; border-radius:14px; background:transparent; color:rgba(255,255,255,.78);
+  font-size:14px; font-weight:600; text-align:left; cursor:pointer; touch-action:manipulation;
+  transition:background .15s ease, color .15s ease;
+}
+.sb-item:hover{ background:rgba(255,255,255,.08); color:#fff; }
+.sb-item.active{ background:rgba(255,255,255,.16); color:#fff; box-shadow:inset 3px 0 0 #C9A8FF; }
+.sb-item:focus-visible{ outline:2px solid #C9A8FF; outline-offset:2px; }
+.sb-ico{ width:30px; height:30px; border-radius:10px; background:rgba(255,255,255,.1); display:grid; place-items:center; font-size:16px; flex-shrink:0; }
+.sb-state{ margin-left:auto; font-size:11px; font-weight:700; padding:3px 9px; border-radius:99px; background:rgba(255,255,255,.14); }
+.sb-user{ margin-top:auto; display:flex; align-items:center; gap:10px; padding:12px; border-radius:16px; background:rgba(255,255,255,.1); }
+.sb-avatar{ width:38px; height:38px; border-radius:50%; background:#fff; display:grid; place-items:center; font-size:20px; flex-shrink:0; }
+.sb-user-name{ font-size:13px; font-weight:700; }
+.sb-user-lv{ font-size:11px; opacity:.7; margin-top:1px; }
+
+/* ---- main grid ---- */
+.menu-screen:not(.hide){
+  display:grid !important; grid-template-columns:repeat(12,minmax(0,1fr));
+  gap:18px !important; width:min(1120px,100%) !important;
+  padding:26px 0 28px !important; align-items:stretch;
+}
+.menu-screen > .d-top, .menu-screen > .hero, .menu-screen > .d-stats, .menu-screen > .d-row,
+.menu-screen > .d-ach, .menu-screen > .d-section, .menu-screen > .level-back{ grid-column:1 / -1; }
+.menu-screen .level-back{ justify-self:start; }
+
+.d-top{ display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.d-title{ margin:0; font-size:clamp(24px,3.4vw,30px); font-weight:800; color:#2A2140; letter-spacing:-.01em; line-height:1.2; }
+.d-sub{ margin:4px 0 0; font-size:14px; color:#6F6590; text-transform:capitalize; }
+.d-btn{
+  display:inline-flex; align-items:center; gap:8px; min-height:46px; padding:0 22px;
+  border:0; border-bottom:3px solid #4C2A9E; border-radius:999px; cursor:pointer;
+  background:linear-gradient(180deg,#9A6CFF,#6A3FD0); color:#fff; font-size:14px; font-weight:800;
+  touch-action:manipulation; white-space:nowrap;
+}
+.d-btn:active{ transform:translateY(2px); border-bottom-width:1px; }
+
+.d-card{ background:#fff; border:1px solid #ECE5FA; border-radius:22px; padding:18px; box-shadow:0 12px 32px -22px rgba(91,51,184,.45); min-width:0; }
+.d-card-title{ margin:0; font-size:15px; font-weight:800; color:#2A2140; }
+.d-card-sub{ margin:2px 0 0; font-size:12px; color:#6F6590; }
+
+/* ---- hero ---- */
+.hero{
+  position:relative; overflow:hidden; padding:30px 28px 28px; border-radius:28px; color:#fff;
+  background:linear-gradient(135deg,#8A5CF0 0%,#6A3FD0 55%,#4F2BA6 100%);
+  box-shadow:0 24px 44px -24px rgba(91,51,184,.85);
+}
+.hero::before,.hero::after{ content:""; position:absolute; border-radius:50%; background:rgba(255,255,255,.1); pointer-events:none; }
+.hero::before{ width:240px; height:240px; right:-60px; top:-90px; }
+.hero::after{ width:170px; height:170px; right:150px; bottom:-100px; background:rgba(255,255,255,.07); }
+.hero-badge{ position:relative; display:inline-block; padding:6px 14px; border-radius:99px; background:rgba(255,255,255,.2); font-size:12px; font-weight:700; margin-bottom:12px; }
+.hero-title{ position:relative; margin:0 0 6px; font-size:clamp(26px,4.4vw,38px); font-weight:800; line-height:1.15; letter-spacing:-.01em; max-width:60%; }
+.hero-text{ position:relative; margin:0; max-width:52%; font-size:15px; line-height:1.55; color:rgba(255,255,255,.9); }
+.hero-pills{ position:relative; display:flex; flex-wrap:wrap; gap:8px; margin-top:18px; }
+.hero-pills span{ padding:7px 13px; border-radius:99px; background:rgba(255,255,255,.16); font-size:12px; font-weight:700; }
+.hero-emo{ position:absolute; z-index:1; pointer-events:none; line-height:1; animation:heroBob 5s ease-in-out infinite; }
+.hero-emo.e1{ right:150px; top:34px; font-size:54px; }
+.hero-emo.e2{ right:52px; bottom:22px; font-size:46px; animation-delay:.8s; }
+.hero-emo.e3{ right:262px; bottom:30px; font-size:26px; animation-delay:1.4s; opacity:.9; }
+.hero-emo.e4{ right:228px; top:22px; font-size:22px; animation-delay:2s; opacity:.9; }
+.hero-wave{ position:absolute; z-index:1; right:34px; top:20px; font-size:54px; line-height:1; transform-origin:70% 70%; animation:v3wave 2.6s ease-in-out 2; }
+@keyframes heroBob{ 0%,100%{ transform:translate3d(0,0,0) rotate(0); } 50%{ transform:translate3d(0,-9px,0) rotate(-5deg); } }
+
+/* ---- stat cards ---- */
+.d-stats{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+.stat-top{ display:flex; align-items:center; gap:10px; }
+.stat-ico{ width:34px; height:34px; border-radius:11px; display:grid; place-items:center; font-size:17px; }
+.t-fire{ background:#FFE9DD; } .t-xp{ background:#FFF1C2; } .t-ok{ background:#DDF5E9; }
+.stat-name{ font-size:13px; font-weight:700; color:#6F6590; }
+.stat-main{ display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin-top:14px; }
+.stat-num{ font-size:34px; font-weight:800; line-height:1; color:#2A2140; letter-spacing:-.02em; }
+.stat-num small{ font-size:14px; font-weight:700; color:#8B80AB; letter-spacing:0; }
+.stat-foot{ margin-top:10px; font-size:12px; color:#6F6590; }
+.mini-bars{ display:flex; align-items:flex-end; gap:4px; height:36px; }
+.mini-bars i{ display:block; width:7px; border-radius:4px; background:#E3D8FA; }
+.mini-bars i.hot{ background:linear-gradient(180deg,#9A6CFF,#6A3FD0); }
+.xp-track{ height:8px; margin-top:14px; border-radius:99px; background:#EFE9FB; overflow:hidden; }
+.xp-track i{ display:block; height:100%; width:0; border-radius:99px; background:linear-gradient(90deg,#8A5CF0,#C79BFF); transition:width .5s ease; }
+
+/* ---- rows ---- */
+.d-row{ display:grid; gap:16px; }
+.d-row2{ grid-template-columns:3fr 4fr 5fr; }
+.d-row3{ grid-template-columns:3fr 4fr 5fr; }
+
+.gauge{ --p:0; position:relative; width:176px; height:88px; overflow:hidden; margin:16px auto 0; }
+.gauge::before{ content:""; position:absolute; left:0; top:0; width:176px; height:176px; border-radius:50%;
+  background:conic-gradient(from -90deg,#7C4DDB 0,#B58CFF calc(var(--p)*1.8deg),#EFE9FB 0 180deg,transparent 0); }
+.gauge::after{ content:""; position:absolute; left:22px; top:22px; width:132px; height:132px; border-radius:50%; background:#fff; }
+.gauge-num{ position:absolute; left:0; right:0; bottom:0; z-index:1; text-align:center; font-size:30px; font-weight:800; color:#2A2140; line-height:1; }
+.gauge-meta{ margin-top:12px; text-align:center; font-size:13px; font-weight:700; color:#5B33B8; }
+.d-track{ height:8px; margin-top:10px; border-radius:99px; background:#EFE9FB; overflow:hidden; }
+.d-fill{ height:100%; width:0; border-radius:99px; background:#7C4DDB; transition:width .5s ease; }
+.d-msg{ margin-top:10px; font-size:12px; line-height:1.45; color:#6F6590; text-align:center; }
+
+.lv-list{ display:flex; flex-direction:column; gap:16px; margin-top:18px; }
+.lv-row{ display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:4px 10px; }
+.lv-dot{ width:10px; height:10px; border-radius:50%; }
+.lv-name{ font-size:13px; font-weight:700; color:#2A2140; }
+.lv-pct{ font-size:13px; font-weight:800; color:#2A2140; }
+.lv-bar{ grid-column:1 / -1; height:8px; border-radius:99px; background:#F1EDF8; overflow:hidden; }
+.lv-bar i{ display:block; height:100%; border-radius:99px; transition:width .5s ease; }
+
+.act-head{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+.act-total{ text-align:right; line-height:1.1; }
+.act-total b{ display:block; font-size:28px; font-weight:800; color:#5B33B8; }
+.act-total span{ font-size:12px; color:#6F6590; }
+.act-chart{ display:grid; grid-template-columns:repeat(7,1fr); gap:10px; height:150px; margin-top:16px; }
+.act-col{ display:flex; flex-direction:column; align-items:center; justify-content:flex-end; gap:6px; height:100%; min-width:0; }
+.act-val{ font-size:11px; font-weight:700; color:#6F6590; }
+.act-bar{ width:100%; max-width:38px; flex:1; display:flex; align-items:flex-end; background:#F4EFFD; border-radius:10px; overflow:hidden; }
+.act-bar i{ display:block; width:100%; border-radius:10px; background:#C9B3F5; transition:height .5s ease; }
+.act-col.today .act-bar i{ background:linear-gradient(180deg,#9A6CFF,#6A3FD0); }
+.act-day{ font-size:11px; font-weight:600; color:#8B80AB; }
+.act-col.today .act-day{ color:#5B33B8; font-weight:800; }
+
+/* ring (donut) */
+.ring{ --p:0; --c:#B58CFF; --t:rgba(255,255,255,.16); --bg:#2B1B5A;
+  width:84px; height:84px; flex-shrink:0; border-radius:50%; position:relative; display:grid; place-items:center;
+  background:conic-gradient(var(--c) calc(var(--p)*3.6deg), var(--t) 0); }
+.ring::before{ content:""; position:absolute; inset:9px; border-radius:50%; background:var(--bg); }
+.ring-in{ position:relative; z-index:1; font-size:17px; font-weight:800; }
+.ring-mint{ --c:#2FB67C; --t:#CDEBDD; --bg:#EAF8F1; }
+
+.dark-card{ color:#fff; border:0; background:linear-gradient(160deg,#3B2478 0%,#1F1245 100%); box-shadow:0 18px 40px -22px rgba(31,18,69,.85); }
+.dk-top{ display:flex; align-items:center; gap:14px; }
+.dk-title{ margin:0; font-size:16px; font-weight:800; }
+.dk-sub{ margin:4px 0 0; font-size:12px; line-height:1.45; opacity:.7; }
+.dk-row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:16px; }
+.dk-row > div{ background:rgba(255,255,255,.1); border-radius:14px; padding:10px 12px; }
+.dk-row b{ display:block; font-size:20px; font-weight:800; }
+.dk-row span{ font-size:11px; opacity:.7; }
+
+.mint-card{ border:0; background:linear-gradient(160deg,#EAF8F1 0%,#D6F0E3 100%); }
+.mt-top{ display:flex; align-items:center; gap:14px; }
+.mt-title{ margin:0; font-size:16px; font-weight:800; color:#17543C; }
+.mt-sub{ margin:4px 0 0; font-size:12px; line-height:1.45; color:#3F7A61; }
+.d-track.mint{ background:#fff; margin-top:16px; }
+.d-fill.mint{ background:linear-gradient(90deg,#2FB67C,#7BDDB0); }
+.mt-foot{ margin-top:10px; font-size:12px; color:#3F7A61; }
+.mt-foot b{ color:#17543C; }
+
+.promo-card{
+  position:relative; overflow:hidden; border-radius:22px; padding:22px; color:#fff; min-width:0;
+  background:linear-gradient(135deg,#7C4DDB 0%,#B04FD9 55%,#F0589A 100%);
+  box-shadow:0 20px 40px -22px rgba(176,79,217,.8);
+}
+.promo-card::after{ content:""; position:absolute; right:-50px; bottom:-70px; width:200px; height:200px; border-radius:50%; background:rgba(255,255,255,.12); }
+.promo-emo{ position:absolute; right:22px; top:16px; font-size:64px; opacity:.35; transform:rotate(12deg); }
+.promo-avatars{ display:flex; margin-bottom:12px; }
+.promo-avatars span{ width:40px; height:40px; border-radius:50%; background:#fff; display:grid; place-items:center; font-size:21px; border:3px solid rgba(255,255,255,.55); }
+.promo-avatars span + span{ margin-left:-10px; }
+.promo-title{ position:relative; margin:0; font-size:22px; line-height:1.25; font-weight:800; max-width:75%; }
+.promo-text{ position:relative; margin:6px 0 16px; font-size:13px; line-height:1.5; opacity:.92; max-width:75%; }
+.promo-btn{ position:relative; z-index:1; display:inline-flex; align-items:center; gap:8px; min-height:44px; padding:0 20px; border:0; border-radius:999px; background:#fff; color:#5B33B8; font-size:14px; font-weight:800; cursor:pointer; touch-action:manipulation; }
+.promo-btn:active{ transform:scale(.96); }
+
+/* achievements */
+.d-ach summary{ list-style:none; cursor:pointer; min-height:28px; display:flex; align-items:center; gap:10px; font-size:15px; font-weight:800; color:#2A2140; }
+.d-ach summary::-webkit-details-marker{ display:none; }
+.d-ach summary::after{ content:"▾"; margin-left:auto; color:#8B80AB; transition:transform .2s ease; }
+.d-ach[open] summary::after{ transform:rotate(180deg); }
+.d-ach-count{ font-size:12px; font-weight:700; color:#5B33B8; background:#F1EAFF; padding:3px 10px; border-radius:99px; }
+.hs-ach{ display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+.hs-ach .pe-achievement{ font-size:12px; padding:7px 12px; border-radius:99px; background:#F1EDF6; color:#6F6590; font-weight:700; }
+.hs-ach .pe-achievement.unlocked{ background:#E3F7EE; color:#1F7A55; }
+.hs-reset{ display:block; margin:14px 0 0; background:none; border:0; min-height:36px; padding:0; font-size:12px; color:#9A90B5; text-decoration:underline; cursor:pointer; }
+
+.d-section h2{ margin:0; font-size:20px; font-weight:800; color:#2A2140; }
+.d-section p{ margin:2px 0 0; font-size:13px; color:#6F6590; }
+
+/* ---- level cards (home: 3-up) ---- */
+#levelBeginner{ --lvt:#D3F1E2; } #levelElementary{ --lvt:#FFE7BD; } #levelIntermediate{ --lvt:#FFD3E3; }
+.menu-screen .learning-level{
+  margin:0 !important; padding:0 !important; border-radius:24px !important; box-shadow:none !important;
+  border:1px solid #ECE5FA !important; position:relative;
+  background:linear-gradient(160deg,#fff 40%,var(--lvt) 170%) !important;
+}
+.menu-screen:not(.in-level) .learning-level{ grid-column:span 4; cursor:pointer; display:flex; flex-direction:column; transition:transform .18s ease, border-color .2s ease !important; }
+.menu-screen:not(.in-level) .learning-level .level-body{ margin-top:auto; }
+.menu-screen:not(.in-level) .learning-level:hover{ border-color:var(--lv) !important; }
+.menu-screen:not(.in-level) .learning-level:active{ transform:scale(.985); }
+.menu-screen:not(.in-level) .level-heading{ flex-direction:column; align-items:flex-start; gap:14px; }
+.menu-screen:not(.in-level) .level-chevron{ position:absolute; top:16px; right:16px; }
+.menu-screen .level-header{ padding:20px 20px 14px !important; }
+.menu-screen .level-icon{ width:56px !important; height:56px !important; font-size:28px !important; border-radius:18px !important; box-shadow:none !important; background:rgba(255,255,255,.75) !important; }
+.menu-screen .level-eyebrow{ display:none !important; }
+.menu-screen .level-title{ font-size:17px !important; }
+.menu-screen .level-description{ font-size:13px !important; margin-top:4px !important; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+.menu-screen .level-chevron{ width:32px !important; height:32px !important; padding:7px !important; background:rgba(255,255,255,.8) !important; color:var(--lv) !important; }
+.menu-screen .level-progress-card{ display:flex; align-items:center; gap:12px; margin:0 20px 20px !important; padding:0 !important; background:transparent !important; border:0 !important; border-radius:0 !important; width:auto !important; }
+.menu-screen .level-progress-top{ order:2; margin:0 !important; }
+.menu-screen .level-progress-top > span:first-child{ display:none; }
+.menu-screen .level-progress-count{ background:transparent !important; padding:0 !important; color:#5B3E91 !important; font-size:12px !important; white-space:nowrap; }
+.menu-screen .level-progress-track{ flex:1; order:1; height:7px !important; background:rgba(255,255,255,.85) !important; }
+.menu-screen.in-level .learning-level.active-level{ grid-column:1 / -1; }
+
+/* ---- responsive ---- */
+@media (max-width:1099px){
+  .menu-screen:not(.in-level) .learning-level{ grid-column:1 / -1; }
+  .d-row2, .d-row3{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .d-row2 > :last-child, .d-row3 > :last-child{ grid-column:1 / -1; }
+}
+@media (max-width:700px){
+  .menu-screen:not(.hide){ padding-top:16px !important; gap:14px !important; }
+  .d-row2, .d-row3{ grid-template-columns:1fr; }
+  .d-top .d-btn{ min-height:42px; padding:0 16px; }
+  .hero{ padding:22px 18px 20px; border-radius:24px; }
+  .hero-title, .hero-text{ max-width:100%; }
+  .hero-title{ padding-right:56px; }
+  .hero-emo.e1, .hero-emo.e3, .hero-emo.e4{ display:none; }
+  .hero-emo.e2{ right:16px; bottom:14px; font-size:34px; }
+  .hero-wave{ right:18px; top:14px; font-size:40px; }
+  .d-stats{ gap:8px; }
+  .d-card.stat{ padding:12px; }
+  .stat-top{ flex-direction:column; align-items:flex-start; gap:8px; }
+  .stat-name{ font-size:11px; }
+  .stat-num{ font-size:24px; }
+  .stat-num small{ font-size:11px; }
+  .stat-main{ margin-top:10px; }
+  .mini-bars, .stat-foot:not(#xpFoot){ display:none; }
+  #xpFoot{ font-size:10px; }
+  .promo-title, .promo-text{ max-width:100%; }
+  .promo-emo{ opacity:.2; }
+}
+@media (prefers-reduced-motion:reduce){ .hero-emo, .hero-wave{ animation:none !important; } }
+
+/* =====================================================================
+   SMOOTH MOTION PASS v4 — one easing system, compositor-only animation,
+   no looping decoration, tuned for touch (phones/tablets) and desktop.
+   Loaded last on purpose. Only transform / opacity are ever animated.
+   ===================================================================== */
+:root{
+  --ease-out: cubic-bezier(.22,1,.36,1);      /* soft landing, no overshoot */
+  --ease-std: cubic-bezier(.32,.72,0,1);      /* iOS-like */
+  --ease-spring: cubic-bezier(.34,1.4,.64,1); /* tiny, controlled overshoot */
+  --dur-fast:.14s; --dur-base:.24s; --dur-slow:.38s;
+}
+
+/* ---- 1. stop the always-on loops that keep the GPU busy while idle ---- */
+.hero-emo{ animation: heroBob 5s ease-in-out 2 both !important; }   /* 2 cycles, then rest */
+.hero-wave, .big-wave{ animation: v3wave 2.6s ease-in-out 1 both !important; }
+.mic-btn:not(.recording)::after{ animation: micRing 2.6s var(--ease-out) 3 !important; } /* invites 3x then stops */
+.mic-btn.recording::after{ animation: micRing 1.2s var(--ease-out) infinite !important; }
+.avatar.talking{ animation: avatarTalk .9s ease-in-out infinite !important; }
+/* pause everything infinite when the tab is hidden (set from JS) */
+html.is-hidden *, html.is-hidden *::before, html.is-hidden *::after{ animation-play-state: paused !important; }
+
+/* ---- 2. press feedback: instant, transform-only, same feel everywhere ---- */
+.menu-card, .efb-btn, .icon-btn, .mini-btn, .d-btn, .promo-btn, .sb-item, .level-back,
+.restart-btn, .chunk-btn, .vi-toggle, .mic-btn, .pronunciation-practice-btn, .pronunciation-listen{
+  transition: transform var(--dur-base) var(--ease-std), opacity var(--dur-fast) ease,
+              background-color var(--dur-base) ease, border-color var(--dur-base) ease !important;
+  -webkit-tap-highlight-color: transparent;
+}
+.icon-btn:active, .mini-btn:active, .d-btn:active, .promo-btn:active, .restart-btn:active,
+.chunk-btn:active, .efb-btn:active, .level-back:active, .vi-toggle:active{
+  transform: scale(.95) !important;
+  transition-duration: var(--dur-fast) !important;
+}
+.mic-btn:active{ transform: scale(.94) !important; transition-duration: var(--dur-fast) !important; }
+
+/* ---- 3. lists & cards: GPU layers only while they actually animate ---- */
+.menu-card{ contain: layout style; }
+.menu-card:hover:not(.locked){ transform: translate3d(0,-3px,0) !important; }
+@media (hover:none){
+  .menu-card:hover:not(.locked){ transform:none !important; }
+  .menu-card:active:not(.locked){ transform: scale(.975) !important; }
+}
+
+/* staggered entrance when a level is opened (one-shot, capped so 20+ cards
+   never make the last one wait more than ~0.35s) */
+@keyframes cardIn{
+  from{ opacity:0; transform: translate3d(0,14px,0) scale(.985); }
+  to{   opacity:1; transform: translate3d(0,0,0) scale(1); }
+}
+.menu-screen.in-level .learning-level.active-level .menu-grid .menu-card{
+  animation: cardIn var(--dur-slow) var(--ease-out) both !important;
+  animation-delay: min(calc(var(--stagger-i, 0) * 28ms), 360ms) !important;
+}
+
+/* home: level cards rise in one after another (one-shot) */
+.menu-screen:not(.in-level) .learning-level{
+  animation: cardIn .5s var(--ease-out) both !important;
+}
+.menu-screen:not(.in-level) #levelBeginner{ animation-delay:.05s !important; }
+.menu-screen:not(.in-level) #levelElementary{ animation-delay:.12s !important; }
+.menu-screen:not(.in-level) #levelIntermediate{ animation-delay:.19s !important; }
+.menu-screen:not(.in-level) .learning-level:hover{ transform: translate3d(0,-3px,0); }
+@media (hover:none){ .menu-screen:not(.in-level) .learning-level:hover{ transform:none; } }
+
+/* ---- 4. screens: fade + tiny rise, short and identical on both ---- */
+.menu-screen, .practice-screen{
+  animation: screenEnter var(--dur-base) var(--ease-out) backwards !important;
+}
+@keyframes screenEnter{
+  from{ opacity:0; transform: translate3d(0,10px,0); }
+  to{   opacity:1; transform: translate3d(0,0,0); }
+}
+
+/* ---- 5. dialogue card: shorter, calmer turn switch ---- */
+.card.line-changing{ animation: cardLineFade .2s var(--ease-out) both !important; }
+.card.turn-to-pear{ animation: cardSlideToPear .34s var(--ease-out) both !important; }
+.card.turn-to-egg{  animation: cardSlideToEgg  .34s var(--ease-out) both !important; }
+@keyframes cardSlideToPear{
+  from{ opacity:0; transform: translate3d(-24px,4px,0) scale(.98); }
+  to{   opacity:1; transform: translate3d(0,0,0) scale(1); }
+}
+@keyframes cardSlideToEgg{
+  from{ opacity:0; transform: translate3d(24px,4px,0) scale(.98); }
+  to{   opacity:1; transform: translate3d(0,0,0) scale(1); }
+}
+.card{ transition: transform var(--dur-fast) var(--ease-std), border-color .3s ease !important; }
+
+/* karaoke word highlight: colour only (no scale => no per-word relayout) */
+.line-text .word{ transition: color .12s ease !important; }
+.line-text .word.active{ transform:none !important; }
+
+/* translation strip: fade/slide only — max-height is no longer animated */
+.line-translation{
+  transition: opacity var(--dur-base) ease, transform var(--dur-base) var(--ease-out) !important;
+}
+.line-translation.hidden{
+  display:none;           /* instant collapse, no layout animation */
+}
+
+/* progress dots: animate the colour & scale, not width */
+.dot{ transition: background-color .25s ease, flex-grow .3s var(--ease-out) !important; }
+
+/* progress bars: smooth but short */
+.study-progress-fill, .pe-goal-fill, .resume-fill, .level-progress-fill, .xp-track i,
+.d-fill, .lv-bar i, .menu-inprogress-fill{
+  transition: width .6s var(--ease-out) !important;
+}
+.act-bar i{ transition: height .6s var(--ease-out) !important; }
+
+/* ---- 6. overlays: backdrop fades, sheet slides (transform/opacity only) ---- */
+.resume-overlay, .pe-confirm-overlay{
+  display:flex !important; visibility:hidden; opacity:0; pointer-events:none;
+  transition: opacity var(--dur-base) ease, visibility 0s linear var(--dur-base);
+}
+.resume-overlay.show, .pe-confirm-overlay.show{
+  visibility:visible; opacity:1; pointer-events:auto;
+  transition: opacity var(--dur-base) ease, visibility 0s;
+}
+.resume-modal, .pe-confirm-modal{
+  animation:none !important;
+  transform: translate3d(0,40px,0);
+  transition: transform var(--dur-slow) var(--ease-out) !important;
+}
+.resume-overlay.show .resume-modal, .pe-confirm-overlay.show .pe-confirm-modal{
+  transform: translate3d(0,0,0);
+}
+@media (min-width:700px){                 /* centred dialog on tablets/desktop */
+  .resume-overlay, .pe-confirm-overlay{ align-items:center !important; padding:20px !important; }
+  .resume-modal, .pe-confirm-modal{ border-radius:28px !important; transform: translate3d(0,16px,0) scale(.97); }
+  .resume-overlay.show .resume-modal, .pe-confirm-overlay.show .pe-confirm-modal{ transform:none; }
+}
+
+/* toast */
+.pe-toast{ transition: opacity var(--dur-base) ease, transform var(--dur-base) var(--ease-out) !important; }
+
+/* ---- 7. results: reveal in order instead of all at once ---- */
+.result-box.show{ animation: cardIn .32s var(--ease-out) both; }
+.score-metric-bar-fill{ transition: width .8s var(--ease-out) !important; }
+
+/* ---- 8. scrolling comfort ---- */
+html{ scroll-behavior:auto; }
+/* NOTE: no transform/will-change on .efb-header or .efb-actions: it would become the containing block of the fixed bottom dock on phones. */
+.sidebar{ transform: translateZ(0); overscroll-behavior: contain; }
+
+/* ---- 9. phones: shorter, lighter ---- */
+@media (max-width:640px){
+  :root{ --dur-base:.2s; --dur-slow:.3s; }
+  .hero-emo{ animation:none !important; }
+  .menu-screen.in-level .learning-level.active-level .menu-grid .menu-card{
+    animation-delay: min(calc(var(--stagger-i, 0) * 20ms), 240ms) !important;
+  }
+}
+
+/* ---- 10. accessibility: respect reduced motion everywhere ---- */
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after{
+    animation-duration:.01ms !important; animation-iteration-count:1 !important;
+    animation-delay:0s !important; transition-duration:.01ms !important;
+  }
+}
 </style>
 </head>
 <body>
@@ -3179,112 +4077,194 @@ body{ background: linear-gradient(180deg, var(--sky-pale) 0%, var(--cream) 55%) 
 
 <div class="stage">
 
-  <div class="topbar">
-    <div class="title-block">
-      <div class="title">EFB CLUB</div>
-      <div class="subtitle">Speaking Practice Studio</div>
+  <aside class="sidebar" id="sidebar" aria-label="Điều hướng chính">
+    <div class="sb-brand">
+      <div class="sb-logo" aria-hidden="true">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="sbLogoGrad" x1="6" y1="4" x2="42" y2="44" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#C9A8FF"/><stop offset="1" stop-color="#8B5FE0"/></linearGradient></defs>
+          <path d="M10 4h28a8 8 0 0 1 8 8v18a8 8 0 0 1-8 8H27l-8.5 7.2a1 1 0 0 1-1.65-.76V38H10a8 8 0 0 1-8-8V12a8 8 0 0 1 8-8Z" fill="url(#sbLogoGrad)"/>
+          <text x="24" y="27.5" text-anchor="middle" font-family="'Be Vietnam Pro', Arial, sans-serif" font-weight="800" font-size="15.5" fill="#fff">EFB</text>
+        </svg>
+      </div>
+      <div><div class="sb-name">EFB CLUB</div><div class="sb-sub">Speaking Studio</div></div>
     </div>
-    <div style="display:flex; align-items:center; gap:10px;">
-      <div class="sfx-toggle home-icon" id="homeBtn" role="button" tabindex="0" title="Về màn hình chọn hội thoại" aria-label="Về màn hình chọn hội thoại" style="display:none;">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+    <div class="sb-label">MENU</div>
+    <nav class="sb-nav">
+      <button type="button" class="sb-item active" data-nav="home"><span class="sb-ico">🏠</span><span>Trang chủ</span></button>
+      <button type="button" class="sb-item" data-nav="beginner"><span class="sb-ico">🌱</span><span>Cơ bản</span></button>
+      <button type="button" class="sb-item" data-nav="elementary"><span class="sb-ico">🌿</span><span>Sơ cấp</span></button>
+      <button type="button" class="sb-item" data-nav="intermediate"><span class="sb-ico">🌳</span><span>Trung cấp</span></button>
+    </nav>
+
+    <div class="sb-label">KHÁC</div>
+    <nav class="sb-nav">
+      <button type="button" class="sb-item" data-nav="achievements"><span class="sb-ico">🏆</span><span>Thành tích</span></button>
+      <button type="button" class="sb-item" data-nav="sound"><span class="sb-ico">🔊</span><span>Âm thanh</span><span class="sb-state" id="sbSound">Bật</span></button>
+    </nav>
+
+    <div class="sb-user">
+      <div class="sb-avatar">🍐</div>
+      <div class="sb-user-text"><div class="sb-user-name">Học viên</div><div class="sb-user-lv" id="sbLevel">Level 1</div></div>
+    </div>
+  </aside>
+
+  <header class="topbar efb-header">
+    <div class="efb-brand" aria-label="EFB CLUB">
+      <div class="efb-logo" aria-hidden="true">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="efbLogoGrad" x1="6" y1="4" x2="42" y2="44" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#B58CEB"/>
+              <stop offset="1" stop-color="#7A4FC2"/>
+            </linearGradient>
+          </defs>
+          <path d="M10 4h28a8 8 0 0 1 8 8v18a8 8 0 0 1-8 8H27l-8.5 7.2a1 1 0 0 1-1.65-.76V38H10a8 8 0 0 1-8-8V12a8 8 0 0 1 8-8Z" fill="url(#efbLogoGrad)"/>
+          <text x="24" y="27.5" text-anchor="middle" font-family="'Be Vietnam Pro', Arial, sans-serif" font-weight="800" font-size="15.5" fill="#fff" letter-spacing="0.3">EFB</text>
+        </svg>
+      </div>
+      <div class="efb-wordmark">
+        <div class="title"><span class="efb-w1">EFB</span><span class="efb-w2">CLUB</span></div>
+        <div class="subtitle">Speaking Practice Studio</div>
+      </div>
+    </div>
+    <nav class="efb-actions" aria-label="Điều khiển nhanh">
+      <button type="button" class="efb-btn efb-home" id="homeBtn" title="Về màn hình chọn hội thoại" aria-label="Về màn hình chọn hội thoại" style="display:none;">
+        <svg class="efb-ico" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M4 11.5L12 4L20 11.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M6 10V19C6 19.5523 6.44772 20 7 20H10V15C10 14.4477 10.4477 14 11 14H13C13.5523 14 14 14.4477 14 15V20H17C17.5523 20 18 19.5523 18 19V10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-      </div>
-      <div class="sfx-toggle" id="sfxToggle" role="button" tabindex="0" title="Tắt/bật âm thanh & giọng đọc" aria-label="Tắt/bật âm thanh" aria-pressed="true">🔊</div>
-    </div>
-  </div>
+        <span class="efb-label">Trang chủ</span>
+      </button>
+      <button type="button" class="efb-btn efb-sound" id="sfxToggle" title="Tắt/bật âm thanh &amp; giọng đọc" aria-label="Tắt âm thanh" aria-pressed="true">
+        <svg class="efb-ico efb-ico-on" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M4 9.5v5h3.6L12.5 19V5L7.6 9.5H4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="currentColor" fill-opacity=".15"/>
+          <path d="M16 9a4.2 4.2 0 0 1 0 6M18.6 6.4a8 8 0 0 1 0 11.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <svg class="efb-ico efb-ico-off" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M4 9.5v5h3.6L12.5 19V5L7.6 9.5H4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="currentColor" fill-opacity=".15"/>
+          <path d="M16.5 9.5l5 5m0-5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span class="efb-label"><span class="efb-label-main">Âm thanh</span><span class="efb-state" id="sfxState">Bật</span></span>
+      </button>
+    </nav>
+  </header>
 
   <div class="menu-screen" id="menuScreen">
-    <div class="menu-greeting">
-      <div class="greeting-mascot gm-pear">🍐</div>
-      <div class="greeting-mascot gm-egg">🥚</div>
-      <div class="greeting-mascot gm-note">🎵</div>
-      <div class="greeting-mascot gm-star">✨</div>
-      <div class="big-wave">👋</div>
-      <h1>Xin chào bạn!</h1>
-      <p>Chọn một đoạn hội thoại bên dưới để luyện nói cùng Pear 🍐 và Egg 🥚 nhé.</p>
-    </div>
-    <div class="study-progress" id="studyProgress">
-      <div class="study-progress-top">
-        <div class="study-progress-label">📈 Tiến trình học tập</div>
-        <div class="study-progress-count" id="studyProgressCount">0/0 hoàn thành</div>
+    <div class="d-top">
+      <div>
+        <h1 class="d-title">Bảng điều khiển</h1>
+        <p class="d-sub" id="dDate">Luyện nói tiếng Anh mỗi ngày</p>
       </div>
-      <div class="study-progress-track"><div class="study-progress-fill" id="studyProgressFill"></div></div>
-      <div class="study-progress-msg" id="studyProgressMsg">Hoàn thành một hội thoại để bắt đầu ghi nhận tiến trình nhé!</div>
-    </div>
-    <div class="practice-stats" id="practiceStats">
-
-  <div class="practice-stats-title">
-    🟡 Thống kê luyện tập
-  </div>
-
-  <div class="practice-stats-grid">
-
-    <div class="practice-stat-card">
-      <div class="practice-stat-icon">🏆</div>
-      <div class="practice-stat-value" id="bestScore">0%</div>
-      <div class="practice-stat-label">Điểm cao nhất</div>
+      <button type="button" class="d-btn" id="ctaTop"><span aria-hidden="true">▶</span> <span id="ctaTopText">Bắt đầu học</span></button>
     </div>
 
-    <div class="practice-stat-card">
-      <div class="practice-stat-icon">📊</div>
-      <div class="practice-stat-value" id="averageScore">0%</div>
-      <div class="practice-stat-label">Điểm trung bình</div>
+    <section class="hero" aria-label="Chào mừng">
+      <span class="hero-emo e1" aria-hidden="true">🍐</span>
+      <span class="hero-emo e2" aria-hidden="true">🥚</span>
+      <span class="hero-emo e3" aria-hidden="true">🎵</span>
+      <span class="hero-emo e4" aria-hidden="true">✨</span>
+      <span class="hero-wave" aria-hidden="true">👋</span>
+      <div class="hero-badge" id="peLevelBadge">🌱 Level 1 · New learner</div>
+      <h2 class="hero-title">Xin chào bạn!</h2>
+      <p class="hero-text">Chọn một cấp độ bên dưới để luyện nói cùng Pear 🍐 và Egg 🥚 nhé.</p>
+      <div class="hero-pills">
+        <span>🎙️ Chấm điểm phát âm</span><span>🔊 Nghe bản chuẩn</span><span>🔥 Giữ chuỗi ngày</span>
+      </div>
+    </section>
+
+    <div class="d-stats">
+      <article class="d-card stat">
+        <div class="stat-top"><span class="stat-ico t-fire">🔥</span><span class="stat-name">Ngày liên tiếp</span></div>
+        <div class="stat-main"><div class="stat-num" id="peStreak">0</div><div class="mini-bars" id="barsStreak" aria-hidden="true"></div></div>
+        <div class="stat-foot">7 ngày gần nhất</div>
+      </article>
+      <article class="d-card stat">
+        <div class="stat-top"><span class="stat-ico t-xp">⭐</span><span class="stat-name">Điểm kinh nghiệm</span></div>
+        <div class="stat-main"><div class="stat-num"><span id="peXP">0</span><small> XP</small></div></div>
+        <div class="xp-track"><i id="xpBar"></i></div>
+        <div class="stat-foot" id="xpFoot">0/250 XP đến Level 2</div>
+      </article>
+      <article class="d-card stat">
+        <div class="stat-top"><span class="stat-ico t-ok">✅</span><span class="stat-name">Lượt hôm nay</span></div>
+        <div class="stat-main"><div class="stat-num" id="peSessionsToday">0/10</div><div class="mini-bars" id="barsSessions" aria-hidden="true"></div></div>
+        <div class="stat-foot">số lượt luyện mỗi ngày</div>
+      </article>
     </div>
 
-    <div class="practice-stat-card">
-      <div class="practice-stat-icon">🔁</div>
-      <div class="practice-stat-value" id="practiceCount">0</div>
-      <div class="practice-stat-label">Số lần luyện</div>
+    <div class="d-row d-row2">
+      <article class="d-card">
+        <h3 class="d-card-title">Tiến độ tổng</h3>
+        <p class="d-card-sub">Số hội thoại đã hoàn thành</p>
+        <div class="gauge" id="gauge"><div class="gauge-num" id="gaugeNum">0%</div></div>
+        <div class="gauge-meta"><span id="studyProgressCount">0/0 hoàn thành</span></div>
+        <div class="d-track"><div class="d-fill" id="studyProgressFill"></div></div>
+        <div class="d-msg" id="studyProgressMsg">Hoàn thành một hội thoại để bắt đầu ghi nhận tiến trình nhé!</div>
+      </article>
+
+      <article class="d-card">
+        <h3 class="d-card-title">Tiến độ theo cấp</h3>
+        <p class="d-card-sub">Mức hoàn thành từng cấp độ</p>
+        <div class="lv-list" id="lvList"></div>
+      </article>
+
+      <article class="d-card">
+        <div class="act-head">
+          <div><h3 class="d-card-title">Hoạt động 7 ngày qua</h3><p class="d-card-sub">Số lượt luyện mỗi ngày</p></div>
+          <div class="act-total"><b id="actTotal">0</b><span>lượt</span></div>
+        </div>
+        <div class="act-chart" id="actChart"></div>
+      </article>
     </div>
 
-  </div>
+    <div class="d-row d-row3">
+      <article class="d-card dark-card">
+        <div class="dk-top">
+          <div class="ring" id="dkRing"><div class="ring-in"><span id="bestScore">0%</span></div></div>
+          <div>
+            <h3 class="dk-title">Điểm cao nhất</h3>
+            <p class="dk-sub">Đạt từ 85% trở lên để lên hạng xuất sắc.</p>
+          </div>
+        </div>
+        <div class="dk-row">
+          <div><b id="averageScore">0%</b><span>Điểm trung bình</span></div>
+          <div><b id="practiceCount">0</b><span>Số lần luyện</span></div>
+        </div>
+      </article>
 
-</div>
+      <article class="d-card mint-card">
+        <div class="mt-top">
+          <div class="ring ring-mint" id="goalRing"><div class="ring-in"><span id="goalRingNum">0/10</span></div></div>
+          <div>
+            <h3 class="mt-title">Mục tiêu hôm nay</h3>
+            <p class="mt-sub" id="peGoalText">🎯 Mục tiêu hôm nay: luyện 10 lần</p>
+          </div>
+        </div>
+        <div class="d-track mint"><div class="d-fill mint" id="peGoalFill"></div></div>
+        <div class="mt-foot">Kỷ lục hôm nay: <b id="peBest">0%</b></div>
+      </article>
 
-<!-- Pear & Egg v2: learner dashboard -->
-<div class="pe-dashboard" id="peDashboard">
-  <div class="pe-dashboard-top">
-    <div class="pe-dashboard-title">🌱 Hồ sơ luyện tập</div>
-    <div class="pe-level-badge" id="peLevelBadge">🌱 Level 1 · New learner</div>
-  </div>
-
-  <div class="pe-dashboard-grid">
-    <div class="pe-mini-stat">
-      <div class="pe-mini-icon">⭐</div>
-      <div class="pe-mini-value" id="peXP">0</div>
-      <div class="pe-mini-label">XP</div>
+      <article class="promo-card">
+        <span class="promo-emo" aria-hidden="true">🎙️</span>
+        <div class="promo-avatars" aria-hidden="true"><span>🍐</span><span>🥚</span></div>
+        <h3 class="promo-title">Pear &amp; Egg đang chờ bạn!</h3>
+        <p class="promo-text">Luyện vài câu mỗi ngày để giữ chuỗi 🔥 và tăng điểm phát âm.</p>
+        <button type="button" class="promo-btn" id="ctaPromo">Bắt đầu luyện nói <span aria-hidden="true">→</span></button>
+      </article>
     </div>
-    <div class="pe-mini-stat">
-      <div class="pe-mini-icon">🔥</div>
-      <div class="pe-mini-value" id="peStreak">0</div>
-      <div class="pe-mini-label">Ngày liên tiếp</div>
-    </div>
-    <div class="pe-mini-stat">
-      <div class="pe-mini-icon">🎯</div>
-      <div class="pe-mini-value" id="peSessionsToday">0/10</div>
-      <div class="pe-mini-label">Lượt hôm nay</div>
-    </div>
-    <div class="pe-mini-stat">
-      <div class="pe-mini-icon">🏅</div>
-      <div class="pe-mini-value" id="peBest">0%</div>
-      <div class="pe-mini-label">Kỷ lục hôm nay</div>
-    </div>
-  </div>
 
-  <div class="pe-goal">
-    <div id="peGoalText">🎯 Mục tiêu hôm nay: luyện 10 lần</div>
-    <div class="pe-goal-track"><div class="pe-goal-fill" id="peGoalFill"></div></div>
-  </div>
+    <details class="d-card d-ach" id="achSection">
+      <summary>🏆 Thành tích <span class="d-ach-count" id="peAchvCount">0/5</span></summary>
+      <div class="hs-ach" id="peAchievements"></div>
+      <button class="hs-reset" id="peResetData" type="button">Xóa dữ liệu tiến trình trên thiết bị này</button>
+    </details>
 
-  <button class="pe-achievements-toggle" id="peAchievementsToggle" type="button" aria-expanded="false">🏆 Thành tích <span id="peAchvCount">0/5</span> <span class="pe-achv-chevron">▾</span></button>
-  <div class="pe-achievements" id="peAchievements" style="display:none;"></div>
+    <div class="d-section">
+      <h2>Chọn cấp độ</h2>
+      <p>Bắt đầu từ cấp phù hợp với bạn.</p>
+    </div>
 
-  <div class="pe-dashboard-actions">
-    <button class="pe-reset" id="peResetData" type="button">Xóa dữ liệu tiến trình trên thiết bị này</button>
-  </div>
-</div>
+
 
   <!-- 🌱 FIRST STEPS -->
 <div class="learning-level" id="levelBeginner">
@@ -5507,6 +6487,7 @@ function drawPathLine(grid){
 }
 let _pePathRaf = 0;
 function drawAllPathLines(){
+  return; // decorative path is hidden; skipping avoids forced layout on every update
   // PERF: several callers (progress update, accordion open, screen change)
   // often fire in the same tick. Coalescing them into one animation frame
   // means we measure and rewrite the SVG paths once per frame instead of
@@ -5668,93 +6649,68 @@ drawAllPathLines();
 // Each level starts collapsed; tapping its header reveals the dialogues
 // inside it. Uses a max-height transition (not @keyframes) so it stays
 // smooth and reliable across browsers/devices.
+// Each .level-body gets one inner wrapper so the open/close animation can use
+// grid-template-rows (0fr -> 1fr). No pixel heights to measure or get stuck.
+document.querySelectorAll('.level-body').forEach(body=>{
+  if(body.querySelector(':scope > .level-body-inner')) return;
+  const inner = document.createElement('div');
+  inner.className = 'level-body-inner';
+  while(body.firstChild) inner.appendChild(body.firstChild);
+  body.appendChild(inner);
+});
 function setLevelOpen(header, open){
   const level = header.closest('.learning-level');
-  const body = document.getElementById(header.getAttribute('aria-controls'));
-  if(!level || !body) return;
-
-  if(open){
-    level.classList.add('open');
-    header.setAttribute('aria-expanded','true');
-    body.style.maxHeight = body.scrollHeight + 'px';
-
-    // Unpin the fixed pixel height once the level is open so the content can
-    // grow naturally (more dialogues, stats expanding, window resize).
-    //
-    // This used to rely on `transitionend` alone, which is unreliable: the
-    // event is skipped if the transition is interrupted (open → close → open
-    // quickly), and under prefers-reduced-motion the duration is ~0.01ms so
-    // it can fire before anything is listening. When it was missed, maxHeight
-    // stayed pinned at the height measured at open time and `overflow:hidden`
-    // silently clipped everything below it — the page never grew, so the
-    // scroll wheel had nothing to scroll. A timeout backstop guarantees the
-    // unpin happens either way.
-    const unpin = ()=>{
-      if(level.classList.contains('open')) body.style.maxHeight = 'none';
-      drawAllPathLines();
-    };
-    const onEnd = (e)=>{
-      if(e.propertyName !== 'max-height') return;
-      body.removeEventListener('transitionend', onEnd);
-      clearTimeout(body._peUnpinT);
-      unpin();
-    };
-    body.addEventListener('transitionend', onEnd);
-    clearTimeout(body._peUnpinT);
-    body._peUnpinT = setTimeout(()=>{
-      body.removeEventListener('transitionend', onEnd);
-      unpin();
-    }, 600);
-
-    // Re-trigger the node stagger-in only on open, never as a loop.
-    // PERF: the previous version did `void c.offsetWidth` inside the loop,
-    // which forces one synchronous layout *per card* — the single worst
-    // thing you can do in a handler that runs while a height transition is
-    // starting. One reflow on the container restarts them all at once.
-    const cards = body.querySelectorAll('.menu-card');
-    cards.forEach(c=>{ c.style.animation = 'none'; });
-    void body.offsetWidth;
-    cards.forEach(c=>{ c.style.animation = ''; });
-    drawAllPathLines();
-  } else {
-    clearTimeout(body._peUnpinT);
-    // If height is currently 'none' (fully open), pin it to a concrete pixel
-    // value first so the browser has a real starting point to transition from.
-    if(!body.style.maxHeight || body.style.maxHeight === 'none'){
-      body.style.maxHeight = body.scrollHeight + 'px';
-      void body.offsetHeight;
-    }
-    requestAnimationFrame(()=>{
-      level.classList.remove('open');
-      header.setAttribute('aria-expanded','false');
-      body.style.maxHeight = '0px';
-    });
-  }
+  if(!level) return;
+  level.classList.toggle('open', !!open);
+  header.setAttribute('aria-expanded', open ? 'true' : 'false');
 }
 
-document.querySelectorAll('.level-header').forEach(header=>{
-  header.addEventListener('click', ()=>{
+/* ================= Level "tabs": home shows 3 level cards, tapping one opens its own view ================= */
+const levelBackBtn = document.createElement('button');
+levelBackBtn.type = 'button';
+levelBackBtn.className = 'level-back';
+levelBackBtn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg><span>Tất cả cấp độ</span>';
+menuScreen.insertBefore(levelBackBtn, menuScreen.firstChild);
+
+function replayMenuAnim(){
+  menuScreen.style.animation = 'none';
+  void menuScreen.offsetWidth;
+  menuScreen.style.animation = '';
+}
+function openLevelView(levelKey){
+  const level = document.querySelector('.level-header[data-level="' + levelKey + '"]');
+  if(!level) return;
+  const box = level.closest('.learning-level');
+  document.querySelectorAll('.learning-level').forEach(l => l.classList.remove('active-level'));
+  box.classList.add('active-level');
+  menuScreen.classList.add('in-level');
+  menuScreen.dataset.level = levelKey;
+  window.scrollTo(0, 0);
+  replayMenuAnim();
+}
+function closeLevelView(){
+  menuScreen.classList.remove('in-level');
+  delete menuScreen.dataset.level;
+  document.querySelectorAll('.learning-level').forEach(l => l.classList.remove('active-level'));
+  window.scrollTo(0, 0);
+  replayMenuAnim();
+}
+levelBackBtn.addEventListener('click', ()=>{ ensureCtx(); sfx.tap(); closeLevelView(); });
+
+document.querySelectorAll('.learning-level').forEach(box=>{
+  const header = box.querySelector('.level-header');
+  if(!header) return;
+  header.removeAttribute('aria-controls');
+  header.removeAttribute('aria-expanded');
+  box.addEventListener('click', ()=>{
+    if(menuScreen.classList.contains('in-level')) return;
     ensureCtx(); sfx.tap();
-    const level = header.closest('.learning-level');
-    const isOpen = level.classList.contains('open');
-    setLevelOpen(header, !isOpen);
+    openLevelView(header.dataset.level);
   });
 });
 
-// Open the first level on load. Every level starts collapsed in the markup,
-// so the landing view was three headers and nothing else — short enough that
-// the page didn't overflow and the scroll wheel appeared to do nothing.
-(function openFirstLevelOnLoad(){
-  const first = document.querySelector('.level-header');
-  if(first) setLevelOpen(first, true);
-})();
-
-// Expands the level that a given dialogue set belongs to (used when jumping
-// back to the menu so the learner immediately sees where they landed).
-function expandLevelFor(levelKey){
-  const header = document.querySelector('.level-header[data-level="' + levelKey + '"]');
-  if(header) setLevelOpen(header, true);
-}
+// Used when coming back from a lesson: land on the level that lesson belongs to.
+function expandLevelFor(levelKey){ openLevelView(levelKey); }
 updatePracticeStats();
 updateAllDialogueStats();
 
@@ -5929,26 +6885,7 @@ function unlockAudioForIOS(){
 document.addEventListener('touchend', unlockAudioForIOS, {passive:true});
 document.addEventListener('click', unlockAudioForIOS);
 
-/* ---- Android edge-swipe fix (touch only, never affects desktop mouse wheel) ----
-   Blocks the browser's rubber-band overscroll ONLY when a finger drags past
-   the very top or bottom of the page, since that's what some Android
-   devices misread as a system "go home" gesture. Mouse wheel scrolling is
-   untouched because it never fires touch events. ---- */
-let __touchStartY = 0;
-document.addEventListener('touchstart', (e)=>{
-  if(e.touches && e.touches.length) __touchStartY = e.touches[0].clientY;
-}, {passive:true});
-document.addEventListener('touchmove', (e)=>{
-  if(!e.touches || !e.touches.length) return;
-  const touchY = e.touches[0].clientY;
-  const draggingDown = touchY > __touchStartY; // finger moving toward bottom of screen = page scrolls up toward top
-  const scrollTop = window.scrollY || document.documentElement.scrollTop;
-  const atTop = scrollTop <= 0;
-  const atBottom = (scrollTop + window.innerHeight) >= (document.documentElement.scrollHeight - 1);
-  if((atTop && draggingDown) || (atBottom && !draggingDown)){
-    e.preventDefault();
-  }
-}, {passive:false});
+/* Android edge-swipe: handled in CSS (overscroll-behavior-y), no JS touch listeners. */
 
 /* ---- Some iOS builds populate the voice list asynchronously after the
    page loads, so the very first speak() call can go out with no voice
@@ -5992,7 +6929,9 @@ const sfx = {
 };
 sfxToggle.addEventListener('click', ()=>{
   sfxOn = !sfxOn;
-  sfxToggle.textContent = sfxOn ? '🔊' : '🔇';
+  sfxToggle.classList.toggle('is-muted', !sfxOn);
+  const sfxStateEl = document.getElementById('sfxState');
+  if(sfxStateEl) sfxStateEl.textContent = sfxOn ? 'Bật' : 'Tắt';
   sfxToggle.setAttribute('aria-pressed', sfxOn ? 'true' : 'false');
   sfxToggle.setAttribute('aria-label', sfxOn ? 'Tắt âm thanh' : 'Bật âm thanh');
   if(sfxOn){ ensureCtx(); sfx.tap(); }
@@ -6006,6 +6945,7 @@ let lastKaraokeIndex = -1;
 let currentSpeakingAvatar = null;
 
 function bumpAvatar(el){
+  return; // talking animation (CSS) handles motion; avoids a forced reflow per word
   if(!el) return;
   el.classList.remove('bump');
   void el.offsetWidth; // force reflow so the animation restarts on every word
@@ -6082,7 +7022,8 @@ function spawnSparkles(x, y, count=6){
   // PERF: batch every particle into one fragment so the whole burst costs a
   // single DOM insertion instead of `count` separate ones, and schedule it
   // off the input handler so the tap's own visual feedback paints first.
-  const n = Math.max(1, Math.round(count * 0.4)); // review asked for ~80% less sparkle
+  if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const n = Math.max(1, Math.min(3, Math.round(count * 0.4)));
   requestAnimationFrame(()=>{
     const frag = document.createDocumentFragment();
     const nodes = [];
@@ -6125,7 +7066,8 @@ function addPressFX(el, count){
 /* ================= Confetti ================= */
 function burstConfetti(){
   const colors = ['🍐','🥚','🎉','✨','⭐','💛'];
-  const count = 26;
+  if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const count = (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) ? 14 : 22;
   for(let i=0;i<count;i++){
     const piece = document.createElement('div');
     piece.className = 'confetti-piece';
@@ -6252,17 +7194,7 @@ function paintContent(){
 }
 
 let animating = false;
-function render(withFlip){
-  if(!withFlip){ paintContent(); return; }
-  if(animating) return;
-  animating = true;
-  card.classList.add('flipping');
-  setTimeout(()=>{
-    paintContent();
-    card.classList.remove('flipping');
-    animating = false;
-  }, 220);
-}
+function render(){ paintContent(); }
 
 function next(){
   if(idx < dialogue.length){
@@ -6351,7 +7283,7 @@ chooseAnotherBtn.addEventListener('click',(e)=>{ e.stopPropagation(); goToMenu()
 // These controls are styled as plain elements (not native buttons) to preserve the
 // existing look, so we make them keyboard-operable too: role="button" +
 // tabindex is set in the HTML, and Enter/Space here trigger the same click.
-[prevBtn, nextBtn, speakBtn, sfxToggle, homeBtn].forEach(el=>{
+[prevBtn, nextBtn, speakBtn].forEach(el=>{
   el.addEventListener('keydown', (e)=>{
     if(e.code === 'Enter' || e.code === 'Space'){
       e.preventDefault();
@@ -7995,6 +8927,163 @@ recordPracticeScore = function(score){
 
 peRenderDashboard();
 
+
+/* ================= Dashboard: sidebar, charts, CTA ================= */
+(function(){
+  const LEVELS = [
+    ['beginner','🌱','Cơ bản','#2FB67C'],
+    ['elementary','🌿','Sơ cấp','#F5A524'],
+    ['intermediate','🌳','Trung cấp','#F0589A']
+  ];
+  const DAY_LABELS = ['CN','T2','T3','T4','T5','T6','T7'];
+  const $ = id => document.getElementById(id);
+  const keyOf = d => d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+
+  function renderHomeExtras(){
+    try{
+      const L = peGetLearner();
+      const completed = getCompletedSetIds();
+      const total = DIALOGUE_SETS.length;
+      const done = completed.filter(id => DIALOGUE_SETS.some(s => s.id === id)).length;
+      const pct = total ? Math.round(done/total*100) : 0;
+      const gauge = $('gauge'); if(gauge) gauge.style.setProperty('--p', pct);
+      if($('gaugeNum')) $('gaugeNum').textContent = pct + '%';
+
+      const lv = $('lvList');
+      if(lv){
+        lv.innerHTML = LEVELS.map(([key,ico,name,color])=>{
+          const sets = DIALOGUE_SETS.filter(s => s.level === key);
+          const d = sets.filter(s => completed.includes(s.id)).length;
+          const p = sets.length ? Math.round(d/sets.length*100) : 0;
+          return '<div class="lv-row"><span class="lv-dot" style="background:'+color+'"></span><span class="lv-name">'+ico+' '+name+'</span><span class="lv-pct">'+p+'%</span><div class="lv-bar"><i style="width:'+p+'%;background:'+color+'"></i></div></div>';
+        }).join('');
+      }
+
+      const days = [];
+      for(let i=6;i>=0;i--){
+        const d = new Date(); d.setDate(d.getDate()-i);
+        days.push({ label: DAY_LABELS[d.getDay()], n: L.sessions[keyOf(d)] || 0, today: i === 0 });
+      }
+      const max = Math.max(1, ...days.map(d => d.n));
+      const chart = $('actChart');
+      if(chart){
+        chart.innerHTML = days.map(d =>
+          '<div class="act-col'+(d.today?' today':'')+'"><div class="act-val">'+d.n+'</div><div class="act-bar"><i style="height:'+Math.max(d.n ? 12 : 0, Math.round(d.n/max*100))+'%"></i></div><div class="act-day">'+d.label+'</div></div>'
+        ).join('');
+      }
+      if($('actTotal')) $('actTotal').textContent = days.reduce((a,d)=>a+d.n,0);
+
+      const mini = (fn) => days.map(d => '<i class="'+(d.today?'hot':'')+'" style="height:'+fn(d)+'px"></i>').join('');
+      if($('barsStreak')) $('barsStreak').innerHTML = mini(d => d.n ? 30 : 8);
+      if($('barsSessions')) $('barsSessions').innerHTML = mini(d => Math.max(8, Math.round(d.n/max*34)));
+
+      const into = L.xp % 250, lvl = Math.floor(L.xp/250) + 1;
+      if($('xpBar')) $('xpBar').style.width = (into/250*100) + '%';
+      if($('xpFoot')) $('xpFoot').textContent = into + '/250 XP đến Level ' + (lvl+1);
+
+      const scores = getPracticeStats().scores || [];
+      const best = scores.length ? Math.max(...scores) : 0;
+      if($('dkRing')) $('dkRing').style.setProperty('--p', best);
+
+      const todayN = L.sessions[peToday()] || 0;
+      if($('goalRing')) $('goalRing').style.setProperty('--p', Math.min(100, todayN/PE_DAILY_GOAL*100));
+      if($('goalRingNum')) $('goalRingNum').textContent = Math.min(todayN, PE_DAILY_GOAL) + '/' + PE_DAILY_GOAL;
+
+      const badge = $('peLevelBadge');
+      if($('sbLevel') && badge) $('sbLevel').textContent = badge.textContent.replace(/^\S+\s/, '');
+
+      const cta = $('ctaTopText');
+      if(cta) cta.textContent = (done > 0 || Object.keys(getInProgressMap()).length) ? 'Học tiếp' : 'Bắt đầu học';
+    }catch(e){}
+  }
+
+  // keep charts in sync whenever the existing code refreshes its numbers
+  const _usp = updateStudyProgress;      updateStudyProgress = function(){ _usp.apply(this, arguments); renderHomeExtras(); };
+  const _prd = peRenderDashboard;        peRenderDashboard   = function(){ _prd.apply(this, arguments); renderHomeExtras(); };
+  const _upS = updatePracticeStats;      updatePracticeStats = function(){ _upS.apply(this, arguments); renderHomeExtras(); };
+
+  // sidebar highlight follows the current view
+  const sbItems = Array.from(document.querySelectorAll('.sb-item'));
+  function syncSidebar(){
+    const key = menuScreen.classList.contains('in-level') ? menuScreen.dataset.level : 'home';
+    sbItems.forEach(b => b.classList.toggle('active', b.dataset.nav === key));
+  }
+  const _olv = openLevelView;   openLevelView  = function(){ _olv.apply(this, arguments); syncSidebar(); };
+  const _clv = closeLevelView;  closeLevelView = function(){ _clv.apply(this, arguments); syncSidebar(); };
+
+  sbItems.forEach(b => b.addEventListener('click', ()=>{
+    const k = b.dataset.nav;
+    if(k === 'sound'){
+      sfxToggle.click();
+      const st = $('sbSound'); if(st) st.textContent = sfxOn ? 'Bật' : 'Tắt';
+      return;
+    }
+    ensureCtx(); sfx.tap();
+    if(k === 'home') closeLevelView();
+    else if(k === 'achievements'){
+      closeLevelView();
+      const d = $('achSection'); d.open = true;
+      setTimeout(()=> d.scrollIntoView({ behavior:'smooth', block:'center' }), 80);
+    } else openLevelView(k);
+  }));
+
+  // sidebar only on menu views
+  const _ld = launchDialogue; launchDialogue = function(){ _ld.apply(this, arguments); document.body.classList.add('in-practice'); };
+  const _gm = goToMenu;       goToMenu       = function(){ document.body.classList.remove('in-practice'); _gm.apply(this, arguments); syncSidebar(); };
+
+  // "next lesson" buttons
+  function startNextLesson(){
+    ensureCtx(); sfx.tap();
+    const map = getInProgressMap(), completed = getCompletedSetIds();
+    const order = ['beginner','elementary','intermediate'];
+    const sorted = DIALOGUE_SETS.slice().sort((a,b)=> order.indexOf(a.level) - order.indexOf(b.level));
+    const target = sorted.find(s => map[s.id] && map[s.id].idx > 0 && !completed.includes(s.id))
+                || sorted.find(s => !completed.includes(s.id))
+                || sorted[0];
+    if(target) selectDialogue(target.id);
+  }
+  ['ctaTop','ctaPromo'].forEach(id => { const b = $(id); if(b){ b.addEventListener('click', startNextLesson); addPressFX(b, 5); } });
+
+  const dEl = $('dDate');
+  if(dEl){ try{ dEl.textContent = new Date().toLocaleDateString('vi-VN', { weekday:'long', day:'numeric', month:'numeric' }); }catch(e){} }
+
+  renderHomeExtras();
+  syncSidebar();
+})();
+
+/* ================= Smooth motion helpers (v4) ================= */
+(function(){
+  const root = document.documentElement;
+
+  // Pause every looping animation while the tab/app is in the background
+  // (saves battery on phones, avoids a burst of catch-up work on return).
+  document.addEventListener('visibilitychange', ()=>{
+    root.classList.toggle('is-hidden', document.hidden);
+  });
+
+  // Translation strip: use the Web Animations API instead of toggling inline
+  // styles + forcing a reflow (void offsetHeight) on every line change.
+  pulseTranslationIn = function(){
+    if(!showTranslation || !lineTranslation.animate) return;
+    lineTranslation.animate(
+      [{ opacity:0, transform:'translate3d(0,-6px,0) scale(.98)' },
+       { opacity:1, transform:'translate3d(0,0,0) scale(1)' }],
+      { duration:240, easing:'cubic-bezier(.22,1,.36,1)' }
+    );
+  };
+
+  // Menu screen enter animation: same trick, no reflow.
+  replayMenuAnim = function(){
+    menuScreen.style.animation = 'none';
+    requestAnimationFrame(()=>{ menuScreen.style.animation = ''; });
+  };
+
+  // Touch: remove the 300ms-style delay feeling by preloading the first tap's
+  // audio context (already done) and marking the page as touch for CSS hooks.
+  if('ontouchstart' in window || navigator.maxTouchPoints > 0){
+    root.classList.add('is-touch');
+  }
+})();
 </script>
 
 </body>
