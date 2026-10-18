@@ -9084,6 +9084,330 @@ peRenderDashboard();
     root.classList.add('is-touch');
   }
 })();
+
+/* =====================================================================
+   MIC FIX v5 — rewrites the recording flow (desktop + Android + iOS)
+   Fixes:
+   - recognition.start() now runs synchronously inside the tap (was after an
+     `await getUserMedia`, which broke on iOS/Safari and caused "stop" taps to
+     be lost on desktop)
+   - the app's own text-to-speech is cancelled before listening (the mic used
+     to pick up the app's voice)
+   - no 2nd microphone stream on iOS/Android (conflicts with recognition)
+   - results from an old line can no longer be scored against the new line
+   - Android duplicate-text bug (continuous mode) avoided; interim text is used
+     as a fallback when the engine never sends a "final" result
+   - auto-stop after the learner finishes speaking + a watchdog if stop() hangs
+   - chunk / word practice: tap again to stop, never stuck on "Đang nghe...",
+     and no clash with the main mic
+   ===================================================================== */
+(function(){
+  if(!speechSupported) return;
+
+  const usePlaybackRecorder = mediaSupported && !isAndroid && !isIOS && !!window.MediaRecorder;
+  let micSession = 0;
+  let autoStopTimer = null, watchdogTimer = null;
+  let playbackRec = null;
+
+  const PERM_HINT = 'Trình duyệt đang chặn quyền micro 🙈 Hãy bấm biểu tượng ổ khóa cạnh thanh địa chỉ → cho phép micro rồi thử lại. (Nếu bạn mở file trực tiếp từ máy, hãy chạy qua https hoặc localhost.)';
+
+  function silenceSpeech(){
+    try{ if(window.speechSynthesis) window.speechSynthesis.cancel(); }catch(e){}
+    speechToken++;
+    try{ clearKaraoke(); }catch(e){}
+    pearAvatar.classList.remove('talking','bump');
+    eggAvatar.classList.remove('talking','bump');
+    currentSpeakingAvatar = null;
+  }
+  // iOS Safari: an active Web Audio context keeps the audio session in "playback"
+  // mode, which starves SpeechRecognition of the microphone. Suspend it while listening.
+  function ctxPauseIOS(){ if(isIOS && actx && actx.state === 'running'){ try{ actx.suspend(); }catch(e){} } }
+  function ctxResumeIOS(){ if(isIOS && actx && actx.state === 'suspended'){ try{ actx.resume(); }catch(e){} } }
+  function releaseStream(){
+    if(micStream){ try{ micStream.getTracks().forEach(t=>t.stop()); }catch(e){} micStream = null; }
+  }
+  function micUiIdle(){
+    micBtn.classList.remove('recording');
+    micBtn.setAttribute('aria-pressed','false');
+    micBtn.setAttribute('aria-label','Bắt đầu ghi âm');
+    setMicIdle();
+  }
+  function stopPlaybackRecorder(){
+    if(playbackRec && playbackRec.state !== 'inactive'){ try{ playbackRec.stop(); }catch(e){} }
+  }
+
+  async function startPlaybackRecorder(my){
+    if(!usePlaybackRecorder) return;
+    try{
+      if(!micStream || micStream.getTracks().every(t => t.readyState === 'ended')){
+        micStream = await navigator.mediaDevices.getUserMedia({ audio:true });
+      }
+      if(my !== micSession || !isRecording) return;
+      const chunks = [];
+      let mime = '';
+      if(MediaRecorder.isTypeSupported){
+        mime = ['audio/mp4','audio/aac','audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus']
+          .find(t => MediaRecorder.isTypeSupported(t)) || '';
+      }
+      const mr = mime ? new MediaRecorder(micStream, { mimeType: mime }) : new MediaRecorder(micStream);
+      playbackRec = mr;
+      mr.ondataavailable = e => { if(e.data && e.data.size > 0) chunks.push(e.data); };
+      mr.onstop = ()=>{
+        if(my !== micSession) return;               // stale clip from an earlier line
+        const blob = new Blob(chunks, { type: mr.mimeType || 'audio/webm' });
+        if(myAudioURL) URL.revokeObjectURL(myAudioURL);
+        myAudioURL = URL.createObjectURL(blob);
+        myAudio.src = myAudioURL;
+      };
+      mr.start();
+    }catch(e){ /* playback is optional; scoring still works */ }
+  }
+
+  function abortMain(){
+    micSession++;
+    clearTimeout(recordSafetyTimer); clearTimeout(autoStopTimer); clearTimeout(watchdogTimer);
+    if(recognition){ try{ recognition.abort(); }catch(e){} }
+    stopPlaybackRecorder();
+    isRecording = false;
+    micUiIdle();
+    ctxResumeIOS();
+  }
+
+  startRecording = function(){
+    if(isRecording) return;
+    stopChunkRec();
+    ensureCtx();
+    silenceSpeech();
+    ctxPauseIOS();
+    resultBox.classList.remove('show');
+
+    const my = ++micSession;
+    let finalText = '', interimText = '';
+    let speechStartTs = null, speechEndTs = null, speechSegments = 0;
+    let errored = false, finished = false, gotAudio = false;
+    const startedAt = Date.now();
+    const mobile = isAndroid || isIOS;
+
+    const rec = new SpeechRecognitionCtor();
+    recognition = rec;
+    rec.lang = 'en-US';
+    rec.maxAlternatives = 1;
+    rec.continuous = !mobile;       // continuous mode duplicates text on Android/iOS
+    rec.interimResults = true;
+
+    isRecording = true;
+    micLabel.textContent = 'Đang nghe... nói ngay đi nào 🎧';
+    micBtn.classList.add('recording');
+    micBtn.setAttribute('aria-pressed','true');
+    micBtn.setAttribute('aria-label','Dừng ghi âm');
+    setMicListening();
+
+    function finalize(){
+      if(finished || my !== micSession) return;
+      finished = true;
+      clearTimeout(recordSafetyTimer); clearTimeout(autoStopTimer); clearTimeout(watchdogTimer);
+      isRecording = false;
+      micUiIdle();
+      ctxResumeIOS();
+      sfx.recordStop();
+      stopPlaybackRecorder();
+      const text = (finalText + ' ' + interimText).replace(/\s+/g,' ').trim();
+      if(text){
+        micLabel.textContent = 'Chạm vào mic rồi lặp lại câu phía trên';
+        let timing = (speechStartTs !== null && speechEndTs !== null && speechEndTs > speechStartTs)
+          ? { speechMs: speechEndTs - speechStartTs, speechSegments: speechSegments || 1 } : null;
+        if(!timing){
+          const ms = Date.now() - startedAt;
+          if(ms > 0) timing = { speechMs: ms, speechSegments: speechSegments || 1 };
+        }
+        scoreAndRender(text, timing);
+      } else if(!errored){
+        micLabel.textContent = (isIOS && !gotAudio)
+          ? 'Safari chưa mở được micro 🙈 Kiểm tra: (1) Cài đặt → Safari → Micro = Hỏi/Cho phép, (2) Cài đặt → Chung → Bàn phím → bật "Đọc chính tả", (3) mở bằng địa chỉ https, rồi chạm mic thử lại.'
+          : 'Chưa bắt được giọng bạn — chạm mic để thử lại nhé 🎙️';
+      }
+    }
+
+    function scheduleAutoStop(){
+      if(mobile) return;            // mobile engines end themselves on silence
+      clearTimeout(autoStopTimer);
+      autoStopTimer = setTimeout(()=>{ if(my === micSession) stopRecording(); }, 2200);
+    }
+
+    rec.onstart = ()=>{ if(my === micSession) startPlaybackRecorder(my); };
+    rec.onresult = (e)=>{
+      if(my !== micSession) return;
+      let fin = '', inter = '';
+      for(let i = 0; i < e.results.length; i++){
+        const r = e.results[i];
+        if(r.isFinal) fin += r[0].transcript + ' '; else inter += r[0].transcript + ' ';
+      }
+      finalText = fin; interimText = inter;
+      scheduleAutoStop();
+    };
+    rec.onspeechstart = ()=>{ speechSegments++; if(speechStartTs === null) speechStartTs = Date.now(); };
+    rec.onspeechend = ()=>{ speechEndTs = Date.now(); };
+    rec.onaudiostart = ()=>{ gotAudio = true; if(speechStartTs === null) speechStartTs = Date.now(); };
+    rec.onaudioend = ()=>{ speechEndTs = Date.now(); };
+    rec.onerror = (ev)=>{
+      if(my !== micSession) return;
+      if(ev.error === 'aborted') return;
+      if(ev.error === 'no-speech'){ return; }     // handled by "chưa bắt được giọng" in finalize
+      errored = true;
+      if(ev.error === 'not-allowed' || ev.error === 'service-not-allowed'){
+        micLabel.textContent = (isIOS && ev.error === 'service-not-allowed')
+          ? 'iPhone chưa bật Đọc chính tả: vào Cài đặt → Chung → Bàn phím → bật "Đọc chính tả", rồi thử lại 🎙️'
+          : PERM_HINT;
+      } else if(ev.error === 'network'){
+        micLabel.textContent = 'Không có mạng để nhận diện giọng nói 📶 hãy kiểm tra kết nối rồi thử lại';
+      } else if(ev.error === 'audio-capture'){
+        micLabel.textContent = 'Không tìm thấy micro khả dụng 🎙️ hãy kiểm tra thiết bị (hoặc app khác đang dùng micro) rồi thử lại';
+      } else {
+        micLabel.textContent = 'Ồ, mình chưa nghe rõ lắm. Thử lại nhé 🎙️ (mã lỗi: ' + ev.error + ')';
+      }
+    };
+    rec.onend = finalize;
+
+    clearTimeout(recordSafetyTimer);
+    recordSafetyTimer = setTimeout(()=>{ if(my === micSession) stopRecording(); }, 20000);
+
+    try{
+      rec.start();                  // synchronous, inside the user's tap
+    }catch(err){
+      isRecording = false;
+      micUiIdle();
+      micLabel.textContent = 'Micro đang bận, thử chạm lại sau 1 giây nhé 🎙️';
+    }
+  };
+
+  stopRecording = function(){
+    clearTimeout(autoStopTimer);
+    const my = micSession, rec = recognition;
+    if(rec){ try{ rec.stop(); }catch(e){} }
+    stopPlaybackRecorder();
+    // watchdog: some mobile engines never fire onend after stop()
+    clearTimeout(watchdogTimer);
+    watchdogTimer = setTimeout(()=>{
+      if(my === micSession && isRecording && rec){ try{ rec.abort(); }catch(e){} }
+    }, 2500);
+  };
+
+  /* ---------- chunk / word / mistake practice ---------- */
+  let chunkSession = 0;
+  function stopChunkRec(){
+    chunkSession++;
+    if(chunkRecognition){ try{ chunkRecognition.abort(); }catch(e){} }
+    chunkRecognition = null;
+    chunkRecording = false;
+  }
+
+  startChunkRecording = function(targetText, chunkIndex, resultElementId){
+    const result = document.getElementById(resultElementId || ('chunkResult' + chunkIndex));
+
+    // tap again while listening = stop
+    if(chunkRecording && chunkRecognition){
+      try{ chunkRecognition.stop(); }catch(e){}
+      return;
+    }
+    if(isRecording) abortMain();
+    silenceSpeech();
+    ctxPauseIOS();
+
+    const my = ++chunkSession;
+    const rec = new SpeechRecognitionCtor();
+    chunkRecognition = rec;
+    rec.lang = 'en-US';
+    rec.continuous = false;
+    rec.interimResults = true;
+    rec.maxAlternatives = 1;
+    chunkRecording = true;
+
+    let finalText = '', interimText = '', errMsg = '', done = false, timer = null;
+    if(result) result.textContent = '🎙️ Đang nghe... (chạm lại để dừng)';
+
+    rec.onresult = (e)=>{
+      if(my !== chunkSession) return;
+      let fin = '', inter = '';
+      for(let i = 0; i < e.results.length; i++){
+        const r = e.results[i];
+        if(r.isFinal) fin += r[0].transcript + ' '; else inter += r[0].transcript + ' ';
+      }
+      finalText = fin; interimText = inter;
+    };
+    rec.onerror = (ev)=>{
+      if(my !== chunkSession) return;
+      if(ev.error === 'not-allowed' || ev.error === 'service-not-allowed') errMsg = '⚠️ Hãy cho phép trình duyệt dùng micro (biểu tượng ổ khóa cạnh thanh địa chỉ).';
+      else if(ev.error === 'network') errMsg = '⚠️ Không có mạng để nhận diện giọng nói.';
+      else if(ev.error === 'audio-capture') errMsg = '⚠️ Không tìm thấy micro khả dụng.';
+      else if(ev.error !== 'aborted' && ev.error !== 'no-speech') errMsg = '⚠️ Không nhận diện được. Hãy thử lại.';
+    };
+    rec.onend = ()=>{
+      clearTimeout(timer);
+      if(my !== chunkSession || done) return;
+      done = true;
+      ctxResumeIOS();
+      chunkRecording = false;
+      chunkRecognition = null;
+      const heard = (finalText + ' ' + interimText).replace(/\s+/g,' ').trim();
+      if(!heard){
+        if(result) result.textContent = errMsg || '🙉 Chưa bắt được giọng bạn — thử lại nhé.';
+        return;
+      }
+      const targetWords = targetText.split(/\s+/).filter(Boolean);
+      const heardWords = heard.split(/\s+/).filter(Boolean);
+      const { lcsLength } = alignWords(targetWords, heardWords);
+      const pct = targetWords.length ? Math.round(lcsLength / targetWords.length * 100) : 0;
+      if(result){
+        const head = pct >= 85 ? '✅ Rất tốt! ' + pct + '%'
+                   : pct >= 55 ? '🟡 Khá tốt — thử lại để rõ hơn. ' + pct + '%'
+                   : '🔴 Hãy nghe lại và thử thêm lần nữa. ' + pct + '%';
+        result.innerHTML = head + '<br><span>🎤 Máy nghe: ' + escapeHTML(heard) + '</span>';
+      }
+      recordPracticeScore(pct);
+      if(currentSetId) recordPracticeScoreForSet(pct, currentSetId);
+    };
+
+    timer = setTimeout(()=>{ if(my === chunkSession){ try{ rec.stop(); }catch(e){} } }, 12000);
+    try{
+      rec.start();
+    }catch(err){
+      chunkRecording = false; chunkRecognition = null;
+      if(result) result.textContent = '⚠️ Micro đang bận, thử lại sau 1 giây nhé.';
+    }
+  };
+
+  /* ---------- keep sessions clean when the screen / line changes ---------- */
+  const _reset = resetPracticeUI;
+  resetPracticeUI = function(){
+    micSession++;                              // invalidates any in-flight recognition
+    clearTimeout(recordSafetyTimer); clearTimeout(autoStopTimer); clearTimeout(watchdogTimer);
+    stopChunkRec();
+    ctxResumeIOS();
+    _reset.apply(this, arguments);
+  };
+  const _menu = goToMenu;
+  goToMenu = function(){
+    micSession++;
+    stopChunkRec();
+    _menu.apply(this, arguments);
+    releaseStream();
+  };
+
+  // stop listening if the app goes to the background (avoids a stuck mic indicator)
+  document.addEventListener('visibilitychange', ()=>{
+    if(document.hidden){ if(isRecording) abortMain(); stopChunkRec(); }
+  });
+
+  // iOS: like Android, own-voice playback isn't reliable alongside recognition
+  if(isIOS){
+    playMineBtn.style.display = 'none';
+    const note = document.getElementById('playbackNote');
+    if(note){
+      note.textContent = '🎧 Trên iPhone/iPad, nghe lại giọng của bạn chưa khả dụng (micro dùng chung với nhận diện giọng nói) — nhưng chấm điểm vẫn hoạt động bình thường.';
+      note.style.display = 'block';
+    }
+  }
+})();
 </script>
 
 </body>
