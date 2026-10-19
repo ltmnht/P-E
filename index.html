@@ -9219,7 +9219,7 @@ function unlockAudioForIOS(){
       const warm = new SpeechSynthesisUtterance(' ');
       warm.volume = 0;
       window.speechSynthesis.speak(warm);
-      window.speechSynthesis.cancel();
+      if(!/Android/i.test(navigator.userAgent)) window.speechSynthesis.cancel();
     }
   }catch(e){}
 }
@@ -9234,11 +9234,24 @@ document.addEventListener('click', unlockAudioForIOS);
    an English voice explicitly instead of relying on the default. ---- */
 let cachedVoices = [];
 function refreshVoices(){
-  if('speechSynthesis' in window) cachedVoices = window.speechSynthesis.getVoices();
+  if('speechSynthesis' in window) cachedVoices = window.speechSynthesis.getVoices() || [];
 }
 if('speechSynthesis' in window){
   refreshVoices();
   window.speechSynthesis.onvoiceschanged = refreshVoices;
+  // Android Chrome often fills the list late and may never fire onvoiceschanged
+  let _vTries = 0;
+  const _vTimer = setInterval(()=>{
+    refreshVoices();
+    if(cachedVoices.length || ++_vTries > 20) clearInterval(_vTimer);
+  }, 500);
+}
+function pickEnglishVoice(){
+  if(!cachedVoices.length) refreshVoices();
+  const norm = v => (v.lang || '').replace('_','-').toLowerCase();
+  return cachedVoices.find(v => norm(v) === 'en-us')
+      || cachedVoices.find(v => norm(v).startsWith('en'))
+      || null;
 }
 
 function tone(freq, start, dur, type='sine', peakGain=0.18){
@@ -9312,11 +9325,14 @@ function clearKaraoke(){
 }
 
 let speechToken = 0;
+let _speakTimer = null;
 function speak(text){
   try{
     if(!sfxOn) return;
     if(!('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
+    const synth = window.speechSynthesis;
+    if(_speakTimer){ clearTimeout(_speakTimer); _speakTimer = null; }
+    synth.cancel();
     clearKaraoke();
     pearAvatar.classList.remove('talking','bump');
     eggAvatar.classList.remove('talking','bump');
@@ -9325,38 +9341,72 @@ function speak(text){
     const isMainLine = idx < dialogue.length && text === dialogue[idx][1];
     const speakingAvatar = !isMainLine ? null : (speaker === 'Pear' ? pearAvatar : (speaker === 'Egg' ? eggAvatar : null));
     const myToken = ++speechToken;
+    const onAndroid = /Android/i.test(navigator.userAgent);
 
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'en-US';
-    u.rate = 0.92;
-    if(cachedVoices.length){
-      const v = cachedVoices.find(v => v.lang === 'en-US') || cachedVoices.find(v => v.lang && v.lang.startsWith('en'));
-      if(v) u.voice = v;
+    const finish = ()=>{
+      if(myToken !== speechToken) return;
+      clearKaraoke();
+      if(speakingAvatar) speakingAvatar.classList.remove('talking','bump');
+      currentSpeakingAvatar = null;
+    };
+
+    const build = (useVoice)=>{
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-US';
+      u.rate = 0.92;
+      u.volume = 1;
+      if(useVoice){
+        const v = pickEnglishVoice();
+        if(v) u.voice = v;
+      }
+      u.onstart = ()=>{
+        u._started = true;
+        if(myToken !== speechToken) return;
+        currentSpeakingAvatar = speakingAvatar;
+        if(speakingAvatar) speakingAvatar.classList.add('talking');
+      };
+      u.onboundary = (e)=>{
+        if(!isMainLine) return;
+        if(myToken !== speechToken) return;
+        if(e.name && e.name !== 'word') return;
+        highlightWordAt(e.charIndex);
+      };
+      u.onend = finish;
+      u.onerror = (e)=>{
+        console.warn('[speech] error', e && e.error);
+        finish();
+      };
+      return u;
+    };
+
+    const go = ()=>{
+      if(myToken !== speechToken) return;
+      if(synth.paused) synth.resume();
+      const u = build(true);
+      synth.speak(u);
+      if(onAndroid){
+        // Watchdog: if nothing started within 1.5s, reset the engine and retry
+        // once without an explicit voice (lets Android pick its default).
+        setTimeout(()=>{
+          if(myToken !== speechToken || u._started) return;
+          try{
+            synth.cancel();
+            setTimeout(()=>{
+              if(myToken !== speechToken) return;
+              synth.speak(build(false));
+            }, 120);
+          }catch(_){}
+        }, 1500);
+      }
+    };
+
+    // Android Chrome silently drops speak() issued right after cancel().
+    if(onAndroid || /iPad|iPhone|iPod/.test(navigator.userAgent)){
+      _speakTimer = setTimeout(()=>{ _speakTimer = null; go(); }, 120);
+    }else{
+      go();
     }
-    u.onstart = ()=>{
-      if(myToken !== speechToken) return;
-      currentSpeakingAvatar = speakingAvatar;
-      if(speakingAvatar) speakingAvatar.classList.add('talking');
-    };
-    u.onboundary = (e)=>{
-      if(!isMainLine) return;   // chunk / single-word playback must not highlight the full line by char index
-      if(myToken !== speechToken) return;
-      if(e.name && e.name !== 'word') return; // ignore sentence-level boundaries
-      highlightWordAt(e.charIndex);
-    };
-    u.onend = ()=>{
-      if(myToken !== speechToken) return;
-      clearKaraoke();
-      if(speakingAvatar) speakingAvatar.classList.remove('talking','bump');
-      currentSpeakingAvatar = null;
-    };
-    u.onerror = ()=>{
-      if(myToken !== speechToken) return;
-      clearKaraoke();
-      if(speakingAvatar) speakingAvatar.classList.remove('talking','bump');
-      currentSpeakingAvatar = null;
-    };
-    window.speechSynthesis.speak(u); }catch(e){ console.warn('[speech] speak failed', e); }
+  }catch(e){ console.warn('[speech] speak failed', e); }
 }
 
 /* ================= Playful button press sparkles ================= */
