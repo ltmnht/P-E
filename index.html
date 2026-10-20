@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
-<title>EFB CLUB Speaking Studio</title>
+<title>EFB CLUB English Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&display=swap" rel="stylesheet">
@@ -6406,20 +6406,20 @@ body::after{
   width:auto !important;
   margin:0 12px;
   padding:14px 16px !important;
-  background:rgba(255,255,255,.82) !important;
-  -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+  background:rgba(255,255,255,.55) !important;
+  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
   border:2px solid var(--lv) !important;
   border-radius:20px !important;
   box-shadow:0 6px 16px -8px rgba(40,25,70,.4);
 }
-.menu-screen .level-title{ color:var(--ink) !important; }
+.menu-screen .level-title{ color:var(--ink) !important; text-shadow:0 1px 0 rgba(255,255,255,.8); }
 .menu-screen .level-description{ color:#3b3552 !important; font-weight:600; -webkit-line-clamp:2 !important; }
 .menu-screen:not(.in-level) .level-heading{ gap:8px !important; }
 .menu-screen .level-progress-card{
   margin:10px 12px 12px !important;
   padding:10px 14px !important;
-  background:rgba(255,255,255,.86) !important;
-  -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+  background:rgba(255,255,255,.6) !important;
+  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
   border:2px solid var(--lv) !important;
   border-radius:18px !important;
   box-shadow:0 6px 16px -8px rgba(40,25,70,.4) !important;
@@ -6442,6 +6442,460 @@ body::after{
   mask-image:linear-gradient(#000 62%, transparent);
 }
 .menu-screen.in-level .learning-level.active-level .level-header{ margin-top:96px; }
+
+/* ================= READING TAB ================= */
+.rd-screen{
+  --rd-bg:#F6F1FB; --rd-pane:#FFFDFF; --rd-line:#E7DEFA; --rd-ink:#2A2140; --rd-mute:#6F6590;
+  --rd-g:#6A3FD0; --rd-g-dark:#4C2A9E; --rd-g-pale:#F1EAFF; --rd-red:#B93851; --rd-red-pale:#FBE9EE; --rd-ok:#2FB67C; --rd-ok-dark:#1E8A5C; --rd-ok-pale:#DDF5EA;
+  position:fixed; inset:0; z-index:300; overflow:auto;
+  background:var(--rd-bg); color:var(--rd-ink);
+  font-family:var(--font, 'Be Vietnam Pro', system-ui, sans-serif);
+  -webkit-overflow-scrolling:touch; user-select:text; -webkit-user-select:text;
+}
+.rd-screen[hidden], .rd-test[hidden], .rd-list[hidden]{ display:none !important; }
+@media (min-width:1024px){ .rd-screen:not(.testing){ left:264px; } }
+.rd-screen button{ font-family:inherit; }
+
+/* ---------- list ---------- */
+.rd-list{ max-width:980px; margin:0 auto; padding:28px 20px 48px; }
+.rd-head{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:6px; }
+.rd-back{
+  border:2px solid var(--rd-line); background:#fff; color:var(--rd-ink); border-radius:999px;
+  padding:8px 16px; font-weight:800; font-size:14px; cursor:pointer;
+}
+.rd-h1{ font-size:28px; font-weight:800; margin:0; }
+.rd-sub{ margin:6px 0 22px; color:var(--rd-mute); font-size:14px; line-height:1.6; }
+.rd-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:16px; }
+.rd-card{
+  text-align:left; cursor:pointer; background:#fff; border:3px solid var(--rd-g); border-radius:24px;
+  padding:18px; display:flex; flex-direction:column; gap:10px; min-height:210px;
+  box-shadow:0 12px 26px -16px rgba(74,45,125,.3); transition:transform .15s ease, box-shadow .2s ease;
+}
+.rd-card:hover{ transform:translateY(-3px); }
+.rd-card:active{ transform:scale(.985); }
+.rd-card-top{ display:flex; align-items:center; justify-content:space-between; }
+.rd-emoji{ width:54px; height:54px; border-radius:16px; background:var(--rd-g-pale); display:flex; align-items:center; justify-content:center; font-size:28px; }
+.rd-pill{ font-size:11px; font-weight:800; padding:4px 10px; border-radius:999px; background:var(--rd-g-pale); color:var(--rd-g-dark); }
+.rd-card h3{ margin:0; font-size:18px; line-height:1.3; font-weight:800; }
+.rd-card .rd-tag{ font-size:12.5px; color:var(--rd-mute); font-weight:600; }
+.rd-card .rd-meta{ margin-top:auto; display:flex; justify-content:space-between; align-items:center; font-size:13px; font-weight:700; color:var(--rd-mute); }
+.rd-go{ background:var(--rd-g); color:#fff; border-radius:999px; padding:7px 14px; font-weight:800; font-size:13px; }
+
+/* ---------- home entry card ---------- */
+.rd-home-card{
+  grid-column:1 / -1; width:100%; box-sizing:border-box; display:flex; align-items:center; gap:14px; text-align:left; cursor:pointer;
+  margin:6px 0 4px; padding:14px 16px; border-radius:24px; border:2px solid #A15FCB;
+  background:linear-gradient(135deg,#FFFDFF,#F3E3FA); color:#2D2A26;
+  box-shadow:0 12px 26px -18px rgba(76,42,158,.5);
+}
+.rd-home-card .rd-hc-ico{ font-size:30px; width:54px; height:54px; border-radius:16px; background:#fff; display:flex; align-items:center; justify-content:center; flex:0 0 auto; }
+.rd-home-card b{ display:block; font-size:16px; font-weight:800; }
+.rd-home-card span.rd-hc-sub{ display:block; font-size:12.5px; font-weight:600; color:#6F6590; margin-top:2px; }
+.rd-home-card .rd-hc-go{ margin-left:auto; background:#A15FCB; color:#fff; padding:8px 14px; border-radius:999px; font-weight:800; font-size:13px; white-space:nowrap; }
+
+/* ---------- test view ---------- */
+.rd-test{ display:flex; flex-direction:column; height:100vh; height:100dvh; }
+.rd-bar{ display:flex; align-items:center; gap:12px; padding:10px 16px; background:#fff; border-bottom:1px solid var(--rd-line); }
+.rd-exit{ border:2px solid var(--rd-line); background:#fff; border-radius:999px; padding:7px 14px; font-weight:800; font-size:13px; cursor:pointer; color:var(--rd-ink); white-space:nowrap; }
+.rd-bar-title{ font-size:14px; font-weight:700; min-width:0; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.rd-timer{ font-variant-numeric:tabular-nums; font-weight:800; font-size:14px; color:var(--rd-g-dark); background:var(--rd-g-pale); border-radius:999px; padding:6px 12px; }
+.rd-tabs{ display:none; background:#fff; padding:8px 12px; gap:8px; border-bottom:1px solid var(--rd-line); }
+.rd-tabs button{ flex:1; border:2px solid var(--rd-line); background:#fff; border-radius:12px; padding:8px; font-weight:800; font-size:14px; color:var(--rd-mute); cursor:pointer; }
+.rd-tabs button.on{ background:var(--rd-g); border-color:var(--rd-g); color:#fff; }
+.rd-panes{ flex:1; min-height:0; display:grid; grid-template-columns:1fr 1fr; gap:14px; padding:12px 14px 0; }
+.rd-pane{ min-height:0; overflow-y:auto; background:var(--rd-pane); border-radius:14px; padding:22px 28px 40px; -webkit-overflow-scrolling:touch; scroll-behavior:smooth; }
+.rd-ptag{ font-size:14px; font-weight:800; margin:0 0 14px; }
+.rd-ptitle{ text-align:center; font-size:23px; font-weight:800; margin:6px 0 18px; line-height:1.3; }
+.rd-passage p, .rv-passage p{ font-size:16px; line-height:1.85; margin:0 0 16px; }
+.rd-passage p .rd-pl, .rv-passage p .rd-pl{ display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; margin-right:8px; border-radius:8px; background:var(--rd-g); color:#fff; font-weight:800; font-size:14px; vertical-align:1px; }
+
+.rd-result{ border-radius:16px; padding:14px 16px; margin-bottom:18px; background:var(--rd-g-pale); border:2px solid var(--rd-g); }
+.rd-result b{ font-size:20px; }
+.rd-result .rd-rbtn{ display:inline-block; margin:10px 8px 0 0; border:2px solid var(--rd-g); background:#fff; color:var(--rd-g-dark); border-radius:999px; padding:7px 14px; font-weight:800; font-size:13px; cursor:pointer; }
+.rd-gh{ margin:22px 0 12px; }
+.rd-gh:first-of-type{ margin-top:4px; }
+.rd-gh h3{ font-size:17px; font-weight:800; margin:0 0 6px; }
+.rd-gh p{ font-size:13.5px; line-height:1.6; margin:0 0 4px; color:#3E3450; }
+.rd-gh ul{ margin:4px 0 0; padding-left:18px; font-size:13.5px; line-height:1.6; color:#3E3450; }
+.rd-gh ul b{ color:var(--rd-ink); }
+
+.rd-num{ flex:0 0 auto; min-width:28px; height:28px; padding:0 6px; border-radius:999px; background:var(--rd-g-pale); color:var(--rd-g-dark); font-weight:800; font-size:13px; display:inline-flex; align-items:center; justify-content:center; box-sizing:border-box; }
+.rd-q{ display:flex; align-items:flex-start; gap:12px; padding:12px 8px; border-radius:12px; border:2px solid transparent; }
+.rd-q .rd-qt{ flex:1; font-size:15.5px; line-height:1.55; padding-top:2px; }
+.rd-q select{
+  flex:0 0 auto; width:128px; font-size:14px; font-weight:700; padding:7px 8px; border:1.5px solid #8b80ab; border-radius:8px; background:#fff; color:var(--rd-ink);
+}
+.rd-q.rd-q-match select{ width:72px; }
+.rd-q select:focus, .rd-gap input:focus{ outline:none; border-color:var(--rd-g); box-shadow:0 0 0 3px rgba(106,63,208,.2); }
+.rd-q.flash, .rd-gap.flash{ animation:rdFlash 1.2s ease; }
+@keyframes rdFlash{ 0%,60%{ background:#FFF3B8; } 100%{ background:transparent; } }
+.rd-q.ok{ border-color:var(--rd-g); background:#F3FBF7; }
+.rd-q.bad{ border-color:var(--rd-red); background:#FFF6F6; }
+.rd-ans{ display:block; margin-top:4px; font-size:12.5px; font-weight:800; color:var(--rd-g-dark); }
+.rd-q .rd-qt .rd-ans{ margin-top:6px; }
+
+.rd-multi .rd-mq{ flex:1; }
+.rd-multi .rd-mq > p{ margin:0 0 8px; font-weight:700; font-size:15.5px; line-height:1.5; }
+.rd-opt{ display:flex; gap:10px; align-items:flex-start; padding:8px 10px; margin:4px 0; border:1.5px solid var(--rd-line); border-radius:10px; background:#fff; cursor:pointer; font-size:14.5px; line-height:1.5; }
+.rd-opt input{ margin-top:4px; accent-color:var(--rd-g); width:16px; height:16px; flex:0 0 auto; }
+.rd-opt.sel{ border-color:var(--rd-g); background:#F3FBF7; }
+.rd-opt.ok{ border-color:var(--rd-g); background:var(--rd-g-pale); }
+.rd-opt.bad{ border-color:var(--rd-red); background:var(--rd-red-pale); }
+
+.rd-note{ border:1.5px solid #3E3450; border-radius:6px; padding:12px 16px 16px; margin-top:10px; background:#fff; }
+.rd-note-title{ text-align:center; font-size:17px; font-weight:800; margin:2px 0 10px; }
+.rd-note h5{ font-size:15.5px; font-weight:800; margin:14px 0 6px; }
+.rd-note ul{ margin:0; padding-left:20px; }
+.rd-note li{ font-size:15.5px; line-height:2.2; }
+.rd-sum p{ font-size:15.5px; line-height:2.3; margin:0 0 10px; }
+.rd-gap{ display:inline-flex; align-items:center; gap:6px; vertical-align:middle; border-radius:8px; }
+.rd-gap input{ border:0; border-bottom:2px solid #3E3450; background:transparent; font:inherit; font-size:15px; width:9.5em; max-width:46vw; padding:2px 4px; text-align:center; color:var(--rd-ink); border-radius:0; }
+.rd-gap.ok input{ color:var(--rd-g-dark); border-bottom-color:var(--rd-g); font-weight:800; }
+.rd-gap.bad input{ color:var(--rd-red); border-bottom-color:var(--rd-red); text-decoration:line-through; }
+.rd-gap .rd-ans{ display:inline; margin:0 0 0 4px; font-size:13px; }
+
+.rd-foot{ display:flex; align-items:center; gap:12px; padding:10px 14px calc(10px + env(safe-area-inset-bottom)); background:#EDE6FA; margin-top:12px; border-top:1px solid var(--rd-line); }
+.rd-chips{ display:flex; flex-wrap:wrap; gap:6px; padding:7px 12px; background:#fff; border:2px solid var(--rd-g); border-radius:12px; min-width:0; }
+.rd-chip{ width:28px; height:28px; border-radius:999px; border:0; background:var(--rd-g-pale); color:var(--rd-g-dark); font-weight:800; font-size:13px; cursor:pointer; padding:0; flex:0 0 auto; }
+.rd-chip.done{ background:var(--rd-g); color:#fff; }
+.rd-chip.ok{ background:var(--rd-g); color:#fff; box-shadow:0 0 0 2px #fff, 0 0 0 4px var(--rd-g); }
+.rd-chip.bad{ background:var(--rd-red); color:#fff; box-shadow:0 0 0 2px #fff, 0 0 0 4px var(--rd-red); }
+.rd-chip.cur{ outline:3px solid #B58CFF; outline-offset:1px; }
+.rd-submit{ margin-left:auto; border:0; background:var(--rd-g); color:#fff; border-radius:999px; padding:11px 22px; font-weight:800; font-size:14px; cursor:pointer; box-shadow:0 8px 16px -10px rgba(76,42,158,.9); white-space:nowrap; }
+.rd-submit[disabled]{ background:#B9A2EE; cursor:default; box-shadow:none; }
+
+@media (max-width:899px){
+  .rd-tabs{ display:flex; }
+  .rd-panes{ grid-template-columns:1fr; padding:8px 8px 0; }
+  .rd-panes[data-show="read"] .rd-questions{ display:none; }
+  .rd-panes[data-show="q"] .rd-passage{ display:none; }
+  .rd-pane{ padding:16px 14px 32px; }
+  .rd-ptitle{ font-size:20px; }
+  .rd-foot{ gap:8px; padding-left:8px; padding-right:8px; }
+  .rd-chips{ flex-wrap:nowrap; overflow-x:auto; padding:6px 8px; flex:1; }
+  .rd-submit{ padding:10px 14px; }
+  .rd-q{ flex-wrap:wrap; }
+  .rd-q select{ width:112px; }
+  .rd-q .rd-qt{ flex-basis:calc(100% - 52px); }
+  .rd-q select{ margin-left:40px; order:3; }
+  .rd-q.rd-q-match select{ width:84px; }
+  .rd-note li{ line-height:2.4; }
+  .rd-gap input{ width:7em; }
+}
+
+/* ----- result screen ----- */
+.rd-test .rd-res{ display:none; }
+.rd-test.res .rd-res{ display:grid; grid-template-columns:minmax(260px,.8fr) 1.2fr; gap:14px; flex:1; min-height:0; padding:12px 14px 14px; overflow:auto; }
+.rd-test.res .rd-panes, .rd-test.res .rd-tabs, .rd-test.res .rd-foot{ display:none !important; }
+.rd-res-l{ border-radius:18px; padding:28px 22px; color:#fff; text-align:center; display:flex; flex-direction:column; align-items:center; gap:18px; background:linear-gradient(160deg,#8B5FC7,#3B2478); }
+.rd-res-l.good{ background:linear-gradient(160deg,#9A6CFF,#4C2A9E); }
+.rd-res-l.mid{ background:linear-gradient(160deg,#8B5FC7,#3B2478); }
+.rd-res-l.low{ background:linear-gradient(160deg,#7C4DDB,#2B1B5A); }
+.rd-res-l h2{ margin:0; font-size:20px; line-height:1.4; font-weight:800; }
+.rd-mascot{ font-size:120px; line-height:1; margin-top:auto; margin-bottom:auto; filter:drop-shadow(0 14px 12px rgba(0,0,0,.25)); }
+.rd-res-l.good .rd-mascot{ animation:rdHop 1.1s ease-in-out infinite; }
+.rd-res-l.low .rd-mascot{ transform:rotate(-72deg); }
+@keyframes rdHop{ 0%,100%{ transform:translateY(0) rotate(-4deg); } 50%{ transform:translateY(-18px) rotate(4deg); } }
+.rd-res-r{ background:#fff; border-radius:18px; padding:0 0 22px; display:flex; flex-direction:column; }
+.rd-res-h{ display:flex; justify-content:space-between; align-items:center; padding:16px 22px; border-bottom:1px solid var(--rd-line); }
+.rd-res-h b{ font-size:17px; }
+.rd-res-h span{ text-align:right; font-size:12.5px; color:var(--rd-mute); line-height:1.4; }
+.rd-res-h strong{ color:var(--rd-ink); font-size:15px; font-variant-numeric:tabular-nums; }
+.rd-res-body{ display:flex; align-items:center; justify-content:center; gap:34px; flex-wrap:wrap; padding:26px 22px 18px; }
+.rd-ring{ position:relative; width:230px; height:230px; }
+.rd-donut{ width:100%; height:100%; }
+.rd-ring-c{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.rd-ring-c b{ font-size:34px; font-weight:800; }
+.rd-ring-c span{ font-size:16px; font-weight:700; color:var(--rd-mute); }
+.rd-legend{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:16px; }
+.rd-legend li{ display:flex; align-items:center; gap:10px; font-size:16px; color:var(--rd-mute); font-weight:600; }
+.rd-legend li b{ color:var(--rd-ink); font-size:18px; margin-left:4px; }
+.rd-legend i{ width:18px; height:18px; border-radius:50%; display:inline-block; }
+.rd-res-btns{ display:flex; flex-direction:column; gap:10px; align-items:center; padding:0 22px; margin-top:auto; }
+.rd-big{ width:min(340px,100%); border:0; border-radius:999px; padding:14px 18px; font-weight:800; font-size:16px; cursor:pointer; background:var(--rd-g); color:#fff; box-shadow:0 10px 18px -12px rgba(76,42,158,.9); }
+.rd-big.alt{ background:#fff; color:var(--rd-ink); border:2px solid var(--rd-line); box-shadow:none; padding:11px 18px; font-size:14.5px; }
+
+/* ----- explanations ----- */
+.rd-grp + .rd-grp{ margin-top:30px; }
+.rd-exp{ margin-top:16px; border:2px solid #E7DEFA; background:#FAF8FF; border-radius:14px; padding:12px 14px 6px; }
+.rd-exp h4{ margin:0 0 8px; font-size:14.5px; font-weight:800; color:var(--rd-g-dark); }
+.rd-exp-ans{ margin:0 0 8px; font-size:14px; }
+.rd-er{ display:flex; gap:10px; padding:10px 0; border-top:1px dashed #E7DEFA; }
+.rd-er:first-of-type{ border-top:0; }
+.rd-er p{ margin:4px 0 0; font-size:14px; line-height:1.65; color:#3E3450; }
+.rd-ev{ font-size:13.5px; display:flex; flex-wrap:wrap; gap:4px 12px; }
+.rd-ev .okc, b.okc{ color:var(--rd-g-dark); }
+.rd-ev .badc, b.badc{ color:var(--rd-red); }
+.rd-you{ font-weight:700; }
+.rd-you.okc{ color:var(--rd-g-dark); } .rd-you.badc{ color:var(--rd-red); }
+@media (max-width:899px){
+  .rd-test.res .rd-res{ grid-template-columns:1fr; }
+  .rd-res-l{ padding:18px; gap:6px; }
+  .rd-res-l h2{ font-size:17px; }
+  .rd-mascot{ font-size:78px; margin:4px 0; }
+  .rd-res-l.low .rd-mascot{ transform:rotate(-72deg) scale(.9); }
+  .rd-ring{ width:190px; height:190px; }
+  .rd-res-body{ gap:18px; }
+}
+
+/* ----- review mode (explanations) ----- */
+.rd-test .rv{ display:none; }
+.rd-test.rev .rv{ display:flex; flex-direction:column; flex:1; min-height:0; }
+.rd-test.rev .rd-bar, .rd-test.rev .rd-panes, .rd-test.rev .rd-tabs, .rd-test.rev .rd-foot, .rd-test.rev .rd-res{ display:none !important; }
+.rv-top{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 16px; background:var(--rd-bg); }
+.rv-x{ width:36px; height:36px; border-radius:50%; border:2px solid var(--rd-line); background:#fff; font-size:16px; font-weight:800; cursor:pointer; color:var(--rd-mute); }
+.rv-pill{ background:#fff; border:1.5px solid var(--rd-line); border-radius:999px; padding:7px 18px; font-size:14px; color:var(--rd-mute); display:flex; align-items:center; gap:10px; }
+.rv-pill span{ font-variant-numeric:tabular-nums; color:var(--rd-ink); }
+.rv-pill b{ color:var(--rd-g); font-size:18px; border-left:1.5px solid var(--rd-line); padding-left:10px; }
+.rv-top-btn{ border:2px solid var(--rd-g); background:#fff; color:var(--rd-g-dark); border-radius:999px; padding:8px 16px; font-weight:800; font-size:13.5px; cursor:pointer; }
+.rv-tabs{ display:none; background:#fff; padding:8px 12px; gap:8px; border-bottom:1px solid var(--rd-line); }
+.rv-tabs button{ flex:1; border:2px solid var(--rd-line); background:#fff; border-radius:12px; padding:8px; font-weight:800; font-size:14px; color:var(--rd-mute); cursor:pointer; }
+.rv-tabs button.on{ background:var(--rd-g); border-color:var(--rd-g); color:#fff; }
+.rv-panes{ flex:1; min-height:0; display:grid; grid-template-columns:1fr 1fr; gap:14px; padding:4px 14px 0; }
+.rv-passage .rv-pt{ transition:background .2s; }
+.rv-mark{ background:#D9C2FF; color:inherit; border-radius:4px; padding:2px 0; box-shadow:0 0 0 3px #D9C2FF; animation:rvPulse 1.2s ease 2; }
+@keyframes rvPulse{ 0%,100%{ background:#D9C2FF; box-shadow:0 0 0 3px #D9C2FF; } 50%{ background:#FFE27A; box-shadow:0 0 0 3px #FFE27A; } }
+.rv-right{ padding:0 !important; display:flex; flex-direction:column; }
+.rv-qh{ display:flex; align-items:center; gap:10px; padding:14px 22px 6px; }
+.rv-qn{ font-weight:800; font-size:16px; }
+.rv-st{ font-size:12.5px; font-weight:800; padding:3px 10px; border-radius:999px; }
+.rv-st.ok{ background:var(--rd-g-pale); color:var(--rd-g-dark); } .rv-st.bad{ background:var(--rd-red-pale); color:var(--rd-red); } .rv-st.skip{ background:#EDE6FA; color:var(--rd-mute); }
+.rv-arrows{ margin-left:auto; display:flex; gap:6px; }
+.rv-nav{ width:34px; height:34px; border-radius:50%; border:2px solid var(--rd-line); background:#fff; font-size:20px; line-height:1; cursor:pointer; color:var(--rd-ink); padding:0 0 3px; }
+.rv-qbody{ padding:8px 22px 18px; }
+.rv-stmt{ display:flex; gap:12px; align-items:flex-start; margin:6px 0 14px; }
+.rv-qt{ margin:0; font-size:16px; line-height:1.75; }
+.rv-choices{ display:flex; flex-direction:column; gap:6px; }
+.rv-choices.row{ flex-direction:row; flex-wrap:wrap; }
+.rv-opt{ display:flex; align-items:center; gap:12px; padding:10px 14px; border-radius:10px; border:1.5px solid transparent; font-size:15.5px; }
+.rv-choices.row .rv-opt{ padding:8px 16px; border-color:var(--rd-line); background:#fff; }
+.rv-opt.right{ background:#DDF5EA; border-color:#9AE0C2; color:var(--rd-g-dark); font-weight:700; }
+.rv-opt.wrong{ background:var(--rd-red-pale); border-color:#E8B4C1; color:var(--rd-red); font-weight:700; }
+.rv-radio{ width:20px; height:20px; border-radius:50%; border:2px solid #9a90b5; flex:0 0 auto; box-sizing:border-box; }
+.rv-radio.on{ border:6px solid currentColor; }
+.rv-opt.right .rv-radio{ border-color:var(--rd-g); } .rv-opt.wrong .rv-radio{ border-color:var(--rd-red); }
+.rv-opt em{ font-style:normal; font-size:11.5px; font-weight:800; margin-left:auto; padding:2px 8px; border-radius:999px; background:#fff; color:var(--rd-red); }
+.rv-opt em.g{ color:var(--rd-g-dark); margin-left:6px; }
+.rv-opt .rv-mk{ font-size:18px; flex:0 0 auto; }
+.rv-opt{ line-height:1.5; }
+.rv-gv{ font-weight:800; padding:1px 8px; border-radius:6px; }
+.rv-gv.right{ background:#DDF5EA; color:var(--rd-g-dark); } .rv-gv.wrong{ background:var(--rd-red-pale); color:var(--rd-red); text-decoration:line-through; }
+.rv-sep{ height:0; border-top:2px solid #B47FDE; margin:0; flex:0 0 auto; }
+.rv-expl{ padding:16px 22px 40px; }
+.rv-eh{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:space-between; margin-bottom:10px; }
+.rv-eh h4{ margin:0; font-size:16.5px; font-weight:800; }
+.rv-loc{ border:2px solid var(--rd-g); background:#fff; color:var(--rd-g-dark); border-radius:999px; padding:7px 14px; font-weight:800; font-size:13px; cursor:pointer; white-space:nowrap; }
+.rv-loc.on{ background:var(--rd-g); color:#fff; }
+.rv-ansline{ margin:0 0 8px; font-size:15px; }
+.rv-ansline b{ color:var(--rd-g-dark); } .rv-ansline b.badc{ color:var(--rd-red); }
+.rv-exp-t{ margin:0; font-size:15.5px; line-height:1.8; }
+.rv-orow{ padding:12px 0; border-top:1px dashed var(--rd-line); }
+.rv-oh{ display:flex; align-items:center; gap:10px; }
+.rv-oh .rv-loc{ margin-left:auto; }
+.rv-orow p{ margin:8px 0 0; font-size:15px; line-height:1.75; }
+.rv-orow b.okc{ color:var(--rd-g-dark); } .rv-orow b.badc{ color:var(--rd-red); }
+.rv-foot{ display:flex; align-items:center; gap:10px; padding:10px 14px calc(10px + env(safe-area-inset-bottom)); background:#EDE6FA; margin-top:12px; border-top:1px solid var(--rd-line); }
+.rv-chips{ display:flex; flex-wrap:wrap; gap:6px; padding:8px 14px; background:#fff; border:2px solid var(--rd-g); border-radius:12px; min-width:0; }
+.rv-chip{ width:28px; height:28px; border-radius:50%; border:0; color:#fff; font-weight:800; font-size:13px; cursor:pointer; padding:0; flex:0 0 auto; }
+.rv-chip.ok{ background:var(--rd-g); } .rv-chip.bad{ background:#B93851; } .rv-chip.skip{ background:#C9BFE3; }
+.rv-chip.cur{ box-shadow:0 0 0 2px #fff, 0 0 0 4px #B58CFF; }
+.rv-btn{ border:0; background:var(--rd-g); color:#fff; border-radius:999px; padding:11px 20px; font-weight:800; font-size:14px; cursor:pointer; white-space:nowrap; }
+.rv-btn.alt{ background:#fff; color:#8B5FC7; border:2px solid #B47FDE; padding:9px 18px; }
+.rv-btn:first-of-type{ margin-left:auto; }
+@media (max-width:899px){
+  .rv-tabs{ display:flex; }
+  .rv-panes{ grid-template-columns:1fr; padding:8px 8px 0; }
+  .rv-panes[data-show="read"] .rv-right{ display:none; }
+  .rv-panes[data-show="exp"] .rv-passage{ display:none; }
+  .rv-pill{ padding:6px 12px; font-size:12.5px; }
+  .rv-top-btn{ padding:7px 10px; font-size:12.5px; }
+  .rv-foot{ gap:6px; padding-left:8px; padding-right:8px; flex-wrap:wrap; }
+  .rv-chips{ flex-wrap:nowrap; overflow-x:auto; width:100%; padding:6px 8px; }
+  .rv-btn{ flex:1; padding:10px 8px; font-size:13px; }
+  .rv-btn.alt{ padding:8px 8px; }
+  .rv-qh, .rv-qbody, .rv-expl{ padding-left:14px; padding-right:14px; }
+}
+</style>
+<style>
+/* ===== Skill-based navigation: Speaking (Cơ bản / Sơ cấp / Trung cấp) + Reading ===== */
+.skill-row{ grid-column:1 / -1; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+.skill-row > .rd-home-card, .skill-row > .sp-home-card{ grid-column:auto !important; margin:0; min-width:0; }
+.skill-row .rd-hc-go, .skill-row .sp-hc-go{ display:none; }
+.sp-home-card{
+  grid-column:1 / -1; width:100%; box-sizing:border-box; display:flex; align-items:center; gap:14px; text-align:left; cursor:pointer;
+  padding:14px 16px; border-radius:24px; border:2px solid var(--c-purple-400, #7c4ddb);
+  background:linear-gradient(135deg,#FFFDFF,#E7DEFA); color:#2D2A26; font-family:var(--font);
+  box-shadow:0 12px 26px -18px rgba(91,51,184,.6);
+}
+.sp-home-card .sp-hc-ico{ font-size:30px; width:54px; height:54px; border-radius:16px; background:#fff; display:flex; align-items:center; justify-content:center; flex:0 0 auto; }
+.sp-home-card b{ display:block; font-size:16px; font-weight:800; }
+.sp-home-card span.sp-hc-sub{ display:block; font-size:12.5px; font-weight:600; color:#6F6590; margin-top:2px; }
+.sp-home-card .sp-hc-go{ margin-left:auto; background:var(--c-purple-500, #6a3fd0); color:#fff; padding:8px 14px; border-radius:999px; font-weight:800; font-size:13px; white-space:nowrap; }
+.rd-home-card{ font-family:var(--font); }
+@media (max-width:760px){ .skill-row{ grid-template-columns:1fr; } }
+
+/* levels belong to Speaking: hidden on Home, visible in the Speaking view */
+.menu-screen:not(.in-speaking) > .learning-level,
+.menu-screen:not(.in-speaking) > #spHead{ display:none !important; }
+.menu-screen.in-speaking:not(.in-level) > :not(.learning-level):not(.level-back):not(#spHead){ display:none !important; }
+.menu-screen.in-speaking .level-back{ display:inline-flex; }
+</style>
+<style>
+/* ===== Reading v2: radio answers, highlight, dictionary, motion ===== */
+@keyframes rdUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes rdPop{from{opacity:0;transform:translateY(6px) scale(.94)}to{opacity:1;transform:none}}
+@keyframes rdSwap{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+@keyframes chipPop{40%{transform:scale(1.25)}100%{transform:scale(1)}}
+@keyframes okPulse{0%{box-shadow:0 0 0 0 rgba(34,165,89,.5)}100%{box-shadow:0 0 0 14px rgba(34,165,89,0)}}
+@keyframes badShake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+@keyframes rdBob{50%{transform:translateY(-8px) rotate(4deg)}}
+@keyframes donutIn{from{opacity:0;transform:rotate(-120deg) scale(.7)}to{opacity:1;transform:none}}
+@keyframes conf{to{transform:translate(var(--dx),105vh) rotate(540deg)}}
+@keyframes dot{40%{transform:translateY(-4px);opacity:1}}
+.rd-grid .rd-card{animation:rdUp .5s cubic-bezier(.22,1,.36,1) both;animation-delay:calc(var(--i,0)*70ms);transition:transform .2s,box-shadow .2s}
+.rd-grid .rd-card:hover{transform:translateY(-4px);box-shadow:0 14px 26px -16px rgba(23,122,65,.5)}
+.rd-grid .rd-card:active{transform:scale(.98)}
+.rd-test{animation:rdUp .4s both}
+.rd-pane{animation:rdUp .35s both}
+.rd-q{transition:background .3s,border-color .3s}
+.rd-q.ok{animation:okPulse .7s}.rd-q.bad{animation:badShake .45s}
+.rd-chip{transition:transform .15s,background .2s,color .2s}.rd-chip.done{animation:chipPop .35s}
+.rd-submit,.rd-big,.rv-btn{transition:transform .15s,filter .2s}.rd-submit:active,.rd-big:active,.rv-btn:active{transform:scale(.96)}
+.rd-mascot{animation:rdBob 2.4s ease-in-out infinite}
+.rd-donut{animation:donutIn .9s cubic-bezier(.22,1,.36,1) both}
+.rv-right.swap,#rvQ.swap{animation:rdSwap .3s cubic-bezier(.22,1,.36,1)}
+/* radio answers */
+.rd-q-radio{align-items:flex-start}
+.rd-rb{flex:1;min-width:0}
+.rd-radios{display:flex;flex-direction:column;gap:4px;margin-top:10px}
+.rd-q-match .rd-radios{flex-direction:row;flex-wrap:wrap}
+.rd-r{position:relative;display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:12px;cursor:pointer;font-size:15px;font-weight:600;transition:background .2s,color .2s,transform .15s}
+.rd-r input{position:absolute;opacity:0;pointer-events:none}
+.rd-rd{width:24px;height:24px;border-radius:50%;border:2px solid #6F6590;position:relative;flex:0 0 auto;transition:border-color .2s}
+.rd-rd::after{content:"";position:absolute;inset:3px;border-radius:50%;background:var(--rd-g);transform:scale(0);transition:transform .3s cubic-bezier(.34,1.9,.64,1)}
+.rd-r:hover{background:#F6F2FD}.rd-r:active{transform:scale(.98)}
+.rd-r:has(input:checked){background:#EFE7FF;color:var(--rd-g-dark)}
+.rd-r:has(input:checked) .rd-rd{border-color:var(--rd-g)}.rd-r:has(input:checked) .rd-rd::after{transform:scale(1)}
+.rd-r:has(input:focus-visible){outline:2px solid var(--rd-g)}
+.rd-q.ok .rd-r,.rd-q.bad .rd-r{cursor:default}
+.rd-r.right{background:#DDF5EA;color:var(--rd-g-dark)}.rd-r.right .rd-rd{border-color:var(--rd-g)}.rd-r.right .rd-rd::after{transform:scale(1)}
+.rd-r.wrong{background:#FDE4E5;color:#B3261E}.rd-r.wrong .rd-rd{border-color:#E5484D}.rd-r.wrong .rd-rd::after{background:#E5484D;transform:scale(1)}
+@media(max-width:899px){.rd-q.rd-q-radio{flex-wrap:nowrap}}
+/* highlight + lookup */
+.rd-pt,.rd-passage,.rv-passage{-webkit-user-select:text!important;user-select:text!important;-webkit-touch-callout:default}
+.rd-hint{font-size:12.5px;color:var(--rd-mute);margin:0 0 12px;padding:8px 12px;border-radius:10px;background:var(--rd-g-pale)}
+.rd-pt .w{cursor:pointer;border-radius:3px;transition:background .15s}
+.rd-pt .w:hover,.rd-pt .w.wf{background:rgba(106,63,208,.2)}
+mark.hl{color:inherit;border-radius:3px;animation:rdPop .35s}
+.hl-y{background:#FFE98A}.hl-g{background:#BFEFC8}.hl-p{background:#FFC9DC}.hl-b{background:#BFDDFF}
+.rd-pop,.rd-dict{position:fixed;z-index:360;background:#fff;border:1.5px solid var(--rd-line);border-radius:16px;box-shadow:0 18px 40px -14px rgba(40,30,20,.4);animation:rdPop .18s ease-out;font-family:var(--font)}
+.rd-pop{display:flex;align-items:center;gap:6px;padding:8px 10px}
+.hc{width:24px;height:24px;border-radius:50%;border:2px solid rgba(0,0,0,.12);cursor:pointer;transition:transform .15s}
+.hc:hover{transform:scale(1.2)}.hc-y{background:#FFE98A}.hc-g{background:#BFEFC8}.hc-p{background:#FFC9DC}.hc-b{background:#BFDDFF}
+.pb,.dc-rm{border:0;background:var(--rd-g-pale);color:var(--rd-g-dark);font-weight:800;font-size:13px;padding:6px 10px;border-radius:999px;cursor:pointer;font-family:inherit}
+.rd-dict{width:min(340px,calc(100vw - 20px));padding:14px 16px;color:var(--rd-ink)}
+.dc-h{display:flex;align-items:center;gap:8px}.dc-h b{font-size:20px}.dc-ph{color:var(--rd-mute);font-size:13px}.dc-sp{flex:1}
+.dc-h button,.vc-h button,.vc-r button{border:0;background:#F1EAFF;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:15px}
+.dc-vi{margin:8px 0 6px;font-size:17px;font-weight:800;color:var(--rd-g-dark)}
+.dc-m{font-size:13.5px;line-height:1.5;margin-top:6px}.dc-m i{font-weight:800;color:var(--rd-mute);margin-right:4px}.dc-m em{display:block;color:var(--rd-mute);font-size:12.5px}
+.dc-a{display:inline-block;margin-top:8px;font-size:12.5px;color:var(--rd-g-dark);font-weight:700}
+.dc-load{font-size:13.5px;color:var(--rd-mute);padding:10px 0}.dc-load i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--rd-g);margin-right:3px;opacity:.4;animation:dot 1s infinite}.dc-load i:nth-child(2){animation-delay:.15s}.dc-load i:nth-child(3){animation-delay:.3s}
+.dc-f{display:flex;align-items:center;gap:8px;margin-top:12px;padding-top:10px;border-top:1px solid var(--rd-line)}.dc-rm{margin-left:auto}
+.rd-voc{position:fixed;inset:0;z-index:380;background:rgba(30,22,40,.45);display:flex;align-items:center;justify-content:center;padding:16px;animation:rdPop .2s}
+.rd-voc[hidden],.rd-pop[hidden],.rd-dict[hidden]{display:none}
+.vc-box{background:#fff;border-radius:22px;width:min(460px,100%);max-height:80vh;overflow:auto;padding:16px 18px;font-family:var(--font);color:var(--rd-ink)}
+.vc-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:17px}
+.vc-r{display:flex;align-items:center;gap:8px;padding:10px 0;border-top:1px solid var(--rd-line)}.vc-r>div{flex:1}.vc-vi{font-size:13.5px;color:var(--rd-mute)}
+.rd-conf{position:fixed;inset:0;pointer-events:none;z-index:400;overflow:hidden}.rd-conf span{position:absolute;top:-30px;animation:conf 2s ease-in forwards}
+@media(max-width:700px){.rd-dict{left:8px!important;right:8px;top:auto!important;bottom:8px;width:auto}}
+/* home / speaking motion */
+@property --p{syntax:'<number>';inherits:true;initial-value:0}
+.gauge,.ring{transition:--p 1s cubic-bezier(.22,1,.36,1)}
+.skill-row>*{animation:rdUp .5s cubic-bezier(.22,1,.36,1) both;transition:transform .2s,box-shadow .2s}
+.skill-row>*:nth-child(2){animation-delay:.08s}
+.skill-row>*:hover{transform:translateY(-3px)}.skill-row>*:active{transform:scale(.98)}
+@media(prefers-reduced-motion:reduce){.rd-screen *,.skill-row *{animation:none!important;transition:none!important}}
+</style>
+<style>
+.rd-ask{text-align:center;padding:24px 22px}
+.rd-ask .ask-ico{font-size:40px;animation:rdBob 2.4s ease-in-out infinite}
+.rd-ask h3{margin:6px 0 4px;font-size:19px}.rd-ask p{margin:0 0 12px;color:var(--rd-mute);font-size:14.5px;line-height:1.5}
+.ask-nums{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-bottom:16px;max-height:110px;overflow:auto}
+.ask-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+</style>
+<style>
+/* ===== Reading uses the EFB purple brand; green kept only for "correct" ===== */
+.rd-screen{background:linear-gradient(180deg,#F1EAFA 0%,#F6F1FB 60%)}
+.rd-q.ok{border-color:var(--rd-ok);background:#F3FBF7}
+.rd-opt.ok{border-color:var(--rd-ok);background:var(--rd-ok-pale)}
+.rd-gap.ok input{border-bottom-color:var(--rd-ok)}
+.rd-gap.ok input,.rd-ans,.rd-ev .okc,b.okc,.rd-you.okc,.rv-orow b.okc,.rv-opt.right,.rv-gv.right,.rv-st.ok,.rd-r.right{color:var(--rd-ok-dark)}
+.rv-st.ok,.rv-gv.right,.rv-opt.right,.rd-r.right{background:var(--rd-ok-pale)}
+.rv-opt.right .rv-radio,.rd-r.right .rd-rd{border-color:var(--rd-ok)}
+.rd-r.right .rd-rd::after{background:var(--rd-ok)}
+.rd-chip.ok,.rv-chip.ok{background:var(--rd-ok)}
+.rd-chip.ok{box-shadow:0 0 0 2px #fff,0 0 0 4px var(--rd-ok)}
+.rd-r.wrong{background:var(--rd-red-pale);color:var(--rd-red)}.rd-r.wrong .rd-rd{border-color:var(--rd-red)}.rd-r.wrong .rd-rd::after{background:var(--rd-red)}
+.rd-grid .rd-card:hover{box-shadow:0 14px 26px -16px rgba(106,63,208,.5)}
+.rd-hint{background:var(--rd-g-pale)}
+@keyframes rdFlash{0%,60%{background:#E7DEFA}100%{background:transparent}}
+@keyframes okPulse{0%{box-shadow:0 0 0 0 rgba(47,182,124,.5)}100%{box-shadow:0 0 0 14px rgba(47,182,124,0)}}
+</style>
+<style>
+/* ===== Reading: phones / small tablets ===== */
+.rd-screen{overscroll-behavior:contain;-webkit-tap-highlight-color:transparent}
+.rd-screen button,.rd-screen label,.rd-screen a{touch-action:manipulation}
+@supports(height:100dvh){.rd-screen{height:100dvh;bottom:auto}}
+.rd-grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr))}
+.rd-pop{max-width:calc(100vw - 20px);flex-wrap:wrap;justify-content:center}
+.rd-dict{max-height:calc(100dvh - 20px);overflow:auto}
+.rd-voc{padding:max(16px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+.vc-box{max-height:80vh;max-height:80dvh}
+@media(max-width:899px){
+  .rd-list{padding:20px max(14px,env(safe-area-inset-right)) 40px max(14px,env(safe-area-inset-left))}
+  .rd-bar{position:sticky;top:0;z-index:5;gap:8px;padding:8px max(12px,env(safe-area-inset-right)) 8px max(12px,env(safe-area-inset-left));padding-top:calc(8px + env(safe-area-inset-top))}
+  .rd-bar-title{font-size:13px}
+  .rd-exit,.rd-back{min-height:40px;padding:8px 12px}
+  .rd-tabs button,.rv-tabs button{min-height:44px;font-size:14px}
+  .rd-pane{padding:16px max(14px,env(safe-area-inset-right)) 20px max(14px,env(safe-area-inset-left))}
+  .rd-ptitle{font-size:21px;line-height:1.3}
+  .rd-passage p,.rv-passage p{font-size:16px;line-height:1.75}
+  .rd-gap input,.rd-note input{font-size:16px;min-height:40px}
+  .rd-r{padding:12px;min-height:46px;font-size:15.5px}
+  .rd-q{padding:12px 4px}
+  .rd-chip,.rv-chip{min-width:40px;min-height:40px}
+  .rd-foot,.rv-foot{padding-left:max(10px,env(safe-area-inset-left));padding-right:max(10px,env(safe-area-inset-right));padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+  .rd-submit,.rv-btn{min-height:44px;white-space:nowrap}
+  .rd-res{grid-template-columns:1fr!important;gap:12px;padding:12px max(12px,env(safe-area-inset-right)) 12px max(12px,env(safe-area-inset-left))}
+  .rd-res-body{flex-direction:column;align-items:center;gap:14px}
+  .rd-ring{width:min(210px,58vw);height:auto;aspect-ratio:1}
+  .rd-res-btns{display:flex;flex-direction:column;align-items:stretch;gap:10px}
+  .rd-big{width:100%;min-height:48px}
+  .rv-qh,.rv-qbody,.rv-expl{padding-left:14px;padding-right:14px}
+  .rv-choices.row{flex-wrap:wrap}
+  .rv-loc{min-height:36px}
+}
+@media(max-width:700px){
+  .rd-dict{left:8px!important;right:8px;top:auto!important;bottom:calc(8px + env(safe-area-inset-bottom));width:auto;max-height:70dvh;border-radius:22px 22px 16px 16px}
+  .skill-row{gap:10px}
+  .sp-home-card,.rd-home-card{padding:12px;gap:10px}
+  .sp-home-card b,.rd-home-card b{font-size:15px}
+  .sp-home-card .sp-hc-ico,.rd-home-card .rd-hc-ico{width:46px;height:46px;font-size:26px}
+}
+@media(max-width:380px){
+  .rd-h1{font-size:22px}
+  .rd-bar-title{display:none}
+  .rd-timer{margin-left:auto}
+  .rd-r{gap:10px;padding:10px}
+  .rd-chip,.rv-chip{min-width:36px;min-height:36px;font-size:13px}
+  .rd-submit{padding:10px 14px;font-size:13px}
+  #rdVocBtn{padding:8px 10px}
+}
+@media(max-height:480px) and (orientation:landscape){
+  .rd-bar{padding-top:max(4px,env(safe-area-inset-top));padding-bottom:4px}
+  .rd-res-l{padding:10px}.rd-mascot{font-size:36px}
+  .rd-dict{max-height:calc(100dvh - 16px)}
+}
 </style>
 </head>
 <body>
@@ -6466,15 +6920,18 @@ body::after{
           <text x="24" y="27.5" text-anchor="middle" font-family="'Be Vietnam Pro', Arial, sans-serif" font-weight="800" font-size="15.5" fill="#fff">EFB</text>
         </svg>
       </div>
-      <div><div class="sb-name">EFB CLUB</div><div class="sb-sub">Speaking Studio</div></div>
+      <div><div class="sb-name">EFB CLUB</div><div class="sb-sub">English Studio</div></div>
     </div>
 
     <div class="sb-label">MENU</div>
     <nav class="sb-nav">
       <button type="button" class="sb-item active" data-nav="home"><span class="sb-ico">🏠</span><span>Trang chủ</span></button>
-      <button type="button" class="sb-item" data-nav="beginner"><span class="sb-ico">🌱</span><span>Cơ bản</span></button>
-      <button type="button" class="sb-item" data-nav="elementary"><span class="sb-ico">🌿</span><span>Sơ cấp</span></button>
-      <button type="button" class="sb-item" data-nav="intermediate"><span class="sb-ico">🌳</span><span>Trung cấp</span></button>
+    </nav>
+
+    <div class="sb-label">KỸ NĂNG</div>
+    <nav class="sb-nav">
+      <button type="button" class="sb-item" data-nav="speaking"><span class="sb-ico">🎙️</span><span>Speaking</span></button>
+      <button type="button" class="sb-item" data-nav="reading"><span class="sb-ico">📖</span><span>Reading</span></button>
     </nav>
 
     <div class="sb-label">KHÁC</div>
@@ -6505,7 +6962,7 @@ body::after{
       </div>
       <div class="efb-wordmark">
         <div class="title"><span class="efb-w1">EFB</span><span class="efb-w2">CLUB</span></div>
-        <div class="subtitle">Speaking Practice Studio</div>
+        <div class="subtitle">English Practice Studio</div>
       </div>
     </div>
     <nav class="efb-actions" aria-label="Điều khiển nhanh">
@@ -6534,7 +6991,7 @@ body::after{
     <div class="d-top">
       <div>
         <h1 class="d-title">Oi Oi Oi</h1>
-        <p class="d-sub" id="dDate">Luyện nói tiếng Anh mỗi ngày</p>
+        <p class="d-sub" id="dDate">Luyện tiếng Anh mỗi ngày</p>
       </div>
       <button type="button" class="d-btn" id="ctaTop"><span aria-hidden="true">▶</span> <span id="ctaTopText">Bắt đầu học</span></button>
     </div>
@@ -6547,11 +7004,24 @@ body::after{
       <span class="hero-wave" aria-hidden="true">👋</span>
       <div class="hero-badge" id="peLevelBadge">🌱 Level 1 · New learner</div>
       <h2 class="hero-title">Xin chào bạn!</h2>
-      <p class="hero-text">Chọn một cấp độ bên dưới để luyện nói cùng Pear 🍐 và Egg 🥚 nhé.</p>
+      <p class="hero-text">Chọn một kỹ năng bên dưới để bắt đầu luyện tiếng Anh cùng Pear 🍐 và Egg 🥚 nhé.</p>
       <div class="hero-pills">
         <span>🎙️ Chấm điểm phát âm</span><span>🔊 Nghe bản chuẩn</span><span>🔥 Giữ chuỗi ngày</span>
       </div>
     </section>
+
+    <div class="skill-row" aria-label="Kỹ năng">
+      <button type="button" class="sp-home-card" id="spHomeCard">
+        <span class="sp-hc-ico">🎙️</span>
+        <span><b>Luyện Speaking</b><span class="sp-hc-sub">Hội thoại cùng Pear &amp; Egg · 3 cấp độ · chấm điểm phát âm</span></span>
+        <span class="sp-hc-go">Luyện nói →</span>
+      </button>
+      <button type="button" class="rd-home-card" id="rdHomeCard">
+        <span class="rd-hc-ico">📖</span>
+        <span><b>Luyện Reading</b><span class="rd-hc-sub">4 passage · 13–14 câu mỗi bài · chấm điểm ngay</span></span>
+        <span class="rd-hc-go">Làm bài →</span>
+      </button>
+    </div>
 
     <div class="d-stats">
       <article class="d-card stat">
@@ -6575,7 +7045,7 @@ body::after{
     <div class="d-row d-row2">
       <article class="d-card">
         <h3 class="d-card-title">Tiến độ tổng</h3>
-        <p class="d-card-sub">Số hội thoại đã hoàn thành</p>
+        <p class="d-card-sub">Hội thoại &amp; bài đọc đã hoàn thành</p>
         <div class="gauge" id="gauge"><div class="gauge-num" id="gaugeNum">0%</div></div>
         <div class="gauge-meta"><span id="studyProgressCount">0/0 hoàn thành</span></div>
         <div class="d-track"><div class="d-fill" id="studyProgressFill"></div></div>
@@ -6639,9 +7109,9 @@ body::after{
       <button class="hs-reset" id="peResetData" type="button">Xóa dữ liệu tiến trình trên thiết bị này</button>
     </details>
 
-    <div class="d-section">
-      <h2>Chọn cấp độ</h2>
-      <p>Bắt đầu từ cấp phù hợp với bạn.</p>
+    <div class="d-section" id="spHead">
+      <h2>🎙️ Speaking</h2>
+      <p>Chọn cấp độ phù hợp với bạn để luyện nói cùng Pear 🍐 và Egg 🥚.</p>
     </div>
 
 
@@ -7030,6 +7500,11 @@ body::after{
     </div>
   </div>
   </div>
+</div>
+
+<div class="rd-screen" id="rdScreen" hidden>
+  <div class="rd-list" id="rdList"></div>
+  <div class="rd-test" id="rdTest" hidden></div>
 </div>
 
 <script>
@@ -8391,9 +8866,10 @@ function markSetCompleted(id){
   updateLevelProgress();
 }
 function updateStudyProgress(){
-  const total = DIALOGUE_SETS.length;
+  const rp = window.rdProgress ? window.rdProgress() : {done:0,total:0};
+  const total = DIALOGUE_SETS.length + rp.total;
   const done = getCompletedSetIds().filter(id => DIALOGUE_SETS.some(s => s.id === id));
-  const doneCount = done.length;
+  const doneCount = done.length + rp.done;
   const pct = total ? Math.round((doneCount / total) * 100) : 0;
 
   const fillEl = document.getElementById('studyProgressFill');
@@ -8403,11 +8879,11 @@ function updateStudyProgress(){
   if(countEl) countEl.textContent = doneCount + '/' + total + ' hoàn thành';
   if(msgEl){
     if(doneCount === 0){
-      msgEl.textContent = 'Hoàn thành một hội thoại để bắt đầu ghi nhận tiến trình nhé!';
+      msgEl.textContent = 'Hoàn thành một bài để bắt đầu ghi nhận tiến trình nhé!';
     } else if(doneCount >= total){
-      msgEl.textContent = 'Tuyệt vời! Bạn đã hoàn thành tất cả hội thoại! 🎉';
+      msgEl.textContent = 'Tuyệt vời! Bạn đã hoàn thành tất cả bài học! 🎉';
     } else {
-      msgEl.textContent = 'Cố lên! Còn ' + (total - doneCount) + ' hội thoại nữa thôi 💪';
+      msgEl.textContent = 'Cố lên! Còn ' + (total - doneCount) + ' bài nữa thôi 💪';
     }
   }
 
@@ -9079,7 +9555,7 @@ function setLevelOpen(header, open){
 const levelBackBtn = document.createElement('button');
 levelBackBtn.type = 'button';
 levelBackBtn.className = 'level-back';
-levelBackBtn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg><span>Tất cả cấp độ</span>';
+levelBackBtn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg><span id="levelBackLabel">Trang chủ</span>';
 menuScreen.insertBefore(levelBackBtn, menuScreen.firstChild);
 
 function replayMenuAnim(){
@@ -9087,25 +9563,48 @@ function replayMenuAnim(){
   void menuScreen.offsetWidth;
   menuScreen.style.animation = '';
 }
+function setLevelBackLabel(){
+  const s = document.getElementById('levelBackLabel');
+  if(s) s.textContent = menuScreen.classList.contains('in-level') ? 'Tất cả cấp độ' : 'Trang chủ';
+}
+// Speaking view: lists the 3 levels (Cơ bản / Sơ cấp / Trung cấp)
+function openSpeaking(){
+  document.querySelectorAll('.learning-level').forEach(l => l.classList.remove('active-level'));
+  menuScreen.classList.remove('in-level');
+  delete menuScreen.dataset.level;
+  menuScreen.classList.add('in-speaking');
+  setLevelBackLabel();
+  window.scrollTo(0, 0);
+  replayMenuAnim();
+}
 function openLevelView(levelKey){
   const level = document.querySelector('.level-header[data-level="' + levelKey + '"]');
   if(!level) return;
   const box = level.closest('.learning-level');
   document.querySelectorAll('.learning-level').forEach(l => l.classList.remove('active-level'));
   box.classList.add('active-level');
+  menuScreen.classList.add('in-speaking');
   menuScreen.classList.add('in-level');
   menuScreen.dataset.level = levelKey;
+  setLevelBackLabel();
   window.scrollTo(0, 0);
   replayMenuAnim();
 }
+// back to Home (leaves Speaking entirely)
 function closeLevelView(){
   menuScreen.classList.remove('in-level');
+  menuScreen.classList.remove('in-speaking');
   delete menuScreen.dataset.level;
   document.querySelectorAll('.learning-level').forEach(l => l.classList.remove('active-level'));
+  setLevelBackLabel();
   window.scrollTo(0, 0);
   replayMenuAnim();
 }
-levelBackBtn.addEventListener('click', ()=>{ ensureCtx(); sfx.tap(); closeLevelView(); });
+// level -> Speaking list -> Home
+levelBackBtn.addEventListener('click', ()=>{
+  ensureCtx(); sfx.tap();
+  if(menuScreen.classList.contains('in-level')) openSpeaking(); else closeLevelView();
+});
 
 document.querySelectorAll('.learning-level').forEach(box=>{
   const header = box.querySelector('.level-header');
@@ -11438,8 +11937,9 @@ peRenderDashboard();
     try{
       const L = peGetLearner();
       const completed = getCompletedSetIds();
-      const total = DIALOGUE_SETS.length;
-      const done = completed.filter(id => DIALOGUE_SETS.some(s => s.id === id)).length;
+      const _rp = window.rdProgress ? window.rdProgress() : {done:0,total:0};
+      const total = DIALOGUE_SETS.length + _rp.total;
+      const done = completed.filter(id => DIALOGUE_SETS.some(s => s.id === id)).length + _rp.done;
       const pct = total ? Math.round(done/total*100) : 0;
       const gauge = $('gauge'); if(gauge) gauge.style.setProperty('--p', pct);
       if($('gaugeNum')) $('gaugeNum').textContent = pct + '%';
@@ -11451,7 +11951,7 @@ peRenderDashboard();
           const d = sets.filter(s => completed.includes(s.id)).length;
           const p = sets.length ? Math.round(d/sets.length*100) : 0;
           return '<div class="lv-row"><span class="lv-dot" style="background:'+color+'"></span><span class="lv-name">'+ico+' '+name+'</span><span class="lv-pct">'+p+'%</span><div class="lv-bar"><i style="width:'+p+'%;background:'+color+'"></i></div></div>';
-        }).join('');
+        }).join('') + (window.rdLvRow ? window.rdLvRow() : '');
       }
 
       const days = [];
@@ -11499,14 +11999,17 @@ peRenderDashboard();
   // sidebar highlight follows the current view
   const sbItems = Array.from(document.querySelectorAll('.sb-item'));
   function syncSidebar(){
-    const key = menuScreen.classList.contains('in-level') ? menuScreen.dataset.level : 'home';
+    const key = menuScreen.classList.contains('in-speaking') ? 'speaking' : 'home';
     sbItems.forEach(b => b.classList.toggle('active', b.dataset.nav === key));
   }
   const _olv = openLevelView;   openLevelView  = function(){ _olv.apply(this, arguments); syncSidebar(); };
   const _clv = closeLevelView;  closeLevelView = function(){ _clv.apply(this, arguments); syncSidebar(); };
+  const _osp = openSpeaking;    openSpeaking   = function(){ _osp.apply(this, arguments); syncSidebar(); };
 
   sbItems.forEach(b => b.addEventListener('click', ()=>{
     const k = b.dataset.nav;
+    if(k === 'reading'){ openReading(); return; }
+    if(k !== 'sound' && window.rdClose) rdClose();
     if(k === 'sound'){
       sfxToggle.click();
       const st = $('sbSound'); if(st) st.textContent = sfxOn ? 'Bật' : 'Tắt';
@@ -11518,8 +12021,12 @@ peRenderDashboard();
       closeLevelView();
       const d = $('achSection'); d.open = true;
       setTimeout(()=> d.scrollIntoView({ behavior:'smooth', block:'center' }), 80);
-    } else openLevelView(k);
+    } else if(k === 'speaking') openSpeaking();
+    else openLevelView(k);
   }));
+
+  const spCard = $('spHomeCard');
+  if(spCard){ spCard.addEventListener('click', ()=>{ ensureCtx(); sfx.tap(); openSpeaking(); }); addPressFX(spCard, 5); }
 
   // sidebar only on menu views
   const _ld = launchDialogue; launchDialogue = function(){ _ld.apply(this, arguments); document.body.classList.add('in-practice'); };
@@ -11910,6 +12417,599 @@ peRenderDashboard();
       note.style.display = 'block';
     }
   }
+})();
+
+/* ================= READING TAB (logic) ================= */
+(function(){
+  const DATA = [{"id": "r1", "emoji": "🦗", "title": "The Lord Howe Island stick insect", "tag": "Nature · Conservation", "paras": [{"t": "In a recent survey, officers from the New South Wales environment department reported the existence of two healthy colonies of the Lord Howe Island stick insect at new locations on Ball's Pyramid. The survey team found nine adult insects and took seven to join the captive breeding programme. Even so, the wild population is officially listed as fewer than 50 mature individuals, though the insects are hard to find and their remote habitat makes their numbers difficult to estimate. 'This species is very cryptic and hard to detect as they have an incredible ability to hide and camouflage themselves,' says a threatened species officer with the department."}, {"t": "Ball's Pyramid, a steep volcanic sea stack rising 572 metres out of the ocean about 23 kilometres from Lord Howe Island, is the only place in the world where the insect still survives in the wild. Known to science as Dryococelus australis, the insect is large and wingless. It grows to around 15 centimetres. On Ball's Pyramid, adults are nocturnal and spend the night eating the leaf tips of a single shrub species (Melaleuca howeana). Newly hatched young, known as nymphs, are bright green and, unlike the adults, active by day. Older insects are darker, a colour difference linked to camouflage."}, {"t": "The insect is named after Lord Howe Island, off the coast of New South Wales, where it was once abundant and survived until the early twentieth century. In 1918 the supply ship Makambo ran aground there, and black rats became established on the island. These rats are blamed for the loss of the stick insect. Within two years none could be found, and for many years the species was generally believed to be extinct."}, {"t": "The first indication of survival came in 1964, when a dead insect was found on Ball's Pyramid. Nearly four decades later, a small team that included two government scientists landed on the Pyramid. In daylight they found nothing but droppings beneath a bush, and it wasn't until two of them returned that night that they came upon three live insects – two adult females and a young green nymph – on a single Melaleuca howeana shrub. On a visit the following year, 24 live insects were counted."}, {"t": "One night in February 2003, two pairs of insects were collected from Ball's Pyramid and carried in specially designed tubes to two breeding facilities in mainland Australia. One pair went to a private breeder in Sydney, where the female laid 21 eggs in her first two weeks at the facility; however, the male died 29 days after collection and the female the following day, and eight nymphs eventually hatched from her eggs. Meanwhile, the other pair went to Melbourne Zoo, where Patrick Honan, the head of the zoo's invertebrate department, named them Adam and Eve. Eve nearly died, but Honan revived her by dripping into her mouth a mixture of ground melaleuca leaves, sugar and calcium. She lived for 15 months and laid about 250 eggs, from which 71 young hatched. The first of these nymphs emerged that September, on the day Australia dedicates each year to its threatened species."}, {"t": "Four males from Melbourne were subsequently exchanged for four males from Sydney, and more than a decade later a further female was collected from Ball's Pyramid in order to widen the gene pool of a captive population that had by then produced more than 14,000 nymphs at Melbourne Zoo."}, {"t": "The living insects differ noticeably in form from museum specimens collected on Lord Howe Island, raising the question of whether they are the same species. In 2017 the biologist Mikheyev, then working in Japan, led a team that compared the DNA of the two groups for a study in the journal Current Biology. Yet this comparison showed the two groups to differ by less than one per cent. 'We found what everyone hoped to find – that despite some significant morphological differences, these are indeed the same species,' says Mikheyev. 'Unlike most stories involving extinction, this one gives us a unique second chance.'"}, {"t": "Any return to Lord Howe Island, of course, depended on eliminating the rats. A baiting operation to exterminate the island's black rats was carried out in 2019, and in 2023 the island was declared free of them. The chief executive of the board that administers the island has already indicated where the first insects would go. 'Based on the scientific advice, the first place they would be brought back to would be in the remote areas of the permanent park preserve,' she says."}, {"t": "There are also colonies abroad, in zoos such as Bristol Zoo in the UK. Eggs sent from Bristol founded a colony at Prague Zoo, which recently hatched 13 insects, the first ever successfully bred in the Czech Republic. According to Melbourne Zoo, its colony of between 700 and 800 live insects, a total that varies with the season, has produced 19 generations from five wild-caught founders. Rohan Cleave, who manages the zoo's breeding programme, says the genes of the seven wild insects taken from Ball's Pyramid this year mean a stronger species that could eventually be returned to the wild."}], "groups": [{"type": "tfng", "from": 1, "to": 7, "instr": "Do the following statements agree with the information given in the passage?", "opts": [["TRUE", "if the statement agrees with the information"], ["FALSE", "if the statement contradicts the information"], ["NOT GIVEN", "if there is no information on this"]], "items": [{"n": 1, "q": "Fewer than half of the adult stick insects spotted during the recent survey were taken into captivity.", "a": "FALSE"}, {"n": 2, "q": "On Ball's Pyramid, adult stick insects feed on a variety of plants at night.", "a": "FALSE"}, {"n": 3, "q": "Nymphs and adults of the Lord Howe Island stick insect are active at different times of the day.", "a": "TRUE"}, {"n": 4, "q": "The stick insect had already died out on Lord Howe Island before the Makambo was stranded there.", "a": "FALSE"}, {"n": 5, "q": "A climber discovered the body of a stick insect on Ball's Pyramid in 1964.", "a": "NOT GIVEN"}, {"n": 6, "q": "The insects removed from the wild in 2003 were chosen because they looked the healthiest.", "a": "NOT GIVEN"}, {"n": 7, "q": "Honan saved Eve's life with a blend of crushed foliage, sugar and calcium.", "a": "TRUE"}]}, {"type": "notes", "from": 8, "to": 13, "instr": "Complete the notes below. Choose ONE WORD ONLY from the passage for each answer.", "title": "The stick insect since 2017", "sections": [{"h": "Identifying the species", "b": ["Mikheyev's team studied living stick insects and museum specimens", "the two groups differ by under 1% in their {8}"]}, {"h": "Preparing Lord Howe Island", "b": ["a campaign to remove pests took place in 2019", "four years later, the island was officially cleared of {9}", "first release site chosen on expert {10}"]}, {"h": "Zoo colonies and the future", "b": ["Prague Zoo's colony grew from {11} supplied by Bristol Zoo", "Melbourne Zoo has 700–800 stick insects, the number changing from one {12} to the next", "Cleave expects {13} from seven recently collected stick insects to make the species more robust"]}], "answers": {"8": ["dna"], "9": ["rats"], "10": ["advice"], "11": ["eggs"], "12": ["season"], "13": ["genes"]}}], "total": 13}, {"id": "r2", "emoji": "⚽", "title": "The World Cup ball", "tag": "Sport · Technology", "paras": [{"t": "Shortly before the 2010 World Cup began, Brazil's goalkeeper Júlio César complained to journalists that the official ball was like one you might buy in a supermarket. He wasn't alone. Gianluigi Buffon, another goalkeeper, called it shameful to use such a ball in so important a competition, and Robinho, Júlio César's team-mate in the Brazil squad, added: 'For sure the guy who designed this ball never played football.' The ball, which Adidas called the Jabulani (the word means roughly 'to celebrate' in isiZulu), had eight panels. And it was not only goalkeepers who complained that its flight was unpredictable."}, {"t": "Such criticism must have embarrassed the manufacturer, since the ball had undergone years of development. Adidas had already worked with engineers at Loughborough University on several balls, including the one used at the previous tournament. For the Jabulani, whose eight panels were thermally bonded rather than stitched, Andy Harland's team placed a kicking robot inside a wind tunnel so that every prototype received an identical kick. From these tests they shaped grooves to guide the ball through the air."}, {"t": "At NASA, the aerospace engineer Rabi Mehta later provided an explanation. When a ball is kicked with little or no spin, its seams disturb the thin layer of air around it, and the resulting side forces push it unpredictably from one side to the other – an effect known as knuckling, after the knuckleball pitch in baseball. Using wind-tunnel and water-channel tests, Mehta found that a traditional stitched ball knuckles most at around 30 miles per hour. Yet the much smoother Jabulani does so at around 50 miles per hour, which is about the speed at which players strike the ball."}, {"t": "For the next tournament, in Brazil, Adidas changed its approach, for example by involving players early in the design. Its new ball, the Brazuca, has only six panels, but its seams are longer and deeper than the Jabulani's, and its surface is covered in tiny bumps. More than 600 players in ten countries evaluated the ball over two and a half years. Even its name was chosen by a public vote. In Mehta's tests it behaved like a conventional ball. 'The players should be happier with the new ball,' he said."}, {"t": "The rules, however, have scarcely moved since 1872, when the Football Association required the ball to be spherical, with a circumference of 27–28 inches. The permitted weight has remained the same since it was raised in 1937. The ball itself is a different matter."}, {"t": "For centuries footballs were inflated pigs' bladders in leather cases, and their shape depended entirely on the bladder. Around 1862 the bootmaker Richard Lindon replaced the bladder with one made of India rubber, which was too stiff to inflate by mouth, so he also built his own brass pump modelled on a doctor's ear syringe. His inventions earned him medals at an exhibition, yet he never patented any of them."}, {"t": "Leather balls of the early twentieth century absorbed water in wet weather and grew heavier as the match went on. That's why the laws refer to a dry weight, and probably also why heading was so often painful. These balls were hand-stitched from 18 strips arranged in six panels and closed with a lace. At the first World Cup final, Argentina and Uruguay could not agree on whose ball to use, and FIFA ruled that each side would supply the ball for one half. Argentina led by two goals to one with their own ball; Uruguay won by four goals to two with theirs."}, {"t": "The ball that many people still picture today became familiar in 1970. For the World Cup in Mexico, Adidas supplied the Telstar, whose 32 panels (12 black pentagons and 20 white hexagons) followed a Danish design from the early sixties. Its colours were chosen to help viewers see the ball clearly on black-and-white television, and it owes its name to a communications satellite of a similar shape. Only 20 balls were supplied for the entire tournament."}, {"t": "Since then, innovation has been applied to materials as well as to the number of panels. In 2006 stitching was abandoned in favour of panels bonded with heat, which, according to the manufacturer, made the ball rounder and no heavier in the rain. Leather itself had disappeared 20 years earlier, in 1986, with the first World Cup ball made only from man-made materials. Then came eight panels, then six. The ball used at the World Cup in Qatar has twenty panels arranged around a sensor suspended at its centre. This sensor sends the ball's movements to the video officials 500 times a second, which means that, like a phone, the ball has to be charged."}, {"t": "The latest ball, the Trionda, has just four panels, the fewest ever used at a World Cup. Its chip sits inside one of them, balanced by weights in the other three, and its deep seams, as well as its patterned surface, are intended to give it stability in flight. So far Adidas has supplied the ball for 15 consecutive tournaments, and over this period the number of panels has fallen from 32 to four."}], "groups": [{"type": "tfng", "from": 1, "to": 7, "instr": "Do the following statements agree with the information given in the passage?", "opts": [["TRUE", "if the statement agrees with the information"], ["FALSE", "if the statement contradicts the information"], ["NOT GIVEN", "if there is no information on this"]], "items": [{"n": 1, "q": "Brazil's goalkeeper made his criticism of the Jabulani after the 2010 World Cup had ended.", "a": "FALSE"}, {"n": 2, "q": "Like the Jabulani, the ball used at the previous World Cup had been criticised by players.", "a": "NOT GIVEN"}, {"n": 3, "q": "The Jabulani was at its least predictable at speeds that players rarely reach.", "a": "FALSE"}, {"n": 4, "q": "The public had a say in naming the ball used at the World Cup in Brazil.", "a": "TRUE"}, {"n": 5, "q": "The limits on how heavy the ball may be were last changed in 1937.", "a": "TRUE"}, {"n": 6, "q": "Other manufacturers copied the inventions for which Lindon won medals at an exhibition.", "a": "NOT GIVEN"}, {"n": 7, "q": "The 2006 World Cup ball was the first to contain no natural materials at all.", "a": "FALSE"}]}, {"type": "notes", "from": 8, "to": 13, "instr": "Complete the notes below. Choose ONE WORD ONLY from the passage for each answer.", "title": "How the football has changed", "sections": [{"h": "Early balls", "b": ["shape decided by the pig's bladder inside the leather case", "Lindon's brass pump was based on a {8} used by doctors", "hand-sewn from 18 leather strips, with the opening fastened by a single {9}"]}, {"h": "The Telstar", "b": ["two colours, chosen for the benefit of people watching on {10}", "took its name from a {11} that looked rather like it", "just 20 provided for the whole competition"]}, {"h": "Balls with sensors", "b": ["a sensor inside, so recharging is needed, as with any {12}", "chip in one panel of the latest ball, with {13} elsewhere to counterbalance it"]}], "answers": {"8": ["syringe"], "9": ["lace"], "10": ["television"], "11": ["satellite"], "12": ["phone"], "13": ["weights"]}}], "total": 13}, {"id": "r3", "emoji": "🐋", "title": "The Whale Goes to Court", "tag": "History · Science", "paras": [{"t": "In 1818, a whale became the subject of a controversial court case in New York City. The case involved an old law requiring those who sold fish oil to pay a fee in order to have their barrels inspected by city officials and certified. However, an oil merchant named Samuel Judd refused to pay the inspection fee on three barrels of oil, claiming that no inspection was necessary because it was whale oil and whales were not fish. The state disagreed, and so a date was set for a court to decide not a question of law, but the answer to a more fundamental question: Is a whale a fish?"}, {"t": "As simple as that question may appear today, the answer was far from obvious in the early nineteenth century. Indeed, the public debate in New York sparked off by the trial was sensational. At stake was nothing less than what most regarded as the order of nature. According to the commonly accepted scheme of things, if an animal was not a beast or a bird, it was a fish, regardless of whether it breathed air or suckled its young. For as long as anyone could remember, all non-human creatures had been organized according to the categories of birds, beasts, or fish. For the average person, the answer seemed perfectly obvious: whales swam in the sea and therefore they were fish."}, {"t": "Against this traditional framework stood the new Linnaean system of classification, which sought to introduce more scientific values into the classification of living things. Barely half a century old in 1818, the Linnaean system controversially classified whales as mammals because they shared two mammalian characteristics: they were warm-blooded and breathed air."}, {"t": "So the trial began in December 1818. Judd's defense lawyers chose as their star witness one of New York's most prominent figures, the congressman Samuel Mitchill. Referred to as a \"living encyclopedia\" and a \"walking library,\" Mitchill was a renowned natural history lecturer at the College of Physicians and Surgeons who liked to dare his students to test his knowledge of the natural world. \"Show me the fin, and I will name the fish,\" he boasted. Scientifically, it was an open-and-shut case, and Judd's defense lawyers believed they only had to do one simple thing to win the trial: insist that it be decided by biology alone. Mitchill seemed fully qualified for this role."}, {"t": "But this is where the case becomes interesting, and is the reason why the trial of the whale is not some dusty nineteenth-century obscurity. For rather than debate Mitchill on his area of expertise, lawyers for the New York City fish-oil inspectors chose a different tack. Lead counsel William Sampson turned the trial into a contest between scientific learning and common sense, by asking plain-spoken whalers to make their case before the jury."}, {"t": "The crux of Sampson's case was the trial's implication with regard to humans: should Judd be found not guilty? Sampson told jury members that if they accepted Mitchill's testimony on whales, they were obliged to accept a lower place for their own kind in the natural order. As a result, Mitchill's day in court did not go smoothly, not least because he was forced to acknowledge serious disputes among his peers regarding exactly how to classify biological organisms. Sampson then took aim at Mitchill himself and what he represented: privileged aristocrats from the scientific community who had lost touch with reality. The smooth-talking Sampson then claimed Mitchill's beliefs had their origin in Europe - something he rightly judged would infuriate the citizens of always-independent New York. This revolutionary new thinking, Sampson claimed, was something that honest working New Yorkers could do without. No longer was this a case about barrels of oil; but the proper place of scientific knowledge in the U.S.A."}, {"t": "Ultimately, what won the case for Samuel Judd were not Mitchill's scientific arguments, but testimony from a different sphere altogether. In New York's markets, the merchants implicitly understood that whale oil and fish oil were not the same: whale oil could be used as a fuel for lamps because it could be burned without giving off smoke; fish oil, on the other hand, was nasty, impure stuff used primarily in tanning leather. In the end, it was this testimony that led to Judd's victory."}, {"t": "The trial of the whale still has relevance today, when the court of public opinion remains easily swayed by skeptics. The 1818 trial was really about this question: who gets to decide on the place of the natural world in the human world — scientific experts or public opinion? Whether the issue today is the effects of human activity on the climate of this planet, or one of many other contemporary topics, the legacy of Judd's case continues to be of relevance."}], "groups": [{"type": "tfng", "from": 1, "to": 7, "instr": "Do the following statements agree with the information given in the passage?", "opts": [["TRUE", "if the statement agrees with the information"], ["FALSE", "if the statement contradicts the information"], ["NOT GIVEN", "if there is no information on this"]], "items": [{"n": 1, "q": "An inspection fee on fish oil was introduced in New York in 1818.", "a": "FALSE"}, {"n": 2, "q": "Samuel Judd argued that the inspection fee should exclude whale oil.", "a": "TRUE"}, {"n": 3, "q": "Judd had been in trouble with city officials before the inspection fee disagreement.", "a": "NOT GIVEN"}, {"n": 4, "q": "Many New Yorkers were interested in the court case at the time.", "a": "TRUE"}, {"n": 5, "q": "Traditionally, non-human creatures had been classified in one of three groups.", "a": "TRUE"}, {"n": 6, "q": "Generally speaking, ordinary people thought fish were the lowest form of life.", "a": "NOT GIVEN"}, {"n": 7, "q": "Whales were excluded from the Linnaean system in 1818.", "a": "FALSE"}]}, {"type": "notes", "from": 8, "to": 14, "instr": "Complete the notes below. Choose ONE WORD ONLY from the passage for each answer.", "title": "The Personalities – The Trial of December 1818", "sections": [{"h": "The personalities", "b": ["Samuel Mitchill worked as a congressman and {8}", "The defense wanted Mitchill to present the biology of the case.", "William Sampson called {9} as the witness to appeal to the common sense of the jury."]}, {"h": "The arguments", "b": ["Sampson's case was based on the consequences for humans if Judd won.", "Mitchill admitted that scientists had {10} about classification.", "New Yorkers disliked Mitchill because his ideas came from {11}."]}, {"h": "Conclusions", "b": ["In the end, it was {12} not Mitchill's which helped Judd win.", "Whale oil made a good {13} because it was clean.", "Judd's case is relevant today, e.g., in the debate about Earth's {14}."]}], "answers": {"8": ["lecturer"], "9": ["whalers"], "10": ["disputes"], "11": ["europe"], "12": ["merchants", "merchants'", "testimony"], "13": ["fuel"], "14": ["climate"]}}], "total": 14}, {"id": "r4", "emoji": "🌱", "title": "The libraries that lend seeds", "tag": "Environment · Law", "paras": [{"l": "A", "t": "The oak card-catalogue cabinet in the Calderwick public library gave up its last index card in 1998. It holds seed. Forty-eight shallow drawers, each still wearing the brass label that once announced its stretch of the alphabet, now hold paper envelopes: peas, kale, French beans, and a tomato from Portugal in the 1960s. For years any library member could take six envelopes a season and pay nothing. The understanding, then as now, is that late in summer the borrower lets a few plants run to seed and returns some. Marisol Delgado, who established the collection in 2011 with two shoeboxes, still sorts envelopes on Tuesday evenings."}, {"l": "B", "t": "Some varieties can be lent with considerably more confidence than others. Every envelope is marked with a coloured dot, and the colour says nothing about how easy the plant is to grow. Peas and French beans pollinate themselves inside a flower that has finished the job before it opens. Squash accepts pollen from any other squash of the same species half a mile away. Cabbage, kale and broccoli are a single species and share pollen freely; beetroot's pollen is carried on the wind from distances greater still. A green dot means the seed will come back much as it went out; a red one warns that keeping the variety true to type takes planning. Approximately one envelope in three finds its way home. The limit of six dates from the shoebox years and has never been altered. It stops the drawers being stripped bare in the first warm week of April."}, {"l": "C", "t": "Returned seed undergoes testing before it reaches a drawer. Every envelope handed in comes with a slip giving the variety, the week it was gathered and how close the nearest relative was flowering. Twenty seeds are then counted out onto damp blotting paper and left somewhere warm. A fortnight later a volunteer writes down how many have sprouted. Anything below sixteen sprouts is composted, and most failures are simply too old. Seed dried and stored in a warm bedroom forfeits its ability to germinate years before identical seed kept cool and dry would. Stray pollen is harder to catch. A squash that has crossed with a neighbour still yields a plump, ordinary-looking seed, so doubtful lots are grown out for a season before they are lent again. Some of what travels with seed sits on the coat rather than inside it. Tomato seed is fermented for three or four days to strip its jelly, which removes some of that too."}, {"l": "D", "t": "Tove Falkner, a crop scientist at the Brackenhill plant research station, is careful not to exaggerate what the drawers contain. The varieties in the drawers are all commonplace; what interests her is what one becomes after years in a single garden. 'You keep seed from the plants that came through a wet spring and ignore the ones that sulked,' she says. 'Do that for six or seven years and you have something that fits your own ground.' A commercial grower wants a crop that ripens in one go, because the harvester passes only once. The drawers, she says, hold varieties that come ready a few at a time over several weeks - a nuisance to a machine and a convenience to a kitchen. Falkner readily acknowledges that the plants are no healthier for any of it. Seed circulating round a town transmits infection efficiently from garden to garden."}, {"l": "E", "t": "The awkward part has been legal. In 2016 an inspector called at a seed library in Saltmere and told its volunteers that they were distributing seed unlawfully. Seed marketed commercially must belong to a registered variety and meet fixed standards of purity and germination. Seed law began in the nineteenth century, against the dealer who sold a farmer a sack of dead or dyed seed; the registration rules came a century later, to give a common market a list of tested names. Registration is no answer for a shelf of envelopes: even the inexpensive route for heritage varieties demands a listing, a file and a quantity cap. Calderwick's answer, and that of many others, was to stop lending to the public. Borrowers signed a form, became members of an association and now pass seed between themselves rather than over a counter. Elsewhere the libraries took the argument to legislators, and in a handful of places they have won an exemption for any exchange with no commercial purpose. 'The law was drafted with lorries in mind, not envelopes,' says Yusuf Erdemir, who teaches agricultural law at Ravensholt University."}, {"l": "F", "t": "Almost all the work is unpaid, and a growing proportion of the collections now sit inside public libraries - buildings that already have a counter, shelves and a catalogue. 'Nobody joins to save money,' says Nadine Ferreira, who administers the library service in Calderwick. 'An envelope of seed costs about what a coffee costs. That was never what it was for.'"}, {"l": "G", "t": "The national collections do a different job. A gene bank halts a variety almost completely: the seed is dried, sealed and held far below freezing, and a pinch comes out every few years to see whether it still grows. A seed library does the opposite, returning its seed to the ground every summer so that it alters a little each time. There were four in the county in 2015; there are nineteen now."}], "groups": [{"type": "match", "from": 1, "to": 5, "instr": "The passage has seven paragraphs, A–G. Which paragraph contains the following information? You may use any letter more than once.", "letters": ["A", "B", "C", "D", "E", "F", "G"], "items": [{"n": 1, "q": "an account of a routine check made on a small quantity of seed returned by a borrower", "a": "C"}, {"n": 2, "q": "the problem that seed legislation was originally written to prevent", "a": "E"}, {"n": 3, "q": "a description of library furniture that now serves a different purpose", "a": "A"}, {"n": 4, "q": "a visit that ended in a warning that the law was being broken", "a": "E"}, {"n": 5, "q": "an explanation of why seed from certain plants is more likely to resemble the parent plant", "a": "B"}]}, {"type": "summary", "from": 6, "to": 9, "instr": "Complete the summary below. Write ONE WORD ONLY from the text for each answer.", "title": "Keeping the collection reliable", "text": ["Each envelope shows a coloured {6}: green if the seed can be trusted, red if holding a variety to its type will need some work.", "Anything given back must come with a {7} recording the week of collection, the name of the variety and how far off the closest related plant was in bloom.", "A batch that may have {8} with a plant of the same kind growing nearby is grown for a further season before it is lent again.", "Some things carried by a seed ride on its {9}, not within, which is why tomato seed, for instance, is left to ferment first."], "answers": {"6": ["dot"], "7": ["slip"], "8": ["crossed"], "9": ["coat"]}}, {"type": "multi", "from": 10, "to": 11, "instr": "Choose TWO correct answers.", "q": "Which TWO advantages of seed saved by local gardeners does Tove Falkner point out?", "options": [["A", "Over several seasons the plants become better matched to the garden they grow in."], ["B", "The crop becomes ready for picking over a longer stretch of time."], ["C", "Members save money, because seed bought in a shop is expensive."], ["D", "The plants that result are healthier than those grown from bought seed."], ["E", "The seed keeps its ability to germinate for longer."]], "a": ["A", "B"]}, {"type": "multi", "from": 12, "to": 13, "instr": "Choose TWO correct answers.", "q": "Which TWO changes have seed libraries made in response to the rules on seed?", "options": [["A", "They have added their varieties to the official register."], ["B", "They have stopped supplying the general public and now let people who have joined a group pass seed to one another."], ["C", "They have persuaded lawmakers in some places to put swaps that are not a business outside the rules."], ["D", "They have cut the number of envelopes a borrower may take in a season."], ["E", "They have moved their collections out of public library buildings."]], "a": ["B", "C"]}], "total": 13}];
+  const EXPL = [{"single": {"1": ["FALSE", "Bài đọc cho biết nhóm khảo sát tìm thấy 9 con trưởng thành và bắt 7 con đưa vào chương trình nhân giống. 7/9 lớn hơn một nửa, nên phát biểu sai."], "2": ["FALSE", "Côn trùng trưởng thành ăn phần ngọn lá của một loài cây bụi duy nhất, không phải nhiều loại cây."], "3": ["TRUE", "Con trưởng thành hoạt động ban đêm (nocturnal), trong khi con non (nymphs) hoạt động ban ngày."], "4": ["FALSE", "Côn trùng biến mất sau khi chuột đen xuất hiện trên đảo vào năm 1918. Bài không nói chúng đã tuyệt chủng trước thời điểm đó; ngược lại, chúng từng rất phổ biến và tồn tại đến đầu thế kỷ XX."], "5": ["NOT GIVEN", "Bài nói một cá thể chết được tìm thấy trên Ball's Pyramid năm 1964, nhưng không cho biết người phát hiện là một nhà leo núi."], "6": ["NOT GIVEN", "Bài nói hai cặp côn trùng được bắt vào năm 2003 và chuyển đến các cơ sở nhân giống, nhưng không đề cập việc lựa chọn dựa trên sức khỏe."], "7": ["TRUE", "Honan cứu Eve bằng cách nhỏ vào miệng nó hỗn hợp lá melaleuca nghiền, đường và canxi."], "8": ["DNA", "Nhóm nghiên cứu của Mikheyev so sánh DNA của côn trùng sống và mẫu vật bảo tàng; hai nhóm khác nhau dưới 1%."], "9": ["rats", "Chiến dịch loại bỏ chuột được tiến hành năm 2019; đến năm 2023, hòn đảo được tuyên bố không còn chuột."], "10": ["advice", "Địa điểm thả côn trùng đầu tiên được lựa chọn dựa trên lời khuyên chuyên môn khoa học (scientific advice)."], "11": ["eggs", "Đàn côn trùng tại Prague Zoo được hình thành từ trứng do Bristol Zoo cung cấp."], "12": ["season", "Số lượng côn trùng tại Melbourne Zoo thay đổi theo mùa (with the season)."], "13": ["genes", "Rohan Cleave cho rằng gene từ 7 cá thể mới thu thập sẽ giúp quần thể khỏe mạnh và vững chắc hơn."]}, "multi": {}}, {"single": {"1": ["FALSE", "Júlio César chỉ trích bóng Jabulani ngay trước khi World Cup 2010 bắt đầu, không phải sau khi giải kết thúc."], "2": ["NOT GIVEN", "Bài có nhắc đến quả bóng ở kỳ World Cup trước, nhưng không nói cầu thủ đã chỉ trích quả bóng đó."], "3": ["FALSE", "Jabulani có xu hướng bay khó đoán ở khoảng 50 dặm/giờ, gần với tốc độ cầu thủ sút bóng. Đây không phải tốc độ mà cầu thủ hiếm khi đạt được."], "4": ["TRUE", "Tên Brazuca được lựa chọn thông qua một cuộc bỏ phiếu công khai (public vote)."], "5": ["TRUE", "Giới hạn trọng lượng cho phép của quả bóng được giữ nguyên kể từ khi thay đổi vào năm 1937."], "6": ["NOT GIVEN", "Richard Lindon được trao huy chương cho các phát minh tại một triển lãm, nhưng bài không nói các nhà sản xuất khác có sao chép chúng hay không."], "7": ["FALSE", "Quả bóng World Cup đầu tiên chỉ làm từ vật liệu nhân tạo xuất hiện năm 1986, không phải năm 2006."], "8": ["syringe", "Máy bơm bằng đồng của Lindon được thiết kế dựa trên ống tiêm tai của bác sĩ (doctor's ear syringe)."], "9": ["lace", "Bóng da được khâu từ 18 dải da và phần mở được đóng bằng dây buộc (lace)."], "10": ["television", "Các mảng đen trắng của Telstar giúp khán giả dễ nhìn thấy bóng trên truyền hình đen trắng (black-and-white television)."], "11": ["satellite", "Tên Telstar bắt nguồn từ một vệ tinh truyền thông có hình dạng tương tự."], "12": ["phone", "Quả bóng có cảm biến cần được sạc điện, tương tự như điện thoại (phone)."], "13": ["weights", "Chip nằm trong một mảng của quả bóng Trionda; các quả nặng (weights) ở ba mảng còn lại giúp cân bằng nó."]}, "multi": {}}, {"single": {"1": ["FALSE", "Bài cho biết luật kiểm tra dầu cá đã tồn tại từ trước và được áp dụng trong vụ kiện năm 1818. Không có căn cứ để nói khoản phí được đưa ra lần đầu vào năm đó."], "2": ["TRUE", "Samuel Judd từ chối trả phí kiểm tra ba thùng dầu vì cho rằng dầu cá voi không phải dầu cá, nên không cần kiểm tra theo quy định đó."], "3": ["NOT GIVEN", "Bài không đề cập việc Judd từng gặp rắc rối với chính quyền thành phố trước tranh chấp này."], "4": ["TRUE", "Cuộc tranh luận công khai được mô tả là gây chấn động (sensational), cho thấy vụ kiện thu hút sự quan tâm lớn."], "5": ["TRUE", "Theo cách phân loại truyền thống, động vật không phải thú vật hay chim đều được xếp vào nhóm cá. Ba nhóm là chim, thú vật và cá."], "6": ["NOT GIVEN", "Bài nói người dân thường cho rằng cá voi là cá vì sống dưới biển, nhưng không đề cập cá bị xem là dạng sống thấp nhất."], "7": ["FALSE", "Hệ thống Linnaeus đã phân loại cá voi là động vật có vú vì chúng máu nóng và hô hấp bằng không khí."], "8": ["lecturer", "Samuel Mitchill vừa là nghị sĩ (congressman), vừa là giảng viên lịch sử tự nhiên (natural history lecturer)."], "9": ["whalers", "William Sampson gọi những người săn cá voi (whalers) làm chứng để trình bày quan điểm dựa trên kinh nghiệm thực tế."], "10": ["disputes", "Mitchill phải thừa nhận rằng các nhà khoa học có những bất đồng (disputes) về cách phân loại sinh vật."], "11": ["Europe", "Sampson nói rằng quan điểm của Mitchill bắt nguồn từ châu Âu, điều mà ông cho rằng sẽ khiến người dân New York tức giận."], "12": ["merchants", "Cuối cùng, lời khai của các thương nhân (merchants) về sự khác biệt giữa dầu cá voi và dầu cá đã giúp Judd thắng kiện."], "13": ["fuel", "Dầu cá voi được dùng làm nhiên liệu (fuel) cho đèn vì có thể cháy mà không tạo khói."], "14": ["climate", "Bài liên hệ vụ kiện với những tranh luận hiện đại, chẳng hạn như tác động của hoạt động con người đến khí hậu Trái Đất (climate)."]}, "multi": {}}, {"single": {"1": ["C", "Đoạn C mô tả quy trình kiểm tra hạt giống được trả lại: đếm 20 hạt, đặt lên giấy thấm ẩm và kiểm tra số hạt nảy mầm sau hai tuần."], "2": ["E", "Đoạn E giải thích luật hạt giống ban đầu được xây dựng để ngăn người bán cung cấp hạt giống chết hoặc bị nhuộm màu cho nông dân."], "3": ["A", "Đoạn A mô tả chiếc tủ gỗ sồi từng dùng để lưu trữ thẻ mục lục thư viện, nay được sử dụng để đựng các phong bì hạt giống."], "4": ["E", "Đoạn E kể về một thanh tra đến thư viện hạt giống ở Saltmere năm 2016 và cảnh báo rằng việc phân phối hạt giống là trái pháp luật."], "5": ["B", "Đoạn B giải thích rằng đậu Hà Lan và đậu Pháp tự thụ phấn trước khi hoa nở, nên hạt giống có khả năng giữ đặc tính của cây mẹ tốt hơn một số loài khác."], "6": ["dot", "Mỗi phong bì được đánh dấu bằng một chấm màu (coloured dot). Chấm xanh biểu thị hạt giống có khả năng giữ nguyên đặc tính; chấm đỏ cảnh báo cần có kế hoạch để duy trì giống thuần."], "7": ["slip", "Mỗi lần trả hạt giống, người mượn phải gửi kèm một phiếu (slip) ghi tên giống, tuần thu hoạch và thời điểm cây họ hàng gần nhất ra hoa."], "8": ["crossed", "Nếu hạt giống có thể đã lai chéo với cây cùng loại ở gần đó (crossed with a neighbour), người ta sẽ trồng thử thêm một mùa trước khi cho mượn lại."], "9": ["coat", "Một số tác nhân có thể bám trên lớp vỏ (coat) của hạt giống chứ không nằm bên trong. Vì vậy, hạt cà chua được lên men để loại bỏ lớp gel và một phần tác nhân bám ngoài."]}, "multi": {"10": {"answer": "A và B", "rows": [["A", "Đúng", "Qua 6–7 năm giữ hạt từ những cây thích nghi tốt với điều kiện vườn, giống cây dần phù hợp hơn với khu đất cụ thể."], ["B", "Đúng", "Hạt giống địa phương thường tạo ra cây cho thu hoạch rải rác trong nhiều tuần, thuận tiện cho việc sử dụng trong gia đình."], ["C", "Sai", "Người quản lý thư viện khẳng định mục đích của mô hình không phải tiết kiệm tiền; một phong bì hạt giống có giá tương đương một tách cà phê."], ["D", "Sai", "Nhà khoa học thừa nhận cây trồng từ hạt giống lưu truyền trong cộng đồng không khỏe mạnh hơn."], ["E", "Sai", "Bài không nói hạt giống địa phương giữ khả năng nảy mầm lâu hơn. Khả năng này phụ thuộc đáng kể vào điều kiện bảo quản."]]}, "12": {"answer": "B và C", "rows": [["A", "Sai", "Bài không nói các thư viện đã đăng ký toàn bộ giống cây vào danh mục chính thức. Việc đăng ký còn gây khó khăn vì yêu cầu hồ sơ và giới hạn số lượng."], ["B", "Đúng", "Thư viện Calderwick ngừng cho công chúng mượn trực tiếp. Người mượn đăng ký làm thành viên hiệp hội và trao đổi hạt giống với nhau."], ["C", "Đúng", "Một số thư viện đã vận động các nhà lập pháp và giành được ngoại lệ cho hoạt động trao đổi hạt giống không nhằm mục đích thương mại."], ["D", "Sai", "Giới hạn sáu phong bì mỗi mùa đã tồn tại từ trước, không phải thay đổi được đưa ra để phản ứng với luật hạt giống."], ["E", "Sai", "Đoạn F cho biết ngày càng nhiều bộ sưu tập được đặt trong các thư viện công cộng, không phải chuyển ra khỏi đó."]]}}}];
+  const $ = id => document.getElementById(id);
+  const scr = $('rdScreen'), listEl = $('rdList'), testEl = $('rdTest');
+  if(!scr) return;
+  const LS = 'efb_reading_v1';
+  let store = {};
+  try{ store = JSON.parse(localStorage.getItem(LS)) || {}; }catch(e){}
+  store.drafts = store.drafts || {}; store.results = store.results || {}; store.hl = store.hl || {}; store.vocab = store.vocab || {};
+  const persist = ()=>{ try{ localStorage.setItem(LS, JSON.stringify(store)); }catch(e){} };
+
+  let cur = null, curIdx = 0, ans = {}, submitted = false, t0 = 0, timerId = null;
+
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const norm = s => String(s == null ? '' : s).toLowerCase().replace(/[‘’]/g,"'").trim().replace(/[.,;:!?"“”]+$/,'').trim();
+  const tap = ()=>{ try{ if(typeof sfx !== 'undefined' && sfx.tap) sfx.tap(); }catch(e){} };
+  const fmt = sec => String(Math.floor(sec/60)).padStart(2,'0') + ':' + String(sec%60).padStart(2,'0');
+
+  /* ---------- list ---------- */
+  function statusOf(t){
+    const r = store.results[t.id], d = store.drafts[t.id];
+    if(r) return { pill:'Đã làm', meta:'Điểm cao nhất ' + r.best + '/' + t.total };
+    if(d && Object.keys(d).length) return { pill:'Đang làm dở', meta:'Tiếp tục →' };
+    return { pill:'Chưa làm', meta:t.total + ' câu · ~20 phút' };
+  }
+  function renderList(){
+    listEl.innerHTML =
+      '<div class="rd-head"><button type="button" class="rd-back" id="rdHome">← Trang chủ</button><h1 class="rd-h1">📖 Reading</h1><button type="button" class="rd-exit" id="rdVocBtn" title="Sổ từ vựng" style="margin-left:auto">📒 Từ vựng</button></div>' +
+      '<p class="rd-sub">Chọn một passage để luyện đọc hiểu. Bài được lưu tự động nên bạn có thể thoát và làm tiếp sau.</p>' +
+      '<div class="rd-grid">' + DATA.map((t,i)=>{
+        const s = statusOf(t);
+        return '<button type="button" class="rd-card" style="--i:'+i+'" data-open="'+i+'">' +
+          '<div class="rd-card-top"><div class="rd-emoji">'+t.emoji+'</div><span class="rd-pill">'+s.pill+'</span></div>' +
+          '<div class="rd-tag">Passage '+(i+1)+' · '+esc(t.tag)+'</div>' +
+          '<h3>'+esc(t.title)+'</h3>' +
+          '<div class="rd-meta"><span>'+s.meta+'</span><span class="rd-go">Làm bài</span></div></button>';
+      }).join('') + '</div>';
+  }
+
+  function setActiveSidebar(on){
+    document.querySelectorAll('.sb-item').forEach(b => b.classList.toggle('active', on && b.dataset.nav === 'reading'));
+  }
+  function openReading(){
+    tap();
+    stopTimer();
+    renderList();
+    testEl.hidden = true; listEl.hidden = false;
+    scr.classList.remove('testing'); scr.hidden = false; scr.scrollTop = 0;
+    setActiveSidebar(true);
+  }
+  function rdClose(){
+    if(cur && !submitted) saveDraft();
+    stopTimer();
+    scr.hidden = true; scr.classList.remove('testing');
+    cur = null;
+  }
+  window.openReading = openReading;
+  window.rdClose = rdClose;
+
+  /* ---------- building the test ---------- */
+  function gapify(text, g){
+    return esc(text).replace(/\{(\d+)\}/g, (m, n)=>
+      '<span class="rd-gap" data-qrow="'+n+'"><span class="rd-num">'+n+'</span><input type="text" data-q="'+n+'" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Question '+n+'"></span>');
+  }
+  function groupHtml(g){
+    let h = '<div class="rd-gh"><h3>Questions '+g.from+' – '+g.to+'</h3><p>'+esc(g.instr)+'</p>';
+    if(g.opts) h += '<ul>' + g.opts.map(o => '<li><b>'+o[0]+'</b> '+esc(o[1])+'</li>').join('') + '</ul>';
+    h += '</div>';
+    if(g.type === 'tfng' || g.type === 'match'){
+      const choices = g.type === 'tfng' ? g.opts.map(o => o[0]) : g.letters;
+      h += g.items.map(it =>
+        '<div class="rd-q rd-q-radio'+(g.type==='match'?' rd-q-match':'')+'" data-qrow="'+it.n+'"><span class="rd-num">'+it.n+'</span><div class="rd-rb"><span class="rd-qt">'+esc(it.q)+'</span><div class="rd-radios">' +
+        choices.map(c => '<label class="rd-r"><input type="radio" name="q'+it.n+'" data-q="'+it.n+'" value="'+c+'"><i class="rd-rd"></i><span>'+c+'</span></label>').join('') + '</div></div></div>').join('');
+    }else if(g.type === 'notes'){
+      h += '<div class="rd-note"><h4 class="rd-note-title">'+esc(g.title)+'</h4>' +
+        g.sections.map(s => '<h5>'+esc(s.h)+'</h5><ul>' + s.b.map(b => '<li>'+gapify(b, g)+'</li>').join('') + '</ul>').join('') + '</div>';
+    }else if(g.type === 'summary'){
+      h += '<div class="rd-note rd-sum"><h4 class="rd-note-title">'+esc(g.title)+'</h4>' + g.text.map(t => '<p>'+gapify(t, g)+'</p>').join('') + '</div>';
+    }else if(g.type === 'multi'){
+      h += '<div class="rd-q rd-multi" data-qrow="'+g.from+' '+g.to+'" data-multi="'+g.from+'"><span class="rd-num">'+g.from+'–'+g.to+'</span><div class="rd-mq"><p>'+esc(g.q)+'</p>' +
+        g.options.map(o => '<label class="rd-opt"><input type="checkbox" data-m="'+g.from+'" value="'+o[0]+'"><span><b>'+o[0]+'</b>&nbsp; '+esc(o[1])+'</span></label>').join('') + '</div></div>';
+    }
+    return h;
+  }
+
+  function openTest(i, fresh){
+    cur = DATA[i]; curIdx = i; submitted = false;
+    if(fresh){ delete store.drafts[cur.id]; persist(); }
+    ans = JSON.parse(JSON.stringify(store.drafts[cur.id] || {}));
+    t0 = Date.now() - ((ans.__t || 0) * 1000);
+    const paras = cur.paras.map((p,j) => '<p>' + (p.l ? '<span class="rd-pl">'+p.l+'</span>' : '') + '<span class="rd-pt" data-pi="'+j+'"></span></p>').join('');
+    let chips = ''; for(let n = 1; n <= cur.total; n++) chips += '<button type="button" class="rd-chip" data-n="'+n+'">'+n+'</button>';
+    testEl.innerHTML =
+      '<div class="rd-bar"><button type="button" class="rd-exit" id="rdExit">← Thoát</button>' +
+        '<div class="rd-bar-title">Reading · Passage '+(i+1)+' — '+esc(cur.title)+'</div><button type="button" class="rd-exit" id="rdVocBtn" title="Sổ từ vựng">📒</button><div class="rd-timer" id="rdTimer">00:00</div></div>' +
+      '<div class="rd-tabs" id="rdTabs"><button type="button" class="on" data-p="read">📄 Bài đọc</button><button type="button" data-p="q">✍️ Câu hỏi</button></div>' +
+      '<div class="rd-panes" id="rdPanes" data-show="read">' +
+        '<section class="rd-pane rd-passage" id="rdPassage"><div class="rd-ptag">Reading Passage '+(i+1)+'</div><h2 class="rd-ptitle">'+esc(cur.title)+'</h2><p class="rd-hint">💡 Chạm vào một từ để tra nghĩa · bôi đen đoạn văn để highlight</p>'+paras+'</section>' +
+        '<section class="rd-pane rd-questions" id="rdQs"><div id="rdResult"></div>' + cur.groups.map((g,gi) => '<div class="rd-grp" data-g="'+gi+'">'+groupHtml(g)+'<div class="rd-exp-slot"></div></div>').join('') + '</section>' +
+      '</div>' +
+      '<div class="rd-foot"><div class="rd-chips" id="rdChips">'+chips+'</div><button type="button" class="rd-submit" id="rdSubmit">Nộp bài</button></div>';
+    // restore draft
+    testEl.querySelectorAll('[data-q]').forEach(el => { if(ans[el.dataset.q] == null) return; if(el.type === 'radio') el.checked = (el.value === ans[el.dataset.q]); else el.value = ans[el.dataset.q]; });
+    testEl.querySelectorAll('input[data-m]').forEach(el => { const a = ans['m'+el.dataset.m] || []; el.checked = a.indexOf(el.value) >= 0; });
+    syncOpts(); updateChips(); renderPassages();
+    listEl.hidden = true; testEl.hidden = false; scr.classList.add('testing'); scr.hidden = false; scr.scrollTop = 0;
+    testEl.classList.remove('res','review','rev');
+    startTimer();
+  }
+
+  /* ---------- timer / draft ---------- */
+  function startTimer(){
+    stopTimer();
+    const tick = ()=>{ const el = $('rdTimer'); if(el && !submitted) el.textContent = fmt(Math.floor((Date.now() - t0)/1000)); };
+    tick(); timerId = setInterval(tick, 1000);
+  }
+  function stopTimer(){ if(timerId){ clearInterval(timerId); timerId = null; } }
+  function saveDraft(){
+    if(!cur) return;
+    const d = Object.assign({}, ans); d.__t = Math.floor((Date.now() - t0)/1000);
+    store.drafts[cur.id] = d; persist();
+  }
+
+  /* ---------- answers ---------- */
+  function isAnswered(n){
+    for(const g of cur.groups){
+      if(n < g.from || n > g.to) continue;
+      if(g.type === 'multi'){ const a = ans['m'+g.from] || []; return n === g.from ? a.length >= 1 : a.length >= 2; }
+      return norm(ans[n]) !== '';
+    }
+    return false;
+  }
+  function marks(){           // -> {n: true/false}
+    const out = {};
+    for(const g of cur.groups){
+      if(g.type === 'tfng' || g.type === 'match'){
+        g.items.forEach(it => out[it.n] = ans[it.n] === it.a);
+      }else if(g.type === 'notes' || g.type === 'summary'){
+        for(let n = g.from; n <= g.to; n++){
+          const ok = (g.answers[n] || []).map(norm);
+          out[n] = ok.indexOf(norm(ans[n])) >= 0;
+        }
+      }else if(g.type === 'multi'){
+        const a = ans['m'+g.from] || [];
+        const hit = a.filter(x => g.a.indexOf(x) >= 0).length;
+        out[g.from] = hit >= 1; out[g.to] = hit >= 2;
+      }
+    }
+    return out;
+  }
+  function updateChips(){
+    if(!cur) return;
+    const m = submitted ? marks() : null;
+    testEl.querySelectorAll('.rd-chip').forEach(c => {
+      const n = +c.dataset.n;
+      c.classList.toggle('done', !submitted && isAnswered(n));
+      c.classList.toggle('ok', !!m && m[n] === true);
+      c.classList.toggle('bad', !!m && m[n] === false);
+    });
+  }
+  function syncOpts(){
+    testEl.querySelectorAll('.rd-opt').forEach(l => l.classList.toggle('sel', l.querySelector('input').checked));
+  }
+
+  testEl.addEventListener('input', e => {
+    const t = e.target; if(submitted || !t.dataset) return;
+    if(t.dataset.q){ ans[t.dataset.q] = t.value; }
+    updateChips(); saveDraft();
+  });
+  testEl.addEventListener('change', e => {
+    const t = e.target; if(submitted || !t.dataset) return;
+    if(t.dataset.q){ ans[t.dataset.q] = t.value; if(t.type === 'radio') tap(); }
+    if(t.dataset.m){
+      const k = 'm'+t.dataset.m;
+      let boxes = Array.from(testEl.querySelectorAll('input[data-m="'+t.dataset.m+'"]'));
+      let sel = boxes.filter(b => b.checked);
+      if(sel.length > 2){ t.checked = false; sel = sel.filter(b => b !== t); }
+      ans[k] = sel.map(b => b.value);
+      syncOpts();
+    }
+    updateChips(); saveDraft();
+  });
+  testEl.addEventListener('focusin', e => {
+    const row = e.target.closest && e.target.closest('[data-qrow]'); if(!row) return;
+    const nums = row.dataset.qrow.split(' ');
+    testEl.querySelectorAll('.rd-chip').forEach(c => c.classList.toggle('cur', nums.indexOf(c.dataset.n) >= 0));
+  });
+
+  testEl.addEventListener('click', e => {
+    const chip = e.target.closest('.rd-chip');
+    if(chip){
+      const n = chip.dataset.n;
+      const panes = $('rdPanes');
+      if(panes && matchMedia('(max-width:899px)').matches) setTab('q');
+      const row = testEl.querySelector('[data-qrow~="'+n+'"]');
+      if(row){
+        setTimeout(()=>{
+          row.scrollIntoView({ block:'center', behavior:'smooth' });
+          row.classList.remove('flash'); void row.offsetWidth; row.classList.add('flash');
+          const f = row.querySelector('input,select'); if(f && !submitted){ try{ f.focus({ preventScroll:true }); }catch(_){} }
+        }, 30);
+      }
+      return;
+    }
+    const tab = e.target.closest('#rdTabs button'); if(tab){ setTab(tab.dataset.p); return; }
+    if(e.target.closest('#rdExit')){ tap(); if(!submitted) saveDraft(); stopTimer(); cur = null; openReading(); return; }
+    if(e.target.closest('#rdSubmit')){ if(submitted) showResult(); else submit(false); return; }
+    if(e.target.closest('#rdReview')){ tap(); showReview(); return; }
+    const rc = e.target.closest('.rv-chip'); if(rc){ rvShow(+rc.dataset.n); return; }
+    const rn = e.target.closest('.rv-nav'); if(rn){ rvShow(rvN + (+rn.dataset.d)); return; }
+    const rl = e.target.closest('.rv-loc'); if(rl){ locate(rl.dataset.k, rl); return; }
+    const rt = e.target.closest('#rvTabs button'); if(rt){ setRvTab(rt.dataset.p); return; }
+    if(e.target.closest('#rvClose')){ tap(); showResult(); return; }
+    if(e.target.closest('#rdBackRes')){ tap(); showResult(); return; }
+    if(e.target.closest('#rdRetry')){ tap(); openTest(curIdx, true); return; }
+    if(e.target.closest('#rdToList')){ tap(); cur = null; openReading(); return; }
+  });
+  function setTab(p){
+    const panes = $('rdPanes'); if(!panes) return;
+    panes.dataset.show = p;
+    testEl.querySelectorAll('#rdTabs button').forEach(b => b.classList.toggle('on', b.dataset.p === p));
+  }
+
+  listEl.addEventListener('click', e => {
+    if(e.target.closest('#rdHome')){ tap(); rdClose(); if(typeof closeLevelView === 'function') closeLevelView(); return; }
+    const c = e.target.closest('[data-open]'); if(c){ tap(); openTest(+c.dataset.open, false); }
+  });
+
+  /* ---------- submit & marking ---------- */
+  function askSubmit(list){
+    let el = $('rdAsk'); if(el) el.remove();
+    el = document.createElement('div'); el.id = 'rdAsk'; el.className = 'rd-voc';
+    el.innerHTML = '<div class="vc-box rd-ask" role="dialog" aria-modal="true"><div class="ask-ico">📝</div><h3>Bạn chưa làm xong bài</h3>' +
+      '<p>Còn <b>'+list.length+'</b> câu chưa trả lời. Những câu bỏ trống sẽ không được tính điểm.</p>' +
+      '<div class="ask-nums">'+list.map(n => '<button type="button" class="rd-chip" data-go="'+n+'">'+n+'</button>').join('')+'</div>' +
+      '<div class="ask-btns"><button type="button" class="rd-big alt" data-k="back">Làm tiếp</button><button type="button" class="rd-big" data-k="go">Vẫn nộp bài</button></div></div>';
+    el.addEventListener('click', ev => {
+      const b = ev.target.closest('button');
+      if(ev.target === el || (b && b.dataset.k === 'back')){ el.remove(); return; }
+      if(b && b.dataset.go){ el.remove(); const c = testEl.querySelector('.rd-chip[data-n="'+b.dataset.go+'"]'); if(c) c.click(); return; }
+      if(b && b.dataset.k === 'go'){ el.remove(); submit(true); }
+    });
+    scr.appendChild(el);
+  }
+  function submit(force){
+    if(submitted) return;
+    const left = []; for(let n = 1; n <= cur.total; n++) if(!isAnswered(n)) left.push(n);
+    const blank = left.length;
+    if(blank && !force){ askSubmit(left); return; }
+    submitted = true; stopTimer();
+    const secs = Math.floor((Date.now() - t0)/1000);
+    const m = marks(); let score = 0; for(const n in m) if(m[n]) score++;
+    // visual marking
+    testEl.querySelectorAll('select,input[type=text],input[type=radio]').forEach(el => { el.disabled = true; });
+    testEl.querySelectorAll('input[type=checkbox]').forEach(el => { el.disabled = true; });
+    for(const g of cur.groups){
+      if(g.type === 'tfng' || g.type === 'match'){
+        g.items.forEach(it => {
+          const row = testEl.querySelector('.rd-q[data-qrow="'+it.n+'"]'); if(!row) return;
+          row.classList.add(m[it.n] ? 'ok' : 'bad');
+          row.querySelectorAll('.rd-r').forEach(l => { const inp = l.querySelector('input'); if(inp.value === it.a) l.classList.add('right'); else if(inp.checked) l.classList.add('wrong'); });
+          if(!m[it.n]) row.querySelector('.rd-qt').insertAdjacentHTML('beforeend', '<span class="rd-ans">Đáp án: '+esc(it.a)+'</span>');
+        });
+      }else if(g.type === 'notes' || g.type === 'summary'){
+        for(let n = g.from; n <= g.to; n++){
+          const gap = testEl.querySelector('.rd-gap[data-qrow="'+n+'"]'); if(!gap) continue;
+          gap.classList.add(m[n] ? 'ok' : 'bad');
+          if(!m[n]) gap.insertAdjacentHTML('beforeend', '<span class="rd-ans">→ '+esc(g.answers[n][0])+'</span>');
+        }
+      }else if(g.type === 'multi'){
+        testEl.querySelectorAll('input[data-m="'+g.from+'"]').forEach(inp => {
+          const lab = inp.closest('.rd-opt'); const right = g.a.indexOf(inp.value) >= 0;
+          lab.classList.remove('sel');
+          if(right) lab.classList.add('ok'); else if(inp.checked) lab.classList.add('bad');
+        });
+      }
+    }
+    updateChips();
+    const total = cur.total, pct = Math.round(score/total*100);
+    const prev = store.results[cur.id];
+    store.results[cur.id] = { score, total, time:secs, best: Math.max(score, prev ? prev.best : 0), at: Date.now() };
+    delete store.drafts[cur.id]; persist(); try{ updateStudyProgress(); }catch(e){}
+    let right = 0, wrong = 0, skip = 0;
+    for(let n = 1; n <= total; n++){ if(!isAnswered(n)) skip++; else if(m[n]) right++; else wrong++; }
+    lastRes = { score, total, pct, secs, right, wrong, skip };
+    $('rdSubmit').textContent = 'Xem kết quả';
+    try{ if(typeof sfx !== 'undefined') (pct >= 60 ? sfx.great : sfx.retry)(); }catch(e){}
+    showResult();
+  }
+
+  /* ---------- result screen ---------- */
+  let lastRes = null;
+  const fmtLong = sec => String(Math.floor(sec/3600)).padStart(2,'0') + ':' + fmt(sec % 3600);
+  function donut(r){
+    const C = 2*Math.PI*90, tot = r.total || 1; let cum = 0;
+    const seg = (n, col) => { const len = C*n/tot; const el = n > 0 ? '<circle cx="110" cy="110" r="90" fill="none" stroke="'+col+'" stroke-width="20" stroke-dasharray="'+len+' '+(C-len)+'" stroke-dashoffset="'+(-cum)+'" transform="rotate(-90 110 110)"/>' : ''; cum += len; return el; };
+    return '<svg viewBox="0 0 220 220" class="rd-donut" aria-hidden="true"><circle cx="110" cy="110" r="90" fill="none" stroke="#EDE6FA" stroke-width="20"/>' +
+      seg(r.right,'#2FB67C') + seg(r.wrong,'#B93851') + seg(r.skip,'#CFC6E6') + '</svg>';
+  }
+  function showResult(){
+    if(!lastRes) return;
+    const r = lastRes;
+    const good = r.pct >= 85, ok = r.pct >= 60;
+    const msg = good ? 'Xuất sắc! Pear và Egg tự hào về bạn đó 🎉' : ok ? 'Làm tốt lắm! Cố thêm chút nữa là hoàn hảo nhé!' : 'Hơi khó bạn nhỉ, bình tĩnh cùng luyện tập tiếp nhé!';
+    const mascot = good ? '🍐' : ok ? '🥚' : '🥚';
+    let el = $('rdRes'); if(!el){ el = document.createElement('div'); el.id = 'rdRes'; el.className = 'rd-res'; testEl.insertBefore(el, $('rdTabs')); }
+    el.innerHTML =
+      '<div class="rd-res-l '+(good?'good':ok?'mid':'low')+'"><h2>'+msg+'</h2><div class="rd-mascot">'+mascot+'</div></div>' +
+      '<div class="rd-res-r"><div class="rd-res-h"><b>Kết quả làm bài</b><span>Thời gian làm bài<br><strong>'+fmtLong(r.secs)+'</strong></span></div>' +
+        '<div class="rd-res-body"><div class="rd-ring">'+donut(r)+'<div class="rd-ring-c"><b>'+r.score+'/'+r.total+'</b><span>câu đúng</span></div></div>' +
+        '<ul class="rd-legend"><li><i style="background:#2FB67C"></i>Đúng: <b>'+r.right+' câu</b></li><li><i style="background:#B93851"></i>Sai: <b>'+r.wrong+' câu</b></li><li><i style="background:#CFC6E6"></i>Bỏ qua: <b>'+r.skip+' câu</b></li></ul></div>' +
+        '<div class="rd-res-btns"><button type="button" class="rd-big" id="rdReview">📘 Xem giải thích</button>' +
+        '<button type="button" class="rd-big alt" id="rdRetry">🔁 Làm lại</button><button type="button" class="rd-big alt" id="rdToList">📚 Danh sách bài</button></div></div>';
+    testEl.classList.add('res'); testEl.classList.remove('review','rev'); countUp(); if(r.pct >= 85) confetti();
+  }
+
+  /* ---------- review mode (explanations + locate in passage) ---------- */
+  const EVID = [{"single": {"1": [[0, "The survey team found nine adult insects and took seven to join the captive breeding programme."]], "2": [[1, "adults are nocturnal and spend the night eating the leaf tips of a single shrub species (Melaleuca howeana)."]], "3": [[1, "adults are nocturnal and spend the night eating the leaf tips of a single shrub species (Melaleuca howeana). Newly hatched young, known as nymphs, are bright green and, unlike the adults, active by day."]], "4": [[2, "where it was once abundant and survived until the early twentieth century. In 1918 the supply ship Makambo ran aground there, and black rats became established on the island."]], "5": [[3, "The first indication of survival came in 1964, when a dead insect was found on Ball's Pyramid."]], "6": [[4, "One night in February 2003, two pairs of insects were collected from Ball's Pyramid and carried in specially designed tubes to two breeding facilities in mainland Australia."]], "7": [[4, "Honan revived her by dripping into her mouth a mixture of ground melaleuca leaves, sugar and calcium."]], "8": [[6, "led a team that compared the DNA of the two groups for a study in the journal Current Biology. Yet this comparison showed the two groups to differ by less than one per cent."]], "9": [[7, "A baiting operation to exterminate the island's black rats was carried out in 2019, and in 2023 the island was declared free of them."]], "10": [[7, "Based on the scientific advice, the first place they would be brought back to would be in the remote areas of the permanent park preserve"]], "11": [[8, "Eggs sent from Bristol founded a colony at Prague Zoo, which recently hatched 13 insects"]], "12": [[8, "its colony of between 700 and 800 live insects, a total that varies with the season"]], "13": [[8, "the genes of the seven wild insects taken from Ball's Pyramid this year mean a stronger species"]]}, "multi": {}}, {"single": {"1": [[0, "Shortly before the 2010 World Cup began, Brazil's goalkeeper Júlio César complained to journalists"]], "2": [[1, "Adidas had already worked with engineers at Loughborough University on several balls, including the one used at the previous tournament."]], "3": [[2, "Yet the much smoother Jabulani does so at around 50 miles per hour, which is about the speed at which players strike the ball."]], "4": [[3, "Even its name was chosen by a public vote."]], "5": [[4, "The permitted weight has remained the same since it was raised in 1937."]], "6": [[5, "His inventions earned him medals at an exhibition, yet he never patented any of them."]], "7": [[8, "Leather itself had disappeared 20 years earlier, in 1986, with the first World Cup ball made only from man-made materials."]], "8": [[5, "he also built his own brass pump modelled on a doctor's ear syringe"]], "9": [[6, "These balls were hand-stitched from 18 strips arranged in six panels and closed with a lace."]], "10": [[7, "Its colours were chosen to help viewers see the ball clearly on black-and-white television"]], "11": [[7, "it owes its name to a communications satellite of a similar shape"]], "12": [[8, "which means that, like a phone, the ball has to be charged"]], "13": [[9, "Its chip sits inside one of them, balanced by weights in the other three"]]}, "multi": {}}, {"single": {"1": [[0, "The case involved an old law requiring those who sold fish oil to pay a fee in order to have their barrels inspected by city officials and certified."]], "2": [[0, "claiming that no inspection was necessary because it was whale oil and whales were not fish"]], "3": [[0, "an oil merchant named Samuel Judd refused to pay the inspection fee on three barrels of oil"]], "4": [[1, "the public debate in New York sparked off by the trial was sensational"]], "5": [[1, "all non-human creatures had been organized according to the categories of birds, beasts, or fish"]], "6": [[1, "For the average person, the answer seemed perfectly obvious: whales swam in the sea and therefore they were fish."]], "7": [[2, "the Linnaean system controversially classified whales as mammals because they shared two mammalian characteristics"]], "8": [[3, "Mitchill was a renowned natural history lecturer at the College of Physicians and Surgeons"]], "9": [[4, "Lead counsel William Sampson turned the trial into a contest between scientific learning and common sense, by asking plain-spoken whalers to make their case before the jury."]], "10": [[5, "he was forced to acknowledge serious disputes among his peers regarding exactly how to classify biological organisms"]], "11": [[5, "Sampson then claimed Mitchill's beliefs had their origin in Europe"]], "12": [[6, "what won the case for Samuel Judd were not Mitchill's scientific arguments, but testimony from a different sphere altogether"], [6, "the merchants implicitly understood that whale oil and fish oil were not the same"]], "13": [[6, "whale oil could be used as a fuel for lamps because it could be burned without giving off smoke"]], "14": [[7, "the effects of human activity on the climate of this planet"]]}, "multi": {}}, {"single": {"1": [[2, "Twenty seeds are then counted out onto damp blotting paper and left somewhere warm. A fortnight later a volunteer writes down how many have sprouted."]], "2": [[4, "Seed law began in the nineteenth century, against the dealer who sold a farmer a sack of dead or dyed seed"]], "3": [[0, "The oak card-catalogue cabinet in the Calderwick public library gave up its last index card in 1998. It holds seed."]], "4": [[4, "In 2016 an inspector called at a seed library in Saltmere and told its volunteers that they were distributing seed unlawfully."]], "5": [[1, "Peas and French beans pollinate themselves inside a flower that has finished the job before it opens."]], "6": [[1, "Every envelope is marked with a coloured dot"]], "7": [[2, "Every envelope handed in comes with a slip giving the variety, the week it was gathered and how close the nearest relative was flowering."]], "8": [[2, "A squash that has crossed with a neighbour still yields a plump, ordinary-looking seed, so doubtful lots are grown out for a season before they are lent again."]], "9": [[2, "Some of what travels with seed sits on the coat rather than inside it."]]}, "multi": {"10": {"A": [[3, "Do that for six or seven years and you have something that fits your own ground."]], "B": [[3, "come ready a few at a time over several weeks"]], "C": [[5, "Nobody joins to save money,"]], "D": [[3, "Falkner readily acknowledges that the plants are no healthier for any of it."]], "E": [[2, "Seed dried and stored in a warm bedroom forfeits its ability to germinate years before identical seed kept cool and dry would."]]}, "12": {"A": [[4, "Registration is no answer for a shelf of envelopes: even the inexpensive route for heritage varieties demands a listing, a file and a quantity cap."]], "B": [[4, "Calderwick's answer, and that of many others, was to stop lending to the public. Borrowers signed a form, became members of an association and now pass seed between themselves rather than over a counter."]], "C": [[4, "in a handful of places they have won an exemption for any exchange with no commercial purpose"]], "D": [[1, "The limit of six dates from the shoebox years and has never been altered."]], "E": [[5, "a growing proportion of the collections now sit inside public libraries"]]}}}];
+  let rvN = 1, rvKey = null;
+  const qGroup = n => cur.groups.find(g => n >= g.from && n <= g.to);
+  const gapSentence = (g, n) => (g.type === 'notes' ? g.sections.reduce((a, s) => a.concat(s.b), []) : g.text).find(t => t.indexOf('{'+n+'}') >= 0) || '';
+  const userText = n => norm(ans[n]) === '' ? '' : String(ans[n]);
+
+  function rvPassageHtml(){
+    return '<div class="rd-ptag">Reading Passage '+(curIdx+1)+'</div><h2 class="rd-ptitle">'+esc(cur.title)+'</h2>' +
+      cur.paras.map((p, i) => '<p>' + (p.l ? '<span class="rd-pl">'+p.l+'</span>' : '') + '<span class="rd-pt rv-pt" data-pi="'+i+'"></span></p>').join('');
+  }
+  let rvEv = {};
+  function clearHL(){
+    rvEv = {}; renderPassages('#rvPassage');
+    testEl.querySelectorAll('.rv-loc.on').forEach(b => { b.classList.remove('on'); b.textContent = '📍 Xem vị trí trong bài'; });
+    rvKey = null;
+  }
+  function applyHL(list){
+    rvEv = {}; list.forEach(e => (rvEv[e[0]] = rvEv[e[0]] || []).push(e[1]));
+    renderPassages('#rvPassage');
+    return testEl.querySelector('#rvPassage .rv-mark');
+  }
+  function locate(key, btn){
+    if(rvKey === key){ clearHL(); return; }
+    clearHL();
+    const parts = key.split(':');
+    const ev = parts[0] === 's' ? (EVID[curIdx].single[parts[1]] || []) : ((EVID[curIdx].multi[parts[1]] || {})[parts[2]] || []);
+    const first = applyHL(ev);
+    rvKey = key; btn.classList.add('on'); btn.textContent = '🙈 Bỏ highlight';
+    setRvTab('read');
+    if(first) setTimeout(() => first.scrollIntoView({ block:'center', behavior:'smooth' }), 60);
+  }
+  function setRvTab(p){
+    const panes = $('rvPanes'); if(panes) panes.dataset.show = p;
+    testEl.querySelectorAll('#rvTabs button').forEach(b => b.classList.toggle('on', b.dataset.p === p));
+  }
+
+  function rvChips(){
+    const m = marks();
+    return Array.from({ length: cur.total }, (_, i) => {
+      const n = i + 1, st = !isAnswered(n) ? 'skip' : (m[n] ? 'ok' : 'bad');
+      return '<button type="button" class="rv-chip '+st+(n === rvN || (qGroup(rvN).type === 'multi' && qGroup(n) === qGroup(rvN)) ? ' cur' : '')+'" data-n="'+n+'">'+n+'</button>';
+    }).join('');
+  }
+  function locBtn(key){ return '<button type="button" class="rv-loc" data-k="'+key+'">📍 Xem vị trí trong bài</button>'; }
+
+  function rvQuestion(n){
+    const g = qGroup(n), ex = EXPL[curIdx], m = marks();
+    let head, body, expl;
+    const stat = (ok, any) => !any ? '<span class="rv-st skip">⚪ Bỏ qua</span>' : ok ? '<span class="rv-st ok">✅ Đúng</span>' : '<span class="rv-st bad">❌ Sai</span>';
+    if(g.type === 'multi'){
+      const me = ans['m'+g.from] || [], mx = ex.multi[g.from];
+      head = '<span class="rv-qn">Câu '+g.from+'–'+g.to+'</span>' + stat(m[g.from] && m[g.to], me.length > 0);
+      body = '<p class="rv-qt">'+esc(g.q)+'</p>' + g.options.map(o => {
+        const right = g.a.indexOf(o[0]) >= 0, mine = me.indexOf(o[0]) >= 0;
+        return '<div class="rv-opt'+(right ? ' right' : mine ? ' wrong' : '')+'"><span class="rv-mk">'+(mine ? '☑' : '☐')+'</span><span><b>'+o[0]+'</b>&nbsp; '+esc(o[1])+'</span></div>';
+      }).join('');
+      expl = '<div class="rv-eh"><h4>Câu '+g.from+'–'+g.to+' – Giải thích đáp án</h4></div><p class="rv-ansline">Đáp án: <b>'+esc(mx.answer)+'</b> · Bạn chọn: <b>'+(me.length ? me.join(', ') : '(bỏ trống)')+'</b></p>' +
+        mx.rows.map(r => '<div class="rv-orow"><div class="rv-oh"><span class="rd-num">'+r[0]+'</span><b class="'+(r[1] === 'Đúng' ? 'okc' : 'badc')+'">'+r[1]+'</b>'+locBtn('m:'+g.from+':'+r[0])+'</div><p>'+esc(r[2])+'</p></div>').join('');
+    }else{
+      const e = ex.single[n], u = userText(n), ok = m[n];
+      head = '<span class="rv-qn">Câu '+n+'</span>' + stat(ok, u !== '');
+      if(g.type === 'tfng' || g.type === 'match'){
+        const it = g.items.find(x => x.n === n);
+        const choices = g.type === 'tfng' ? g.opts.map(o => o[0]) : g.letters;
+        body = '<div class="rv-stmt"><span class="rd-num">'+n+'</span><p class="rv-qt">'+esc(it.q)+'</p></div>' +
+          '<div class="rv-choices'+(g.type === 'match' ? ' row' : '')+'">' + choices.map(c => {
+            const right = c === it.a, mine = c === u;
+            return '<div class="rv-opt'+(right ? ' right' : mine ? ' wrong' : '')+'"><span class="rv-radio'+(mine ? ' on' : '')+'"></span><span>'+c+'</span>'+(mine ? '<em>bạn chọn</em>' : '')+(right ? '<em class="g">đáp án</em>' : '')+'</div>';
+          }).join('') + '</div>';
+      }else{
+        const filled = esc(gapSentence(g, n)).replace('{'+n+'}', ok ? '<span class="rv-gv right">'+esc(u)+'</span>' :
+          (u ? '<span class="rv-gv wrong">'+esc(u)+'</span> ' : '<span class="rv-gv wrong">(bỏ trống)</span> ') + '<span class="rv-gv right">'+esc(e[0])+'</span>');
+        body = '<div class="rv-stmt"><span class="rd-num">'+n+'</span><p class="rv-qt">'+filled+'</p></div>';
+      }
+      expl = '<div class="rv-eh"><h4>Câu '+n+' – Giải thích đáp án</h4>'+locBtn('s:'+n)+'</div><p class="rv-ansline">Đáp án: <b>'+esc(e[0])+'</b>' + (u !== '' && !ok ? ' · Bạn chọn: <b class="badc">'+esc(u)+'</b>' : '') + '</p><p class="rv-exp-t">'+esc(e[1])+'</p>';
+    }
+    return '<div class="rv-qh">'+head+'<span class="rv-arrows"><button type="button" class="rv-nav" data-d="-1" aria-label="Câu trước">‹</button><button type="button" class="rv-nav" data-d="1" aria-label="Câu sau">›</button></span></div>' +
+      '<div class="rv-qbody">'+body+'</div><div class="rv-sep"></div><div class="rv-expl">'+expl+'</div>';
+  }
+  function rvShow(n){
+    n = Math.max(1, Math.min(cur.total, n)); rvN = n; clearHL();
+    $('rvQ').innerHTML = rvQuestion(n); $('rvQ').scrollTop = 0; $('rvQ').classList.remove('swap'); void $('rvQ').offsetWidth; $('rvQ').classList.add('swap');
+    $('rvChips').innerHTML = rvChips();
+    const c = $('rvChips').querySelector('.cur'); if(c && c.scrollIntoView) c.scrollIntoView({ block:'nearest', inline:'center' });
+  }
+  function showReview(){
+    if(!lastRes) return;
+    let el = $('rdRv'); if(el) el.remove();
+    el = document.createElement('div'); el.id = 'rdRv'; el.className = 'rv';
+    el.innerHTML =
+      '<div class="rv-top"><button type="button" class="rv-x" id="rvClose" aria-label="Đóng">✕</button>' +
+        '<div class="rv-pill"><span>'+fmtLong(lastRes.secs)+'</span><b>'+lastRes.score+'/'+lastRes.total+'</b> câu đúng</div>' +
+        '<button type="button" class="rv-top-btn" id="rdBackRes">📊 Kết quả</button></div>' +
+      '<div class="rv-tabs" id="rvTabs"><button type="button" data-p="read">📄 Bài đọc</button><button type="button" class="on" data-p="exp">💡 Giải thích</button></div>' +
+      '<div class="rv-panes" id="rvPanes" data-show="exp"><section class="rd-pane rv-passage" id="rvPassage">'+rvPassageHtml()+'</section><section class="rd-pane rv-right" id="rvQ"></section></div>' +
+      '<div class="rv-foot"><div class="rv-chips" id="rvChips"></div><button type="button" class="rv-btn alt" id="rdRetry">🔁 Làm lại</button><button type="button" class="rv-btn" id="rdToList">📚 Làm bài khác</button></div>';
+    testEl.appendChild(el); renderPassages('#rvPassage');
+    testEl.classList.remove('res'); testEl.classList.add('rev');
+    // start at the first wrong / skipped question
+    const m = marks(); let start = 1; for(let n = 1; n <= cur.total; n++){ if(!isAnswered(n) || !m[n]){ start = n; break; } }
+    rvShow(start);
+  }
+
+  /* ---------- progress hooks for the home dashboard ---------- */
+  window.rdProgress = () => ({ done: DATA.filter(d => store.results[d.id]).length, total: DATA.length });
+  window.rdLvRow = () => { const p = window.rdProgress(), pc = p.total ? Math.round(p.done/p.total*100) : 0;
+    return '<div class="lv-row"><span class="lv-dot" style="background:#6A3FD0"></span><span class="lv-name">📖 Reading</span><span class="lv-pct">'+pc+'%</span><div class="lv-bar"><i style="width:'+pc+'%;background:#2FB67C"></i></div></div>'; };
+
+  /* ---------- highlight + dictionary ---------- */
+  const COLORS = ['y','g','p','b'];
+  const HC = (pre) => COLORS.map(c => '<button type="button" class="hc hc-'+c+'" data-c="'+c+'" aria-label="Highlight"></button>').join('');
+  scr.insertAdjacentHTML('beforeend','<div id="rdBar" class="rd-pop" hidden></div><div id="rdDict" class="rd-dict" hidden></div><div id="rdVoc" class="rd-voc" hidden></div>');
+  const BAR = $('rdBar'), DC = $('rdDict'), VC = $('rdVoc');
+  let sel = null, dictCtx = null, dictWord = '', busy = false, selT = 0, clkT = 0;
+  const cache = {};
+  const hlOf = pi => (store.hl[cur.id] || []).filter(h => h.p === pi);
+  const hasHL = x => hlOf(x.pi).some(h => h.s < x.e && h.e > x.s);
+  function wrapWords(raw, a){
+    let o = '', last = 0, m; const re = /[A-Za-z][A-Za-z'’-]*/g;
+    while((m = re.exec(raw))){ o += esc(raw.slice(last, m.index)) + '<span class="w" data-o="'+(a+m.index)+'">'+esc(m[0])+'</span>'; last = re.lastIndex; }
+    return o + esc(raw.slice(last));
+  }
+  function paraHtml(pi, ev){
+    const tx = cur.paras[pi].t, hs = hlOf(pi), cuts = new Set([0, tx.length]);
+    const er = (ev || []).map(q => [tx.indexOf(q), tx.indexOf(q) + q.length]).filter(r => r[0] >= 0);
+    hs.forEach(h => { cuts.add(h.s); cuts.add(h.e); }); er.forEach(r => { cuts.add(r[0]); cuts.add(r[1]); });
+    const pts = Array.from(cuts).sort((a, b) => a - b); let out = '';
+    for(let i = 0; i < pts.length - 1; i++){
+      const a = pts[i], b = pts[i+1]; let seg = wrapWords(tx.slice(a, b), a);
+      const h = hs.find(h => h.s <= a && h.e >= b);
+      if(h) seg = '<mark class="hl hl-'+h.c+'">'+seg+'</mark>';
+      if(er.some(r => r[0] <= a && r[1] >= b)) seg = '<mark class="rv-mark">'+seg+'</mark>';
+      out += seg;
+    }
+    return out;
+  }
+  function renderPassages(root){
+    if(!cur) return;
+    testEl.querySelectorAll((root || '') + ' .rd-pt').forEach(el => { el.innerHTML = paraHtml(+el.dataset.pi, el.closest('#rvPassage') ? rvEv[el.dataset.pi] : null); });
+  }
+  function addHL(x, c){
+    const out = [];
+    (store.hl[cur.id] || []).forEach(h => {
+      if(h.p !== x.pi || h.e <= x.s || h.s >= x.e){ out.push(h); return; }
+      if(h.s < x.s) out.push(Object.assign({}, h, { e: x.s }));
+      if(h.e > x.e) out.push(Object.assign({}, h, { s: x.e, id: h.id + 'b' }));
+    });
+    out.push({ id: Date.now().toString(36), p: x.pi, s: x.s, e: x.e, c }); store.hl[cur.id] = out; persist(); renderPassages(); tap();
+  }
+  function delHL(x){ store.hl[cur.id] = (store.hl[cur.id] || []).filter(h => h.p !== x.pi || h.e <= x.s || h.s >= x.e); persist(); renderPassages(); }
+  const say = w => { try{ speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(w); u.lang = 'en-US'; u.rate = .9; speechSynthesis.speak(u); }catch(e){} };
+
+  function place(el, r){
+    el.hidden = false;
+    const w = el.offsetWidth, h = el.offsetHeight;
+    let left = Math.max(10, Math.min(r.left + r.width/2 - w/2, innerWidth - w - 10)), top = r.bottom + 10;
+    if(top + h > innerHeight - 10) top = Math.max(10, r.top - h - 10);
+    el.style.left = left + 'px'; el.style.top = top + 'px';
+  }
+  function selInfo(){
+    const s = getSelection(); if(!s || s.isCollapsed || !s.rangeCount) return null;
+    const r = s.getRangeAt(0), el0 = r.startContainer.nodeType === 1 ? r.startContainer : r.startContainer.parentElement;
+    const pe = el0 && el0.closest('.rd-pt'); if(!pe) return null;
+    const tx = cur.paras[+pe.dataset.pi].t, pre = document.createRange(); pre.selectNodeContents(pe); pre.setEnd(r.startContainer, r.startOffset);
+    let s0 = pre.toString().length, e0 = tx.length;
+    const e1 = r.endContainer.nodeType === 1 ? r.endContainer : r.endContainer.parentElement;
+    if(e1 && e1.closest('.rd-pt') === pe){ pre.setEnd(r.endContainer, r.endOffset); e0 = pre.toString().length; }
+    const raw = tx.slice(s0, e0); s0 += raw.length - raw.trimStart().length; e0 -= raw.length - raw.trimEnd().length;
+    if(e0 <= s0) return null;
+    return { pi: +pe.dataset.pi, s: s0, e: e0, text: tx.slice(s0, e0), rect: r.getBoundingClientRect() };
+  }
+  document.addEventListener('selectionchange', () => {
+    clearTimeout(selT);
+    selT = setTimeout(() => {
+      if(scr.hidden || !cur) return;
+      const i = selInfo();
+      if(i){ sel = i; BAR.innerHTML = HC() + '<button type="button" class="pb" data-a="look">🔍 Tra từ</button>' + (hasHL(i) ? '<button type="button" class="pb" data-a="rm" aria-label="Bỏ highlight">✕</button>' : ''); place(BAR, i.rect); }
+      else if(!busy) BAR.hidden = true;
+    }, 140);
+  });
+  BAR.addEventListener('pointerdown', e => { e.preventDefault(); busy = true; setTimeout(() => busy = false, 700); });
+  BAR.addEventListener('click', e => {
+    const b = e.target.closest('button'); if(!b || !sel) return;
+    if(b.dataset.c) addHL(sel, b.dataset.c);
+    else if(b.dataset.a === 'rm') delHL(sel);
+    else if(b.dataset.a === 'look'){ const x = sel; openDict(x.text, x, x.rect); }
+    try{ getSelection().removeAllRanges(); }catch(_){} BAR.hidden = true;
+  });
+
+  async function tryDict(k){
+    const c = [k]; if(/ies$/.test(k)) c.push(k.slice(0,-3) + 'y');
+    if(/(es|s|ed|ing)$/.test(k)){ c.push(k.replace(/(es|s|ed|ing)$/, '')); c.push(k.replace(/(ed|ing)$/, 'e')); }
+    for(const x of c){ try{ const r = await fetch('https://api.dictionaryapi.dev/v2/entries/en/' + encodeURIComponent(x)); if(r.ok) return (await r.json())[0]; }catch(e){ return null; } }
+    return null;
+  }
+  async function lookup(w){
+    const k = w.toLowerCase(); if(cache[k]) return cache[k];
+    const o = { w: k, m: [] }, single = /^[A-Za-z][A-Za-z'’-]*$/.test(w);
+    await Promise.all([
+      fetch('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(w) + '&langpair=en|vi').then(r => r.json()).then(j => { const v = j && j.responseData && j.responseData.translatedText; if(v && !/MYMEMORY/i.test(v)) o.vi = v; }).catch(() => {}),
+      single ? tryDict(k).then(d => { if(!d) return; o.ph = d.phonetic || ((d.phonetics || []).find(p => p.text) || {}).text || '';
+        o.m = (d.meanings || []).slice(0, 2).map(m => ({ pos: m.partOfSpeech, def: m.definitions[0].definition, ex: m.definitions[0].example })); }) : null
+    ]);
+    if(o.vi || o.m.length) cache[k] = o;
+    return o;
+  }
+  function cardHtml(word, d, x){
+    const k = word.toLowerCase();
+    return '<div class="dc-h"><b>'+esc(word)+'</b>'+(d && d.ph ? '<span class="dc-ph">'+esc(d.ph)+'</span>' : '')+'<span class="dc-sp"></span><button type="button" data-a="say" aria-label="Nghe">🔊</button><button type="button" data-a="save" aria-label="Lưu từ">'+(store.vocab[k] ? '⭐' : '☆')+'</button><button type="button" data-a="x" aria-label="Đóng">✕</button></div>' +
+      (!d ? '<div class="dc-load"><i></i><i></i><i></i> Đang tra từ</div>' :
+        (d.vi ? '<div class="dc-vi">'+esc(d.vi)+'</div>' : '') +
+        d.m.map(m => '<div class="dc-m"><i>'+esc(m.pos)+'</i> '+esc(m.def)+(m.ex ? '<em>“'+esc(m.ex)+'”</em>' : '')+'</div>').join('') +
+        (!d.vi && !d.m.length ? '<div class="dc-load">Không tra được — kiểm tra kết nối mạng nhé.</div>' : '') +
+        '<a class="dc-a" target="_blank" rel="noopener" href="https://dictionary.cambridge.org/dictionary/english-vietnamese/'+encodeURIComponent(k)+'">Xem thêm trên Cambridge ↗</a>') +
+      '<div class="dc-f">'+HC()+(hasHL(x) ? '<button type="button" class="dc-rm" data-a="rm">Bỏ highlight</button>' : '')+'</div>';
+  }
+  async function openDict(word, x, rect){
+    dictWord = word; dictCtx = x; BAR.hidden = true;
+    DC.innerHTML = cardHtml(word, null, x); place(DC, rect);
+    const d = await lookup(word); if(dictWord !== word) return;
+    DC.innerHTML = cardHtml(word, d, x); place(DC, rect);
+  }
+  DC.addEventListener('click', e => {
+    const b = e.target.closest('button'); if(!b) return;
+    const k = dictWord.toLowerCase(), d = cache[k], a = b.dataset.a;
+    if(a === 'x'){ DC.hidden = true; return; }
+    if(a === 'say'){ say(dictWord); return; }
+    if(b.dataset.c) addHL(dictCtx, b.dataset.c);
+    if(a === 'rm') delHL(dictCtx);
+    if(a === 'save'){ if(store.vocab[k]) delete store.vocab[k]; else store.vocab[k] = { w: k, vi: d && d.vi || '', ph: d && d.ph || '', def: d && d.m[0] ? d.m[0].def : '' }; persist(); tap(); }
+    DC.innerHTML = cardHtml(dictWord, d || null, dictCtx);
+  });
+  document.addEventListener('pointerdown', e => { if(!DC.hidden && !DC.contains(e.target) && !e.target.closest('.w')) DC.hidden = true; });
+  testEl.addEventListener('click', e => {
+    const w = e.target.closest('.rd-pt .w'); if(!w || e.detail > 1) return;
+    clearTimeout(clkT);
+    clkT = setTimeout(() => {
+      const s = getSelection(); if(s && !s.isCollapsed) return;
+      const pi = +w.closest('.rd-pt').dataset.pi, tx = cur.paras[pi].t, o = +w.dataset.o, re = /[A-Za-z][A-Za-z'’-]*/g; let m, x = null;
+      while((m = re.exec(tx))){ if(m.index <= o && o < m.index + m[0].length){ x = { pi, s: m.index, e: m.index + m[0].length, text: m[0] }; break; } }
+      if(x){ w.classList.add('wf'); setTimeout(() => w.classList.remove('wf'), 500); openDict(x.text, x, w.getBoundingClientRect()); }
+    }, 230);
+  });
+  /* vocab notebook */
+  function openVoc(){
+    const V = Object.values(store.vocab);
+    VC.innerHTML = '<div class="vc-box"><div class="vc-h"><b>📒 Sổ từ vựng ('+V.length+')</b><button type="button" data-a="x" aria-label="Đóng">✕</button></div>' +
+      (V.length ? V.map(v => '<div class="vc-r"><div><b>'+esc(v.w)+'</b> <span class="dc-ph">'+esc(v.ph || '')+'</span><div class="vc-vi">'+esc(v.vi || v.def || '')+'</div></div><button type="button" data-a="say" data-w="'+esc(v.w)+'" aria-label="Nghe">🔊</button><button type="button" data-a="del" data-w="'+esc(v.w)+'" aria-label="Xóa">🗑</button></div>').join('') :
+        '<p class="dc-load">Chưa có từ nào. Chạm vào một từ trong bài đọc rồi bấm ☆ để lưu.</p>') + '</div>';
+    VC.hidden = false;
+  }
+  VC.addEventListener('click', e => {
+    const b = e.target.closest('button'); if(e.target === VC || (b && b.dataset.a === 'x')){ VC.hidden = true; return; }
+    if(!b) return; if(b.dataset.a === 'say') say(b.dataset.w);
+    if(b.dataset.a === 'del'){ delete store.vocab[b.dataset.w]; persist(); openVoc(); }
+  });
+  scr.addEventListener('click', e => { if(e.target.closest('#rdVocBtn')){ tap(); openVoc(); } });
+
+  /* ---------- result effects ---------- */
+  function countUp(){
+    const b = testEl.querySelector('.rd-ring-c b'); if(!b || !lastRes) return; const N = lastRes.score, T = lastRes.total; let s = null;
+    const f = ts => { s = s || ts; const p = Math.min(1, (ts - s)/900); b.textContent = Math.round(N*p) + '/' + T; if(p < 1) requestAnimationFrame(f); };
+    requestAnimationFrame(f);
+  }
+  function confetti(){
+    const box = document.createElement('div'), em = ['🎉','✨','🍐','🥚','⭐']; box.className = 'rd-conf';
+    for(let i = 0; i < 26; i++){ const s = document.createElement('span'); s.textContent = em[i % 5]; s.style.cssText = 'left:'+(Math.random()*100)+'%;animation-delay:'+(Math.random()*.5)+'s;font-size:'+(16+Math.random()*16)+'px;--dx:'+((Math.random()-.5)*220)+'px'; box.appendChild(s); }
+    scr.appendChild(box); setTimeout(() => box.remove(), 2600);
+  }
+
+  // entry points
+  const hc = $('rdHomeCard'); if(hc) hc.addEventListener('click', openReading);
 })();
 </script>
 
