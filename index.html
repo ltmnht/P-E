@@ -7132,6 +7132,32 @@ mark.hl{color:inherit;border-radius:3px;animation:rdPop .35s}
 @media(prefers-reduced-motion:reduce){
   .rd-q .rd-r,.rd-opt,.rd-opt *,.rd-chip,.rd-tabs button,.rd-panes>*,.rs-tile,.rs-type,.rs-tips,.rs-cell,.rd-legend li,.vb-chip,.vb-ib,.vb-tabs button,.vb-fc-a,.rd-r .rd-rd{animation:none!important;transition:none!important}
 }
+
+/* drag-to-slot answers */
+.rd-q.rd-q-drop{display:flex;align-items:center;gap:14px;padding:10px 12px}
+.rd-q-drop .rd-qt{flex:1;min-width:0;line-height:1.5}
+.rd-slot{flex:0 0 auto;box-sizing:border-box;width:172px;min-height:44px;display:flex;align-items:center;justify-content:center;padding:6px 10px;border-radius:12px;border:2px dashed #BDB2D6;background:#F4F1FB;cursor:pointer;text-align:center;font-weight:800;font-size:14.5px;color:var(--rd-g-dark);transition:background .15s,border-color .15s,transform .15s;user-select:none;-webkit-user-select:none}
+.rd-slot-n{font-weight:800;color:var(--rd-ok-dark,#1f9d55)}
+.rd-slot.filled{border-style:solid;border-color:var(--rd-g);background:#EFE7FF;touch-action:none;cursor:grab}
+.rd-slot.over{border-color:var(--rd-g);background:#E3D6FF;transform:scale(1.04)}
+.rd-bank.picking .rd-slot:not(.filled){border-color:var(--rd-g)}
+.rd-q:not(.ok):not(.bad) .rd-slot:hover{border-color:var(--rd-g)}
+.rd-q.ok .rd-slot,.rd-q.bad .rd-slot{cursor:default;touch-action:auto}
+.rd-slot.right{background:#DDF5EA;border:2px solid var(--rd-ok,#1f9d55);color:var(--rd-ok-dark,#157a43)}
+.rd-slot.wrong{background:#FDE4E5;border:2px solid #E5484D;color:#B3261E;text-decoration:line-through}
+.rd-drop-hint{margin:14px 2px 8px;font-size:12.5px;color:#7a7094}
+.rd-bank{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0 4px;padding-bottom:4px}
+.rd-dchip{font:inherit;font-size:15px;font-weight:600;padding:9px 16px;border-radius:10px;border:1.5px solid #D7CFE8;background:#fff;color:var(--rd-ink,#2b2340);cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;transition:background .15s,border-color .15s,box-shadow .15s}
+.rd-dchip:hover{border-color:var(--rd-g);background:#F6F2FD}
+.rd-dchip.sel{border-color:var(--rd-g);background:#EFE7FF;box-shadow:0 0 0 3px rgba(106,63,208,.2);color:var(--rd-g-dark)}
+.rd-dchip.dragging,.rd-slot.dragging{opacity:.4}
+.rd-bank.locked .rd-dchip{opacity:.5;cursor:default;pointer-events:none}
+.rd-ghost{position:fixed;z-index:99999;pointer-events:none;transform:translate(-50%,-130%);padding:9px 16px;border-radius:10px;background:var(--rd-g,#6a3fd0);color:#fff;font-weight:700;font-size:15px;box-shadow:0 8px 20px rgba(0,0,0,.25);white-space:nowrap}
+@media (max-width:620px){
+  .rd-q.rd-q-drop{flex-direction:column;align-items:stretch;gap:8px}
+  .rd-slot{width:100%}
+  .rd-dchip{padding:11px 14px}
+}
 </style>
 <style>
 /* sort control */
@@ -7150,6 +7176,266 @@ mark.hl{color:inherit;border-radius:3px;animation:rdPop .35s}
 .rd-qb b{font-size:13.5px;font-weight:800;color:var(--rd-ink);line-height:1.3}
 .rd-qb small{font-size:12.5px;font-weight:600;line-height:1.4;color:var(--rd-mute)}
 .rd-psub{margin:-6px 0 16px;font-size:15px;font-style:italic;color:var(--rd-mute)}
+/* ===== Mobile review + highlight polish ===== */
+.rv-grip{ display:none; }
+.rv-mark{ background:#E3D3FF; color:inherit; border-radius:3px 3px 0 0; padding:1px 0; box-shadow:none;
+  border-bottom:3px solid var(--rd-g); -webkit-box-decoration-break:clone; box-decoration-break:clone; animation:rvPulse2 1.4s ease 2; }
+@keyframes rvPulse2{ 0%,100%{ background:#E3D3FF; } 50%{ background:#C9AEFF; } }
+
+/* highlight toolbar: docked at the bottom on touch screens so it never fights the native selection handles / menu */
+@media (max-width:899px), (pointer:coarse){
+  .rd-pop{ left:10px !important; right:10px !important; top:auto !important; bottom:calc(10px + env(safe-area-inset-bottom)) !important;
+    width:fit-content; margin:0 auto; z-index:390; flex-wrap:nowrap; gap:10px; padding:8px 14px; border-radius:999px;
+    -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; box-shadow:0 14px 34px -10px rgba(40,26,90,.55); }
+  .rd-pop .hc{ width:34px; height:34px; border-width:2px; flex:0 0 auto; }
+  .rd-pop .pb{ min-height:38px; padding:0 14px; font-size:14px; white-space:nowrap; }
+  .rd-pop .hc:hover{ transform:none; }
+}
+
+/* dictionary bottom sheet */
+@media (max-width:700px){
+  .rd-dict{ padding:20px 16px calc(14px + env(safe-area-inset-bottom)); max-height:56dvh; overscroll-behavior:contain; z-index:395; box-shadow:0 -14px 36px -12px rgba(40,26,90,.5); }
+  .rd-dict::before{ content:""; position:absolute; top:7px; left:50%; width:40px; height:4px; margin-left:-20px; border-radius:99px; background:#D5CAEE; }
+  .dc-h button{ width:40px; height:40px; }
+  .dc-f{ gap:12px; }
+  .dc-f .hc{ width:34px; height:34px; }
+  .dc-rm{ min-height:36px; }
+  .rd-test.dict-open .rd-passage, .rd-test.dict-open .rv-passage{ padding-bottom:46dvh; }
+}
+
+/* review: explanation as a bottom sheet over the passage (phones, portrait / normal height) */
+@media (max-width:899px) and (min-height:481px){
+  .rv-panes{ display:block !important; position:relative; overflow:hidden; padding:8px 0 0 !important; --sheet:100%; --pad:76px; }
+  .rv-panes[data-show="read"]{ --sheet:84px; --pad:84px; }
+  .rv-panes[data-show="half"]{ --sheet:42dvh; --pad:42dvh; }
+  .rv-panes[data-show="exp"]{ --sheet:100%; --pad:84px; }
+  .rv-panes > .rv-passage{ position:absolute !important; display:block !important; left:8px; right:8px; top:8px; bottom:0; margin:0;
+    padding-bottom:calc(var(--pad) + 28px); }
+  .rv-panes > .rv-right{ position:absolute !important; display:flex !important; left:0; right:0; bottom:0; top:auto; height:var(--sheet); max-height:calc(100% - 8px);
+    z-index:4; background:#fff; border-radius:22px 22px 0 0 !important; border:1px solid var(--rd-line); border-bottom:0;
+    box-shadow:0 -14px 32px -14px rgba(40,26,90,.55); overflow-y:auto; overscroll-behavior:contain;
+    transition:height .3s cubic-bezier(.22,1,.36,1); }
+  .rv-panes[data-show="read"] > .rv-right{ overflow:hidden; }
+  .rv-grip{ display:flex; position:sticky; top:0; z-index:3; flex:0 0 auto; width:100%; height:26px; align-items:center; justify-content:center;
+    border:0; background:#fff; padding:0; cursor:pointer; touch-action:none; border-radius:22px 22px 0 0; -webkit-tap-highlight-color:transparent; }
+  .rv-grip i{ width:44px; height:5px; border-radius:99px; background:#CDBFEA; }
+  .rv-right .rv-qh{ position:sticky; top:26px; z-index:2; background:#fff; padding-top:2px; padding-bottom:8px; }
+  .rv-nav{ width:40px; height:40px; }
+  .rv-panes[data-show="half"] .rv-qbody, .rv-panes[data-show="half"] .rv-sep{ display:none; }
+  .rv-panes[data-show="half"] .rv-expl{ padding-top:6px; }
+  .rv-passage .rv-pt .w{ padding:1px 0; }
+}
+
+/* compact review footer: one row (question chips + icon buttons) */
+@media (max-width:899px){
+  .rv-foot{ flex-wrap:nowrap !important; align-items:center; gap:8px; margin-top:8px; padding:8px max(10px,env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left)); }
+  .rv-foot .rv-chips{ flex:1 1 auto; width:auto !important; min-width:0; padding:5px 8px; gap:6px; border-width:1.5px; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
+  .rv-foot .rv-chips::-webkit-scrollbar{ display:none; }
+  .rv-chip{ width:34px; height:34px; font-size:14px; }
+  .rv-foot .rv-btn, .rv-foot .rv-btn:first-of-type{ flex:0 0 auto; margin-left:0; min-width:46px; min-height:46px; padding:0 14px; border-radius:14px; font-size:15px; }
+}
+@media (max-width:560px){
+  .rv-foot .rv-btn{ padding:0; font-size:19px; width:46px; }
+  .rv-foot .rv-btn .bt{ display:none; }
+}
+@media (prefers-reduced-motion:reduce){ .rv-panes > .rv-right{ transition:none !important; } .rv-mark{ animation:none; } }
+/* ===== Tips & how-to ===== */
+.tp-banner{ display:flex; align-items:center; gap:12px; width:100%; box-sizing:border-box; margin:0 0 18px; padding:12px 14px; text-align:left; cursor:pointer; border:2px solid #E0CFFA; border-radius:18px; background:linear-gradient(135deg,#FFFDFF,#F1EAFF); color:var(--rd-ink); font-family:inherit; }
+.tp-banner b{ display:block; font-size:15px; font-weight:800; } .tp-banner small{ display:block; margin-top:2px; font-size:12.5px; color:var(--rd-mute); font-weight:600; line-height:1.4; }
+.tp-ban-ico{ flex:0 0 auto; width:44px; height:44px; border-radius:14px; background:#fff; display:flex; align-items:center; justify-content:center; font-size:24px; }
+.tp-banner i{ margin-left:auto; font-style:normal; font-size:24px; color:var(--rd-g); }
+.tp-chip{ border:0; background:#FFF3C4; color:#7A5A00; font:inherit; font-size:12.5px; font-weight:800; padding:6px 12px; border-radius:999px; cursor:pointer; margin:0 0 8px; min-height:32px; }
+.tp-modal{ z-index:420; align-items:flex-end; padding:0; }
+.tp-box{ width:min(560px,100%); max-height:86dvh; display:flex; flex-direction:column; padding:0; border-radius:22px 22px 0 0; overflow:hidden; }
+@media (min-width:700px){ .tp-modal{ align-items:center; padding:16px; } .tp-box{ border-radius:22px; } }
+.tp-h{ display:flex; align-items:center; justify-content:space-between; padding:16px 18px 8px; } .tp-h h2{ margin:0; font-size:18px; }
+.tp-x{ width:40px; height:40px; border:0; border-radius:50%; background:#F1EAFF; cursor:pointer; font-size:15px; }
+.tp-tabs{ display:flex; gap:6px; padding:4px 18px 10px; border-bottom:1px solid var(--rd-line); }
+.tp-tabs button{ flex:1; min-height:40px; border:2px solid var(--rd-line); background:#fff; border-radius:12px; font:inherit; font-size:13.5px; font-weight:800; color:var(--rd-mute); cursor:pointer; }
+.tp-tabs button.on{ background:var(--rd-g); border-color:var(--rd-g); color:#fff; }
+.tp-pane{ overflow-y:auto; padding:14px 18px calc(20px + env(safe-area-inset-bottom)); overscroll-behavior:contain; }
+.tp-pane[hidden]{ display:none; }
+.tp-lead{ margin:0 0 12px; font-size:14px; color:var(--rd-mute); line-height:1.5; }
+.tp-steps{ list-style:none; counter-reset:s; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+.tp-steps li{ counter-increment:s; position:relative; padding:10px 12px 10px 46px; border-radius:14px; background:#FAF8FF; border:1.5px solid #E7DEFA; }
+.tp-steps li::before{ content:counter(s); position:absolute; left:12px; top:10px; width:24px; height:24px; border-radius:50%; background:var(--rd-g); color:#fff; font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; }
+.tp-steps b{ display:block; font-size:14.5px; } .tp-steps span{ display:block; margin-top:2px; font-size:13.5px; line-height:1.55; color:#3E3450; }
+.tp-acc{ margin-bottom:10px; border:2px solid #E7DEFA; border-radius:14px; background:#FAF8FF; }
+.tp-acc summary{ cursor:pointer; padding:12px 14px; font-weight:800; font-size:14.5px; list-style:none; min-height:24px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.tp-acc summary::-webkit-details-marker{ display:none; }
+.tp-acc summary em{ font-style:normal; font-size:11.5px; padding:2px 8px; border-radius:999px; background:var(--rd-ok-pale); color:var(--rd-ok-dark); }
+.tp-acc[open] summary{ border-bottom:1px dashed #E7DEFA; }
+.tp-body{ padding:6px 14px 12px; font-size:13.8px; line-height:1.6; color:#3E3450; }
+.tp-body h5{ margin:10px 0 4px; font-size:13px; color:var(--rd-g-dark); } .tp-body ol,.tp-body ul{ margin:0; padding-left:20px; } .tp-body li{ margin-bottom:4px; }
+.tp-traps li::marker{ content:"⚠️ "; }
+.tp-app{ margin:0; padding-left:18px; font-size:14px; line-height:1.65; } .tp-app li{ margin-bottom:8px; }
+.rv-tip{ margin-top:16px; border:2px solid #FFE08A; border-radius:14px; background:#FFFBEA; }
+.rv-tip summary{ cursor:pointer; padding:12px 14px; font-weight:800; font-size:14px; min-height:24px; }
+.rv-tip .tp-body{ padding-top:0; }
+@media (max-width:560px){ #rdTipBtn .vb-t{ display:none; } }
+/* ===== Tips UX v2 ===== */
+.rd-exit.tp-btn{ position:relative; min-width:44px; padding-left:12px; padding-right:12px; }
+.rd-bar .rd-exit.tp-btn{ flex:0 0 auto; background:#fff; display:inline-flex; align-items:center; gap:6px; min-height:40px; margin:0; }
+.rd-exit.tp-btn.tp-new{ position:relative; }
+.tp-btn.tp-new::after{ content:""; position:absolute; top:4px; right:4px; width:10px; height:10px; border-radius:50%; background:#F5A524; border:2px solid #fff; animation:tpPing 1.8s ease-out infinite; }
+@keyframes tpPing{ 0%{ box-shadow:0 0 0 0 rgba(245,165,36,.6); } 100%{ box-shadow:0 0 0 9px rgba(245,165,36,0); } }
+.tp-chip{ display:inline-flex; align-items:center; gap:6px; position:relative; }
+.tp-chip.new::after{ content:"Mới"; font-size:10.5px; padding:1px 6px; border-radius:999px; background:#F5A524; color:#fff; }
+.tp-chip[aria-expanded="true"]{ background:#FFE58A; }
+.tp-quick{ margin:0 0 10px; padding:10px 12px; border-radius:14px; background:#FFFBEA; border:1.5px solid #FFE08A; animation:rdPop .2s ease-out; }
+.tp-quick[hidden]{ display:none; }
+.tp-quick b{ font-size:13.5px; } .tp-quick p{ margin:4px 0 6px !important; font-size:13.5px !important; line-height:1.55; color:#3E3450; }
+.tp-more{ border:0; background:none; padding:6px 0; min-height:32px; font:inherit; font-size:13px; font-weight:800; color:var(--rd-g-dark); cursor:pointer; }
+.tp-modal{ animation:none; }
+.tp-box{ animation:tpUp .3s cubic-bezier(.22,1,.36,1); position:relative; transition:transform .25s; }
+@keyframes tpUp{ from{ transform:translateY(40px); opacity:0; } to{ transform:none; opacity:1; } }
+.tp-grip{ display:flex; align-items:center; justify-content:center; width:100%; height:22px; border:0; background:none; padding:0; cursor:pointer; flex:0 0 auto; touch-action:none; }
+.tp-grip i{ width:42px; height:5px; border-radius:99px; background:#D5CAEE; }
+@media (min-width:700px){ .tp-grip{ display:none; } }
+.tp-h{ padding-top:2px; touch-action:none; } .tp-prog{ display:block; margin-top:2px; font-size:12.5px; color:var(--rd-mute); font-weight:600; } .tp-prog b{ color:var(--rd-g-dark); }
+.tp-time{ margin-bottom:14px; padding:12px; border-radius:14px; background:#F6F2FD; }
+.tp-tl{ display:flex; gap:3px; } .tp-tl i{ font-style:normal; text-align:center; font-size:11.5px; font-weight:800; color:#fff; padding:6px 2px; border-radius:8px; background:var(--rd-g); min-width:0; white-space:nowrap; overflow:hidden; }
+.tp-tl i:first-child{ background:#9A7BE0; } .tp-tl i:last-child{ background:#2FB67C; }
+.tp-time p{ margin:8px 0 0; font-size:13px; color:var(--rd-mute); }
+.tp-acc summary{ gap:10px; flex-wrap:nowrap; } .tp-nm{ flex:1; min-width:0; } .tp-ic{ font-size:18px; }
+.tp-acc summary em{ flex:0 0 auto; }
+.tp-ck{ flex:0 0 auto; width:22px; height:22px; border-radius:50%; border:2px solid #D5CAEE; color:transparent; font-size:12px; display:flex; align-items:center; justify-content:center; }
+.tp-ck.on{ background:var(--rd-ok); border-color:var(--rd-ok); color:#fff; }
+.tp-sum{ margin:6px 0 4px; padding:8px 10px; border-radius:10px; background:#EFE7FF; font-weight:700; color:var(--rd-g-dark); }
+.tp-ex{ border:1.5px dashed #CDBFEA; border-radius:12px; padding:10px 12px; background:#fff; }
+.tp-ex > div{ display:flex; gap:8px; margin-bottom:6px; align-items:baseline; }
+.tp-ex i{ flex:0 0 62px; font-style:normal; font-size:11.5px; font-weight:800; color:var(--rd-mute); text-transform:uppercase; }
+.tp-ex q{ font-style:italic; quotes:"“" "”"; } .tp-ex-a b{ padding:1px 10px; border-radius:999px; background:var(--rd-ok-pale); color:var(--rd-ok-dark); }
+.tp-ex p{ margin:6px 0 0; padding-top:6px; border-top:1px solid var(--rd-line); }
+@media (prefers-reduced-motion:reduce){ .tp-box,.tp-quick,.tp-btn.tp-new::after{ animation:none; } }
+
+/* ===== Tips banner redesign + badge fix ===== */
+.vb-n[hidden], [data-vbn][hidden]{ display:none !important; }
+.rd-list .tp-banner{ position:relative; overflow:hidden; display:flex; align-items:center; gap:14px; width:100%; margin:0 0 20px; padding:16px 16px 16px 16px;
+  text-align:left; cursor:pointer; border:0; border-radius:22px; color:#fff; font-family:inherit;
+  background:linear-gradient(135deg,#6A3FD0 0%,#8B5FE6 55%,#B58CFF 100%); box-shadow:0 16px 28px -18px rgba(76,42,158,.9);
+  transition:transform .18s, box-shadow .2s; -webkit-tap-highlight-color:transparent; }
+.rd-list .tp-banner::before, .rd-list .tp-banner::after{ content:""; position:absolute; border-radius:50%; background:rgba(255,255,255,.12); pointer-events:none; }
+.rd-list .tp-banner::before{ width:140px; height:140px; right:-30px; top:-60px; }
+.rd-list .tp-banner::after{ width:90px; height:90px; right:90px; bottom:-50px; }
+.rd-list .tp-banner:hover{ transform:translateY(-2px); box-shadow:0 20px 32px -18px rgba(76,42,158,.95); }
+.rd-list .tp-banner:active{ transform:scale(.985); }
+.rd-list .tp-banner:focus-visible{ outline:3px solid #FFE08A; outline-offset:2px; }
+.rd-list .tp-ban-ico{ position:relative; z-index:1; flex:0 0 auto; width:56px; height:56px; border-radius:18px; background:#fff; display:flex; align-items:center; justify-content:center; font-size:30px; box-shadow:0 8px 16px -8px rgba(0,0,0,.35); }
+.rd-list .tp-ban-tx{ position:relative; z-index:1; flex:1; min-width:0; display:flex; flex-direction:column; gap:3px; }
+.rd-list .tp-ban-tx b{ font-size:17px; font-weight:800; line-height:1.25; color:#fff; }
+.rd-list .tp-ban-tx small{ font-size:13px; font-weight:600; line-height:1.45; color:rgba(255,255,255,.88); }
+.rd-list .tp-ban-tags{ display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
+.rd-list .tp-ban-tags em{ font-style:normal; font-size:11.5px; font-weight:800; padding:4px 9px; border-radius:999px; background:rgba(255,255,255,.2); color:#fff; white-space:nowrap; }
+.rd-list .tp-ban-go{ position:relative; z-index:1; flex:0 0 auto; display:flex; flex-direction:column; align-items:center; gap:4px; }
+.rd-list .tp-ban-go small{ font-size:11px; font-weight:700; color:rgba(255,255,255,.85); }
+.tp-ring{ --p:0; width:54px; height:54px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  background:conic-gradient(#7CF0B5 calc(var(--p) * 1%), rgba(255,255,255,.25) 0); }
+.tp-ring b{ width:42px; height:42px; border-radius:50%; background:#5A31B8; color:#fff; font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center; }
+@media (max-width:560px){
+  .rd-list .tp-banner{ padding:14px; gap:12px; align-items:flex-start; border-radius:20px; }
+  .rd-list .tp-ban-ico{ width:48px; height:48px; font-size:26px; border-radius:15px; }
+  .rd-list .tp-ban-tx b{ font-size:16px; } .rd-list .tp-ban-tx small{ font-size:12.5px; }
+  .rd-list .tp-ban-go{ display:none; }
+}
+@media (prefers-reduced-motion:reduce){ .rd-list .tp-banner{ transition:none; } }
+
+/* ================= READING GUIDE ================= */
+.gd-screen{ z-index:301; }
+.gd-wrap{ max-width:800px; margin:0 auto; padding:24px 18px 60px; }
+.gd-screen .rd-head{ display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:6px; }
+.gd-bar-top{ position:sticky; top:0; z-index:5; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 16px; background:rgba(246,241,251,.92); -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); border-bottom:1px solid var(--rd-line); }
+.gd-bar-top span{ font-weight:800; font-size:13px; color:var(--rd-mute); }
+.gd-title{ margin:6px 0 4px; font-size:26px; line-height:1.25; font-weight:800; }
+.gd-sub{ margin:0 0 18px; color:var(--rd-mute); font-size:14px; line-height:1.55; }
+.gd-prog{ background:#fff; border:2px solid var(--rd-line); border-radius:18px; padding:14px 16px; margin:0 0 16px; }
+.gd-prog > div:first-child{ display:flex; justify-content:space-between; font-size:14px; margin-bottom:8px; }
+.gd-prog span{ font-weight:800; color:var(--rd-g-dark); }
+.gd-bar{ height:10px; border-radius:99px; background:#EFE8FB; overflow:hidden; }
+.gd-bar i{ display:block; height:100%; border-radius:99px; background:linear-gradient(90deg,var(--rd-g),#A15FCB); transition:width .4s ease; }
+.gd-grid{ display:grid; gap:12px; }
+.gd-chcard{ display:flex; align-items:center; gap:14px; width:100%; text-align:left; cursor:pointer; background:#fff; border:2px solid var(--rd-line); border-radius:20px; padding:14px 16px; min-height:76px; font-family:inherit; color:var(--rd-ink); box-shadow:0 10px 22px -18px rgba(74,45,125,.6); transition:transform .15s ease, border-color .2s; }
+.gd-chcard:hover{ border-color:var(--rd-g); } .gd-chcard:active{ transform:scale(.985); }
+.gd-chn{ flex:0 0 auto; width:38px; height:38px; border-radius:12px; background:var(--rd-g); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; }
+.gd-chb{ flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
+.gd-chb b{ font-size:16px; } .gd-chb small{ font-size:12.5px; color:var(--rd-mute); line-height:1.45; }
+.gd-chb em{ font-style:normal; font-size:12px; font-weight:800; color:var(--rd-g-dark); margin-top:3px; }
+.gd-chcard > i{ font-style:normal; font-size:26px; color:var(--rd-g); }
+
+.gd-h{ margin:30px 0 10px; font-size:19px; font-weight:800; line-height:1.35; }
+.gd-p{ margin:0 0 12px; font-size:15.5px; line-height:1.75; }
+.gd-ul{ margin:0 0 14px; padding-left:22px; font-size:15.5px; line-height:1.75; } .gd-ul li{ margin-bottom:6px; }
+.gd-k{ background:#FFE9A8; border-radius:4px; padding:0 3px; }
+.gd-callout{ border-radius:16px; padding:12px 16px; margin:14px 0; border:2px solid; }
+.gd-callout > b{ display:block; margin-bottom:4px; font-size:14.5px; } .gd-callout p{ margin:0; font-size:14.5px; line-height:1.65; }
+.gd-callout.tip{ background:#E9F8F1; border-color:#9ad9bb; } .gd-callout.warn{ background:#FFF6E0; border-color:#F2D27A; } .gd-callout.note{ background:#F1EAFF; border-color:#D5CAEE; }
+
+.gd-tw{ margin:12px 0 16px; overflow-x:auto; border-radius:14px; border:1.5px solid var(--rd-line); background:#fff; }
+.gd-table{ width:100%; border-collapse:collapse; font-size:14px; line-height:1.55; }
+.gd-table th{ text-align:left; background:#F1EAFF; color:var(--rd-g-dark); padding:10px 12px; font-size:13px; white-space:nowrap; }
+.gd-table td{ padding:10px 12px; border-top:1px solid var(--rd-line); vertical-align:top; }
+.gd-table tbody tr:first-child td{ border-top:0; }
+.gd-steps{ list-style:none; counter-reset:g; margin:10px 0 14px; padding:0; display:flex; flex-direction:column; gap:10px; }
+.gd-steps li{ counter-increment:g; position:relative; background:#fff; border:2px solid var(--rd-line); border-radius:16px; padding:12px 14px 12px 54px; }
+.gd-steps li::before{ content:counter(g); position:absolute; left:14px; top:12px; width:28px; height:28px; border-radius:50%; background:var(--rd-g); color:#fff; font-weight:800; display:flex; align-items:center; justify-content:center; }
+.gd-steps li > b{ display:block; font-size:15px; margin-bottom:3px; } .gd-steps span{ font-size:14.5px; line-height:1.65; color:#3E3450; }
+.gd-flow{ display:flex; flex-direction:column; gap:10px; margin:10px 0 16px; }
+.gd-fl{ background:#fff; border:2px solid var(--rd-line); border-radius:16px; overflow:hidden; }
+.gd-fq{ display:flex; gap:10px; padding:12px 14px; font-weight:700; font-size:15px; line-height:1.55; background:#FAF7FF; }
+.gd-fq span{ flex:0 0 auto; width:24px; height:24px; border-radius:50%; background:var(--rd-g); color:#fff; font-size:13px; display:flex; align-items:center; justify-content:center; }
+.gd-fa{ display:grid; grid-template-columns:1fr 1fr; } .gd-fa div{ padding:10px 14px; font-size:14px; line-height:1.55; }
+.gd-fa .no{ background:#FBE9EE; } .gd-fa .yes{ background:#E9F8F1; }
+
+.gd-rule{ background:#fff; border:2px solid var(--rd-line); border-radius:18px; margin:14px 0; overflow:hidden; }
+.gd-rule-h{ padding:8px 14px; background:var(--rd-g); color:#fff; font-weight:800; font-size:13px; }
+.gd-rule > div:not(.gd-rule-h){ padding:11px 14px; font-size:14.5px; line-height:1.65; border-top:1px solid var(--rd-line); }
+.gd-rule i{ display:block; font-style:normal; font-size:11.5px; font-weight:800; letter-spacing:.03em; text-transform:uppercase; color:var(--rd-mute); margin-bottom:3px; }
+.gd-old{ background:#FBE9EE; } .gd-old{ text-decoration:none; } .gd-new{ background:#E9F8F1; } .gd-ex{ background:#fff; } .gd-cx{ background:#FFF6E0; }
+.gd-rules-sum .gd-rule{ margin:10px 0; }
+
+.gd-pass{ background:#FFFDFF; border:1.5px solid var(--rd-line); border-left:5px solid var(--rd-g); border-radius:12px; padding:12px 14px; margin:10px 0 12px; font-size:15.5px; line-height:1.8; }
+.gd-pass p{ margin:0 0 8px; } .gd-pass p:last-child{ margin:0; }
+.gd-pass-t{ font-size:12px; font-weight:800; color:var(--rd-g-dark); margin-bottom:6px; }
+.gd-pl{ display:inline-flex; width:24px; height:24px; margin-right:8px; border-radius:8px; background:var(--rd-g); color:#fff; font-weight:800; font-size:13px; align-items:center; justify-content:center; }
+.gd-group{ margin:10px 0 18px; }
+.gd-quiz{ background:#fff; border:2px solid #D5CAEE; border-radius:20px; padding:14px 14px 16px; margin:12px 0; box-shadow:0 12px 26px -22px rgba(74,45,125,.7); }
+.gd-qh{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:6px; font-size:14.5px; }
+.gd-qbadge{ font-size:11.5px; font-weight:800; padding:3px 10px; border-radius:99px; background:#FFF3C4; color:#7A5A00; }
+.gd-done{ margin-left:auto; font-style:normal; font-size:12px; font-weight:800; color:var(--rd-ok-dark); }
+.gd-qq{ margin:8px 0 10px; font-size:15.5px; line-height:1.65; font-weight:700; }
+.gd-opts{ display:flex; flex-direction:column; gap:8px; }
+.gd-opt{ display:flex; align-items:flex-start; gap:10px; width:100%; min-height:48px; text-align:left; padding:10px 14px; border:2px solid var(--rd-line); border-radius:14px; background:#fff; font-family:inherit; font-size:15px; line-height:1.5; color:var(--rd-ink); cursor:pointer; touch-action:manipulation; }
+.gd-opt:hover:not(:disabled){ border-color:var(--rd-g); background:#FAF7FF; }
+.gd-ol{ flex:0 0 auto; min-width:24px; height:24px; border-radius:50%; background:#F1EAFF; color:var(--rd-g-dark); font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; }
+.gd-opt.right{ border-color:var(--rd-ok); background:var(--rd-ok-pale); font-weight:700; }
+.gd-opt.wrong{ border-color:var(--rd-red); background:var(--rd-red-pale); font-weight:700; }
+.gd-opt:disabled{ cursor:default; }
+.gd-fb{ margin-top:12px; } .gd-fb[hidden]{ display:none; }
+.gd-verdict{ border-radius:12px; padding:10px 14px; font-size:15px; font-weight:700; line-height:1.55; }
+.gd-verdict.ok{ background:var(--rd-ok-pale); color:var(--rd-ok-dark); } .gd-verdict.bad{ background:var(--rd-red-pale); color:var(--rd-red); }
+.gd-why{ margin-top:10px; } .gd-why h5{ margin:0 0 8px; font-size:13.5px; color:var(--rd-g-dark); }
+.gd-wi{ padding:9px 12px; margin-bottom:6px; border-radius:12px; background:#FAF8FF; border:1.5px solid #EFE8FB; font-size:14.5px; line-height:1.6; }
+.gd-wi > b{ display:block; margin-bottom:2px; font-size:14px; } .gd-wi > b em{ font-style:normal; font-size:11px; padding:1px 8px; border-radius:99px; background:#fff; color:var(--rd-red); margin-left:4px; }
+.gd-wi.right > b em{ color:var(--rd-ok-dark); }
+.gd-wi.right{ background:var(--rd-ok-pale); border-color:#A9E0C8; } .gd-wi.right > b{ color:var(--rd-ok-dark); }
+.gd-wi.wrong{ background:var(--rd-red-pale); border-color:#F2B8C4; } .gd-wi.wrong > b{ color:var(--rd-red); }
+.gd-btn{ border:0; background:var(--rd-g); color:#fff; border-radius:999px; padding:12px 20px; min-height:46px; font-family:inherit; font-weight:800; font-size:14.5px; cursor:pointer; touch-action:manipulation; }
+.gd-btn.alt{ background:#fff; color:var(--rd-g-dark); border:2px solid var(--rd-g); margin-top:8px; }
+.gd-toks{ display:flex; flex-wrap:wrap; gap:6px; margin:8px 0 12px; }
+.gd-tok{ border:2px solid var(--rd-line); background:#fff; border-radius:10px; padding:8px 11px; min-height:40px; font-family:inherit; font-size:15px; color:var(--rd-ink); cursor:pointer; touch-action:manipulation; }
+.gd-tok.sel{ background:#E3D3FF; border-color:var(--rd-g); font-weight:800; }
+.gd-tok.good{ background:var(--rd-ok-pale); border-color:var(--rd-ok); font-weight:800; } .gd-tok.usable{ background:#FFF3C4; border-color:#E8C65A; } .gd-tok.filler{ background:var(--rd-red-pale); border-color:var(--rd-red); } .gd-tok.miss{ border:2px dashed var(--rd-ok); }
+.gd-legend{ display:flex; flex-wrap:wrap; gap:6px; margin:8px 0 0; font-size:12px; font-weight:700; } .gd-legend span{ padding:3px 10px; border-radius:99px; } .gd-legend .good{ background:var(--rd-ok-pale); } .gd-legend .usable{ background:#FFF3C4; } .gd-legend .filler{ background:var(--rd-red-pale); } .gd-legend .miss{ border:2px dashed var(--rd-ok); }
+.gd-pn{ display:flex; justify-content:space-between; gap:10px; margin-top:34px; flex-wrap:wrap; } .gd-pn .gd-btn{ margin:0; flex:1 1 220px; }
+.gd-cta{ margin:26px 0 6px; padding:18px; border-radius:20px; background:linear-gradient(135deg,#F1EAFF,#F3E3FA); border:2px solid #D5CAEE; text-align:center; } .gd-cta b{ font-size:17px; } .gd-cta p{ margin:6px 0 12px; font-size:14.5px; line-height:1.6; }
+.gd-banner{ margin-top:-8px; }
+@media (max-width:640px){
+  .gd-wrap{ padding:18px 12px 48px; } .gd-title{ font-size:22px; }
+  .gd-table thead{ display:none; } .gd-table, .gd-table tbody, .gd-table tr, .gd-table td{ display:block; width:100%; box-sizing:border-box; }
+  .gd-table tr{ padding:10px 12px; border-top:1px solid var(--rd-line); } .gd-table tbody tr:first-child{ border-top:0; }
+  .gd-table td{ border:0; padding:3px 0; } .gd-table td::before{ content:attr(data-label); display:block; font-size:11px; font-weight:800; text-transform:uppercase; color:var(--rd-mute); }
+  .gd-fa{ grid-template-columns:1fr; }
+}
 </style>
 </head>
 <body>
@@ -7186,6 +7472,7 @@ mark.hl{color:inherit;border-radius:3px;animation:rdPop .35s}
     <nav class="sb-nav">
       <button type="button" class="sb-item" data-nav="speaking"><span class="sb-ico">🎙️</span><span>Speaking</span></button>
       <button type="button" class="sb-item" data-nav="reading"><span class="sb-ico">📖</span><span>Reading</span></button>
+      <button type="button" class="sb-item" data-nav="guide"><span class="sb-ico">🧭</span><span>Hướng dẫn Reading</span></button>
     </nav>
 
     <div class="sb-label">KHÁC</div>
@@ -7760,6 +8047,8 @@ mark.hl{color:inherit;border-radius:3px;animation:rdPop .35s}
   <div class="rd-list" id="rdList"></div>
   <div class="rd-test" id="rdTest" hidden></div>
 </div>
+
+<div class="rd-screen gd-screen" id="gdScreen" hidden><div id="gdRoot"></div></div>
 
 <script>
 const DIALOGUE_SETS = [
@@ -12262,6 +12551,8 @@ peRenderDashboard();
 
   sbItems.forEach(b => b.addEventListener('click', ()=>{
     const k = b.dataset.nav;
+    if(k === 'guide'){ openGuide(); return; }
+    if(k !== 'sound' && window.gdClose) gdClose();
     if(k === 'reading'){ openReading(); return; }
     if(k !== 'sound' && window.rdClose) rdClose();
     if(k === 'sound'){
@@ -12699,7 +12990,7 @@ peRenderDashboard();
   function gMeta(g){
     const lim = wordLimit(g.instr), lt = lim ? ' Tối đa '+lim+' từ cho mỗi đáp án.' : '';
     if(g.type === 'tfng') return { label:'True / False / Not Given', desc:'Xác định phát biểu đúng, sai hay bài không đề cập.' };
-    if(g.type === 'match') return g.opts ? { label:g.label || 'Nối với người', desc:'Chọn người phù hợp với từng nhận định.' } : { label:'Nối thông tin với đoạn', desc:'Tìm đoạn văn chứa thông tin được nêu.' };
+    if(g.type === 'match') return g.opts ? { label:g.label || 'Nối với người', desc:'Kéo tên người vào ô trống phù hợp với từng nhận định.' } : { label:'Nối thông tin với đoạn', desc:'Tìm đoạn văn chứa thông tin được nêu.' };
     if(g.type === 'notes') return { label:'Hoàn thành ghi chú', desc:'Điền từ còn thiếu vào bảng ghi chú.'+lt };
     if(g.type === 'summary') return g.label ? { label:g.label, desc:'Điền từ còn thiếu vào từng câu.'+lt } : { label:'Hoàn thành tóm tắt', desc:'Điền từ còn thiếu vào đoạn tóm tắt.'+lt };
     if(g.type === 'multi') return { label:'Chọn nhiều đáp án', desc:'Chọn '+(g.to - g.from + 1)+' đáp án đúng trong các lựa chọn.' };
@@ -12723,8 +13014,10 @@ peRenderDashboard();
   }
   function renderList(){
     listEl.innerHTML =
-      '<div class="rd-head"><button type="button" class="rd-back" id="rdHome">← Trang chủ</button><h1 class="rd-h1">📖 Reading</h1><button type="button" class="rd-exit vb-open" id="rdVocBtn" aria-label="Mở sổ từ vựng" style="margin-left:auto">📒 Sổ từ vựng<span class="vb-n" data-vbn></span></button></div>' +
+      '<div class="rd-head"><button type="button" class="rd-back" id="rdHome">← Trang chủ</button><h1 class="rd-h1">📖 Reading</h1><button type="button" class="rd-exit vb-open" id="rdVocBtn" aria-label="Mở sổ từ vựng" style="margin-left:auto">📒 Sổ từ vựng<span class="vb-n" data-vbn hidden></span></button></div>' +
       '<p class="rd-sub">Chọn một passage để luyện đọc hiểu. Bài được lưu tự động nên bạn có thể thoát và làm tiếp sau.</p>' +
+      '<button type="button" class="tp-banner" id="rdTipList"><span class="tp-ban-ico">💡</span><span class="tp-ban-tx"><b>Hướng dẫn &amp; mẹo làm bài</b><small>Làm Reading nhanh và chắc hơn với quy trình và mẹo từng dạng câu.</small><span class="tp-ban-tags"><em>⏱ 20 phút/bài</em><em>🧩 5 dạng câu</em><em>✅ Có ví dụ</em></span></span><span class="tp-ban-go"><span class="tp-ring" style="--p:'+Math.round(Object.keys(TIPS).filter(tipSeen).length / Object.keys(TIPS).length * 100)+'"><b>'+Object.keys(TIPS).filter(tipSeen).length+'/'+Object.keys(TIPS).length+'</b></span><small>đã xem</small></span></button>' +
+      '<button type="button" class="tp-banner gd-banner" id="rdGuideList"><span class="tp-ban-ico">🧭</span><span class="tp-ban-tx"><b>Hướng dẫn Reversed Reading</b><small>Chiến thuật từng dạng câu, ví dụ &amp; bài tập tương tác</small></span><i>›</i></button>' +
       '<div class="rd-grid">' + DATA.map((t,i)=>{
         const s = statusOf(t);
         return '<button type="button" class="rd-card" style="--i:'+i+'" data-open="'+i+'">' +
@@ -12762,10 +13055,15 @@ peRenderDashboard();
       '<span class="rd-gap" data-qrow="'+n+'"><span class="rd-num">'+n+'</span><input type="text" data-q="'+n+'" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Question '+n+'"></span>');
   }
   function groupHtml(g){
-    let h = '<div class="rd-gh"><h3>Questions '+g.from+' – '+g.to+'</h3><p>'+esc(g.instr)+'</p>';
-    if(g.opts) h += '<ul>' + g.opts.map(o => '<li><b>'+o[0]+'</b> '+esc(o[1])+'</li>').join('') + '</ul>';
+    let h = '<div class="rd-gh"><h3>Questions '+g.from+' – '+g.to+'</h3><button type="button" class="tp-chip'+(tipSeen(g.type) ? '' : ' new')+'" data-tip="'+g.type+'" aria-expanded="false">💡 Mẹo dạng này</button>'+tipQuick(g.type)+'<p>'+esc(g.instr)+'</p>';
+    if(g.opts && g.type !== 'match') h += '<ul>' + g.opts.map(o => '<li><b>'+o[0]+'</b> '+esc(o[1])+'</li>').join('') + '</ul>';
     h += '</div>';
-    if(g.type === 'tfng' || g.type === 'match'){
+    if(g.type === 'match' && g.opts){
+      h += g.items.map(it =>
+        '<div class="rd-q rd-q-drop" data-qrow="'+it.n+'"><div class="rd-slot" data-slot="'+it.n+'" role="button" tabindex="0" aria-label="Ô trả lời câu '+it.n+'"><span class="rd-slot-n">'+it.n+'</span></div><span class="rd-qt">'+esc(it.q)+'</span></div>').join('');
+      h += '<p class="rd-drop-hint">💡 Kéo đáp án thả vào ô trống, hoặc bấm chọn đáp án rồi bấm vào ô trống để điền.</p>' +
+        '<div class="rd-bank">' + g.opts.map(o => '<button type="button" class="rd-dchip" data-v="'+o[0]+'">'+esc(o[1])+'</button>').join('') + '</div>';
+    }else if(g.type === 'tfng' || g.type === 'match'){
       const choices = g.type === 'tfng' ? g.opts.map(o => o[0]) : g.letters;
       h += g.items.map(it =>
         '<div class="rd-q rd-q-radio'+(g.type==='match'?' rd-q-match':'')+'" data-qrow="'+it.n+'"><span class="rd-num">'+it.n+'</span><div class="rd-rb"><span class="rd-qt">'+esc(it.q)+'</span><div class="rd-radios">' +
@@ -12796,7 +13094,7 @@ peRenderDashboard();
     let chips = ''; for(let n = 1; n <= cur.total; n++) chips += '<button type="button" class="rd-chip" data-n="'+n+'">'+n+'</button>';
     testEl.innerHTML =
       '<div class="rd-bar"><button type="button" class="rd-exit" id="rdExit">← Thoát</button>' +
-        '<div class="rd-bar-title">Reading · Passage '+pnOf(cur)+' — '+esc(cur.title)+'</div><button type="button" class="rd-exit vb-open" id="rdVocBtn" aria-label="Mở sổ từ vựng">📒 <span class="vb-t">Sổ từ</span><span class="vb-n" data-vbn></span></button><div class="rd-timer" id="rdTimer">00:00</div></div>' +
+        '<div class="rd-bar-title">Reading · Passage '+pnOf(cur)+' — '+esc(cur.title)+'</div><button type="button" class="rd-exit tp-btn" id="rdTipBtn" aria-label="Mẹo làm bài">💡 <span class="vb-t">Mẹo</span></button><button type="button" class="rd-exit vb-open" id="rdVocBtn" aria-label="Mở sổ từ vựng">📒 <span class="vb-t">Sổ từ</span><span class="vb-n" data-vbn hidden></span></button><div class="rd-timer" id="rdTimer">00:00</div></div>' +
       '<div class="rd-tabs" id="rdTabs"><button type="button" class="on" data-p="read">📄 Bài đọc</button><button type="button" data-p="q">✍️ Câu hỏi</button></div>' +
       '<div class="rd-panes" id="rdPanes" data-show="read">' +
         '<section class="rd-pane rd-passage" id="rdPassage"><div class="rd-ptag">Reading Passage '+pnOf(cur)+'</div><h2 class="rd-ptitle">'+esc(cur.title)+'</h2>'+(cur.sub ? '<p class="rd-psub">'+esc(cur.sub)+'</p>' : '')+'<p class="rd-hint">💡 Chạm vào một từ để tra nghĩa · bôi đen đoạn văn để highlight</p>'+paras+'</section>' +
@@ -12806,7 +13104,7 @@ peRenderDashboard();
     // restore draft
     testEl.querySelectorAll('[data-q]').forEach(el => { if(ans[el.dataset.q] == null) return; if(el.type === 'radio') el.checked = (el.value === ans[el.dataset.q]); else el.value = ans[el.dataset.q]; });
     testEl.querySelectorAll('input[data-m]').forEach(el => { const a = ans['m'+el.dataset.m] || []; el.checked = a.indexOf(el.value) >= 0; });
-    syncOpts(); updateChips(); renderPassages();
+    syncOpts(); syncDrops(); updateChips(); renderPassages();
     updVocBadge();
     listEl.hidden = true; testEl.hidden = false; scr.classList.add('testing'); scr.hidden = false; scr.scrollTop = 0;
     testEl.classList.remove('res','review','rev');
@@ -12867,6 +13165,86 @@ peRenderDashboard();
     testEl.querySelectorAll('.rd-opt').forEach(l => l.classList.toggle('sel', l.querySelector('input').checked));
   }
 
+  /* ---------- drag / tap answers into slots (match with people) ---------- */
+  let dSel = null, justDragged = false;
+  function optName(g, v){ const o = (g.opts || []).find(x => x[0] === v); return o ? o[1] : v; }
+  function dropGroupOf(n){ return cur.groups.find(g => g.type === 'match' && g.opts && n >= g.from && n <= g.to); }
+  function syncDrops(){
+    if(!cur) return;
+    testEl.querySelectorAll('.rd-slot').forEach(sl => {
+      const n = sl.dataset.slot, g = dropGroupOf(+n), v = ans[n];
+      sl.classList.toggle('filled', !!v);
+      sl.innerHTML = (v && g) ? '<span class="rd-slot-v">'+esc(optName(g, v))+'</span>' : '<span class="rd-slot-n">'+n+'</span>';
+    });
+    testEl.querySelectorAll('.rd-dchip').forEach(c => c.classList.toggle('sel', !submitted && dSel === c.dataset.v));
+    testEl.querySelectorAll('.rd-bank').forEach(b => b.classList.toggle('picking', !submitted && !!dSel));
+  }
+  function setDrop(n, v){
+    if(submitted) return;
+    if(v) ans[n] = v; else delete ans[n];
+    syncDrops(); updateChips(); saveDraft();
+  }
+  testEl.addEventListener('pointerdown', e => {
+    if(submitted || (e.button !== undefined && e.button > 0)) return;
+    const src = e.target.closest && e.target.closest('.rd-dchip, .rd-slot.filled'); if(!src) return;
+    const fromSlot = src.classList.contains('rd-slot');
+    const g = fromSlot ? dropGroupOf(+src.dataset.slot) : null;
+    const val = fromSlot ? ans[src.dataset.slot] : src.dataset.v;
+    const label = fromSlot ? optName(g, val) : src.textContent;
+    const sx = e.clientX, sy = e.clientY;
+    let ghost = null, moved = false, hover = null;
+    const move = ev => {
+      if(!moved && Math.hypot(ev.clientX - sx, ev.clientY - sy) < 6) return;
+      if(!moved){
+        moved = true;
+        ghost = document.createElement('div'); ghost.className = 'rd-ghost'; ghost.textContent = label;
+        document.body.appendChild(ghost); src.classList.add('dragging');
+      }
+      ev.preventDefault();
+      ghost.style.left = ev.clientX + 'px'; ghost.style.top = ev.clientY + 'px';
+      const t = document.elementFromPoint(ev.clientX, ev.clientY);
+      const sl = t && t.closest ? t.closest('.rd-slot') : null;
+      if(hover && hover !== sl) hover.classList.remove('over');
+      if(sl) sl.classList.add('over');
+      hover = sl;
+    };
+    const end = () => {
+      document.removeEventListener('pointermove', move);
+      document.removeEventListener('pointerup', end);
+      document.removeEventListener('pointercancel', end);
+      if(ghost) ghost.remove();
+      src.classList.remove('dragging');
+      if(hover) hover.classList.remove('over');
+      if(!moved) return;
+      justDragged = true; setTimeout(() => { justDragged = false; }, 60);
+      dSel = null;
+      if(hover){
+        if(fromSlot && src !== hover) setDrop(src.dataset.slot, null);
+        setDrop(hover.dataset.slot, val); tap();
+      }else if(fromSlot){ setDrop(src.dataset.slot, null); }
+      else syncDrops();
+    };
+    document.addEventListener('pointermove', move, { passive:false });
+    document.addEventListener('pointerup', end);
+    document.addEventListener('pointercancel', end);
+  });
+  testEl.addEventListener('click', e => {
+    if(submitted || justDragged) return;
+    const chip = e.target.closest('.rd-dchip');
+    if(chip){ tap(); dSel = (dSel === chip.dataset.v) ? null : chip.dataset.v; syncDrops(); return; }
+    const sl = e.target.closest('.rd-slot');
+    if(sl){
+      tap();
+      if(dSel){ setDrop(sl.dataset.slot, dSel); dSel = null; syncDrops(); }
+      else if(ans[sl.dataset.slot]) setDrop(sl.dataset.slot, null);
+    }
+  });
+  testEl.addEventListener('keydown', e => {
+    if(submitted || (e.key !== 'Enter' && e.key !== ' ')) return;
+    const sl = e.target.closest && e.target.closest('.rd-slot'); if(!sl) return;
+    e.preventDefault(); sl.click();
+  });
+
   testEl.addEventListener('input', e => {
     const t = e.target; if(submitted || !t.dataset) return;
     if(t.dataset.q){ ans[t.dataset.q] = t.value; }
@@ -12916,6 +13294,7 @@ peRenderDashboard();
     const rn = e.target.closest('.rv-nav'); if(rn){ rvShow(rvN + (+rn.dataset.d)); return; }
     const rl = e.target.closest('.rv-loc'); if(rl){ locate(rl.dataset.k, rl); return; }
     const rt = e.target.closest('#rvTabs button'); if(rt){ setRvTab(rt.dataset.p); return; }
+    if(e.target.closest('.rv-grip')){ rvSheetStep(0); return; }
     if(e.target.closest('#rvClose')){ tap(); showResult(); return; }
     if(e.target.closest('#rdBackRes')){ tap(); showResult(); return; }
     if(e.target.closest('#rdRetry')){ tap(); openTest(curIdx, true); return; }
@@ -12964,8 +13343,9 @@ peRenderDashboard();
         g.items.forEach(it => {
           const row = testEl.querySelector('.rd-q[data-qrow="'+it.n+'"]'); if(!row) return;
           row.classList.add(m[it.n] ? 'ok' : 'bad');
+          const dsl = row.querySelector('.rd-slot'); if(dsl){ dsl.classList.add(m[it.n] ? 'right' : 'wrong'); dsl.removeAttribute('tabindex'); }
           row.querySelectorAll('.rd-r').forEach(l => { const inp = l.querySelector('input'); if(inp.value === it.a) l.classList.add('right'); else if(inp.checked) l.classList.add('wrong'); });
-          if(!m[it.n]) row.querySelector('.rd-qt').insertAdjacentHTML('beforeend', '<span class="rd-ans">Đáp án: '+esc(it.a)+'</span>');
+          if(!m[it.n]) row.querySelector('.rd-qt').insertAdjacentHTML('beforeend', '<span class="rd-ans">Đáp án: '+esc(dsl ? optName(g, it.a) : it.a)+'</span>');
         });
       }else if(g.type === 'notes' || g.type === 'summary'){
         for(let n = g.from; n <= g.to; n++){
@@ -12981,6 +13361,8 @@ peRenderDashboard();
         });
       }
     }
+    testEl.querySelectorAll('.rd-bank').forEach(b => b.classList.add('locked'));
+    dSel = null; syncDrops();
     updateChips();
     const total = cur.total, pct = Math.round(score/total*100);
     const prev = store.results[cur.id];
@@ -13099,13 +13481,34 @@ peRenderDashboard();
     const ev = parts[0] === 's' ? (EVID[curIdx].single[parts[1]] || []) : ((EVID[curIdx].multi[parts[1]] || {})[parts[2]] || []);
     const first = applyHL(ev);
     rvKey = key; btn.classList.add('on'); btn.textContent = '🙈 Bỏ highlight';
-    setRvTab('read');
-    if(first) setTimeout(() => first.scrollIntoView({ block:'center', behavior:'smooth' }), 60);
+    if(rvSheetMode()){ setRvTab('half'); if(first) setTimeout(() => revealMark(first), 340); }
+    else { setRvTab('read'); if(first) setTimeout(() => first.scrollIntoView({ block:'center', behavior:'smooth' }), 60); }
+  }
+  /* phones: explanation is a bottom sheet (peek / half / full) over the passage */
+  function rvSheetMode(){ return matchMedia('(max-width:899px) and (min-height:481px)').matches; }
+  function revealMark(m){
+    const pane = $('rvPassage'); if(!pane || !m) return;
+    const sheet = $('rvQ') ? $('rvQ').getBoundingClientRect() : null, pr = pane.getBoundingClientRect(), mr = m.getBoundingClientRect();
+    const visH = (sheet && sheet.top > pr.top ? sheet.top : pr.bottom) - pr.top;
+    pane.scrollTo({ top: pane.scrollTop + (mr.top - pr.top) - Math.max(16, (visH - mr.height) / 2), behavior:'smooth' });
   }
   function setRvTab(p){
     const panes = $('rvPanes'); if(panes) panes.dataset.show = p;
-    testEl.querySelectorAll('#rvTabs button').forEach(b => b.classList.toggle('on', b.dataset.p === p));
+    const on = p === 'half' ? 'exp' : p;
+    testEl.querySelectorAll('#rvTabs button').forEach(b => b.classList.toggle('on', b.dataset.p === on));
   }
+  function rvSheetStep(dir){
+    const panes = $('rvPanes'); if(!panes) return;
+    if(!rvSheetMode()){ setRvTab(panes.dataset.show === 'read' ? 'exp' : 'read'); return; }
+    const order = ['read', 'half', 'exp'], i = Math.max(0, order.indexOf(panes.dataset.show));
+    setRvTab(order[dir === 0 ? (i + 1) % 3 : Math.max(0, Math.min(2, i + dir))]);
+  }
+  let gripY = null;
+  testEl.addEventListener('touchstart', e => { gripY = e.target.closest('.rv-grip') ? e.touches[0].clientY : null; }, { passive:true });
+  testEl.addEventListener('touchend', e => {
+    if(gripY == null) return; const dy = e.changedTouches[0].clientY - gripY; gripY = null;
+    if(Math.abs(dy) > 24){ rvSheetStep(dy < 0 ? 1 : -1); e.preventDefault(); }
+  });
 
   function rvChips(){
     const m = marks();
@@ -13147,8 +13550,8 @@ peRenderDashboard();
       }
       expl = '<div class="rv-eh"><h4>Câu '+n+' – Giải thích đáp án</h4>'+locBtn('s:'+n)+'</div><p class="rv-ansline">Đáp án: <b>'+esc(e[0])+'</b>' + (u !== '' && !ok ? ' · Bạn chọn: <b class="badc">'+esc(u)+'</b>' : '') + '</p><p class="rv-exp-t">'+esc(e[1])+'</p>';
     }
-    return '<div class="rv-qh">'+head+'<span class="rv-arrows"><button type="button" class="rv-nav" data-d="-1" aria-label="Câu trước">‹</button><button type="button" class="rv-nav" data-d="1" aria-label="Câu sau">›</button></span></div>' +
-      '<div class="rv-qbody">'+body+'</div><div class="rv-sep"></div><div class="rv-expl">'+expl+'</div>';
+    return '<button type="button" class="rv-grip" id="rvGrip" aria-label="Thu gọn / mở rộng phần giải thích"><i></i></button><div class="rv-qh">'+head+'<span class="rv-arrows"><button type="button" class="rv-nav" data-d="-1" aria-label="Câu trước">‹</button><button type="button" class="rv-nav" data-d="1" aria-label="Câu sau">›</button></span></div>' +
+      '<div class="rv-qbody">'+body+'</div><div class="rv-sep"></div><div class="rv-expl">'+expl+'<details class="rv-tip"><summary>💡 Mẹo cho dạng câu này</summary>'+tipBody(g.type, true)+'<button type="button" class="tp-more" data-more="'+g.type+'">Xem ví dụ &amp; mẹo đầy đủ ›</button></details></div>';
   }
   function rvShow(n){
     n = Math.max(1, Math.min(cur.total, n)); rvN = n; clearHL();
@@ -13166,7 +13569,7 @@ peRenderDashboard();
         '<button type="button" class="rv-top-btn" id="rdBackRes">📊 Kết quả</button></div>' +
       '<div class="rv-tabs" id="rvTabs"><button type="button" data-p="read">📄 Bài đọc</button><button type="button" class="on" data-p="exp">💡 Giải thích</button></div>' +
       '<div class="rv-panes" id="rvPanes" data-show="exp"><section class="rd-pane rv-passage" id="rvPassage">'+rvPassageHtml()+'</section><section class="rd-pane rv-right" id="rvQ"></section></div>' +
-      '<div class="rv-foot"><div class="rv-chips" id="rvChips"></div><button type="button" class="rv-btn alt" id="rdRetry">🔁 Làm lại</button><button type="button" class="rv-btn" id="rdToList">📚 Làm bài khác</button></div>';
+      '<div class="rv-foot"><div class="rv-chips" id="rvChips"></div><button type="button" class="rv-btn alt" id="rdRetry" aria-label="Làm lại bài này">🔁<span class="bt"> Làm lại</span></button><button type="button" class="rv-btn" id="rdToList" aria-label="Làm bài khác">📚<span class="bt"> Làm bài khác</span></button></div>';
     testEl.appendChild(el); renderPassages('#rvPassage');
     testEl.classList.remove('res'); testEl.classList.add('rev');
     // start at the first wrong / skipped question
@@ -13288,10 +13691,10 @@ peRenderDashboard();
       '<div class="dc-f">'+HC()+(hasHL(x) ? '<button type="button" class="dc-rm" data-a="rm">Bỏ highlight</button>' : '')+'</div>';
   }
   async function openDict(word, x, rect){
-    dictWord = word; dictCtx = x; BAR.hidden = true;
-    DC.innerHTML = cardHtml(word, null, x); place(DC, rect);
+    dictWord = word; dictCtx = x; BAR.hidden = true; dictShift = 0;
+    DC.innerHTML = cardHtml(word, null, x); place(DC, rect); keepVisible(rect);
     const d = await lookup(word); if(dictWord !== word) return;
-    DC.innerHTML = cardHtml(word, d, x); place(DC, rect);
+    DC.innerHTML = cardHtml(word, d, x); place(DC, rect); keepVisible(rect);
   }
   DC.addEventListener('click', e => {
     const b = e.target.closest('button'); if(!b) return;
@@ -13303,7 +13706,18 @@ peRenderDashboard();
     if(a === 'save'){ if(store.vocab[k]) delete store.vocab[k]; else store.vocab[k] = { w: k, vi: d && d.vi || '', ph: d && d.ph || '', def: d && d.m[0] ? d.m[0].def : '', pos: d && d.m[0] ? (d.m[0].pos || '') : '', ex: d && d.m[0] ? (d.m[0].ex || '') : '', src: cur ? cur.title : '', at: Date.now() }; persist(); tap(); updVocBadge(); }
     DC.innerHTML = cardHtml(dictWord, d || null, dictCtx);
   });
-  document.addEventListener('pointerdown', e => { if(!DC.hidden && !DC.contains(e.target) && !e.target.closest('.w')) DC.hidden = true; });
+  document.addEventListener('click', e => {
+    if(DC.hidden || e.composedPath().indexOf(DC) >= 0 || e.target.closest('.w,#rdBar')) return;
+    DC.hidden = true;
+  });
+  new MutationObserver(() => testEl.classList.toggle('dict-open', !DC.hidden)).observe(DC, { attributes:true, attributeFilter:['hidden'] });
+  let dictShift = 0;
+  function keepVisible(rect){
+    if(!rect || !matchMedia('(max-width:700px)').matches) return;
+    const pane = testEl.classList.contains('rev') ? $('rvPassage') : $('rdPassage'); if(!pane) return;
+    const top = DC.getBoundingClientRect().top, gap = 16, b = rect.bottom - dictShift;
+    if(b > top - gap){ const d = b - (top - gap); dictShift += d; pane.scrollBy({ top:d, behavior:'smooth' }); }
+  }
   testEl.addEventListener('click', e => {
     const w = e.target.closest('.rd-pt .w'); if(!w || e.detail > 1) return;
     clearTimeout(clkT);
@@ -13314,6 +13728,133 @@ peRenderDashboard();
       if(x){ w.classList.add('wf'); setTimeout(() => w.classList.remove('wf'), 500); openDict(x.text, x, w.getBoundingClientRect()); }
     }, 230);
   });
+
+  /* ---------- tips & how-to guide ---------- */
+  store.tips = store.tips || { tab:'flow', seen:{} };
+  const TIP_STEPS = [
+    ['Đọc lướt 1–2 phút', 'Xem tiêu đề, câu đầu và câu cuối mỗi đoạn để nắm bố cục. Đừng đọc kỹ từng từ ở bước này.'],
+    ['Đọc kỹ yêu cầu', 'Chú ý giới hạn từ (NO MORE THAN TWO WORDS…) và dạng câu hỏi. Sai giới hạn từ là mất điểm dù tìm đúng chỗ.'],
+    ['Gạch từ khóa câu hỏi', 'Chọn danh từ riêng, số, năm, động từ chính. Bài đọc thường dùng từ đồng nghĩa (paraphrase) chứ ít khi lặp nguyên từ.'],
+    ['Làm theo thứ tự', 'Trong cùng một dạng, đáp án thường xuất hiện theo thứ tự trong bài (trừ Matching). Nhờ vậy bạn không phải đọc lại từ đầu.'],
+    ['Đừng sa lầy', 'Mỗi câu tối đa ~1,5 phút. Câu khó thì đánh dấu, làm câu sau rồi quay lại. Không bỏ trống: luôn đoán một đáp án.'],
+    ['Kiểm tra cuối giờ', 'Rà chính tả, số ít/số nhiều, giới hạn từ và đảm bảo đã điền hết ô trống.']
+  ];
+  const TIPS = {
+    tfng: { icon:'✅', name:'True / False / Not Given',
+      quick:'Tìm đoạn liên quan rồi so sánh Ý NGHĨA: trái ý = FALSE, bài không nói đến = NOT GIVEN.',
+      how:['Gạch từ khóa của câu nhận định, tìm đoạn nói về ý đó trong bài (đáp án theo thứ tự bài).','So sánh Ý NGHĨA, không so sánh từ ngữ: TRUE = cùng ý, FALSE = trái ngược/mâu thuẫn, NOT GIVEN = bài không đề cập hoặc không đủ thông tin.','Nếu đọc kỹ đoạn đó mà không thấy thông tin về ý chính của câu → chọn NOT GIVEN, đừng cố “suy ra”.'],
+      traps:['Các từ tuyệt đối/giới hạn: all, only, never, always, most, some, at least. Chỉ cần lệch một từ là có thể thành FALSE.','Dùng kiến thức bên ngoài: chỉ dựa vào những gì bài viết nói.','Nhầm FALSE và NOT GIVEN: FALSE phải có câu trong bài nói điều ngược lại.','Số liệu, năm tháng, so sánh (more than / fewer than): tính lại cẩn thận.'],
+      ex:{ q:'The survey team found nine adult insects and took seven to join the captive breeding programme.', s:'Fewer than half of the adult insects were taken into captivity.', a:'FALSE', w:'7 trên 9 là hơn một nửa, trái với “fewer than half”. Bài có nói rõ nên không phải NOT GIVEN.' } },
+    match: { icon:'🔗', name:'Matching (ghép thông tin / tiêu đề / người)',
+      quick:'Gạch từ khóa các lựa chọn, tìm ý chính (câu đầu/cuối đoạn) hoặc chi tiết, rồi loại dần đáp án đã dùng.',
+      how:['Đọc các lựa chọn (tiêu đề, người, ý) trước, gạch từ khóa của từng lựa chọn.','Matching headings: đọc câu đầu và câu cuối mỗi đoạn để tìm ý chính, rồi chọn tiêu đề bao quát cả đoạn.','Matching information: tìm chi tiết cụ thể rồi xác định nó nằm ở đoạn nào; một đoạn có thể được chọn nhiều lần nếu đề cho phép.','Làm các câu dễ, rõ ràng trước, loại dần đáp án đã dùng.'],
+      traps:['Tiêu đề chỉ khớp một chi tiết nhỏ trong đoạn nhưng không phải ý chính.','Tiêu đề thừa (distractor) thường chứa đúng từ khóa của bài nhưng sai ý.','Đọc cả bài để tìm một câu: hãy dùng ý chính/từ khóa để thu hẹp đoạn trước.'],
+      ex:{ q:'Đoạn kể rằng tàu Makambo mắc cạn năm 1918, chuột đen lên đảo và loài côn trùng gần như biến mất.', s:'Chọn tiêu đề: “A ship’s long history” hay “How an accident threatened a species”?', a:'How an accident threatened a species', w:'Ý chính của đoạn là hậu quả của sự cố với loài côn trùng. Con tàu chỉ là chi tiết nhỏ nên tiêu đề đầu là bẫy.' } },
+    multi: { icon:'☑️', name:'Multiple choice (chọn nhiều đáp án)',
+      quick:'Biết cần chọn mấy đáp án; mỗi lựa chọn phải có bằng chứng rõ ràng trong bài, không chỉ có từ khóa giống nhau.',
+      how:['Biết trước phải chọn mấy đáp án, rồi kiểm chứng từng lựa chọn với bài đọc.','Gạch đoạn liên quan đến câu hỏi, xác nhận lựa chọn nào có thông tin hỗ trợ rõ ràng.','Loại các lựa chọn bị bài phủ nhận hoặc không nhắc đến, phần còn lại thường là đáp án.'],
+      traps:['Lựa chọn dùng đúng từ trong bài nhưng sai ý nghĩa (từ lặp không có nghĩa là đúng).','Lựa chọn đúng sự thật nhưng không được hỏi/không nằm trong bài.','Chọn thiếu hoặc thừa số lượng đáp án yêu cầu.'],
+      ex:{ q:'Black rats became established on the island after the ship ran aground.', s:'Lựa chọn: “Rats were brought to the island on purpose.”', a:'Không chọn', w:'Bài có từ “rats” nhưng nói chuột lên đảo sau sự cố, không phải cố ý. Có từ khóa giống chưa đủ để chọn.' } },
+    notes: { icon:'📝', name:'Điền vào ghi chú / bảng / sơ đồ',
+      quick:'Đoán loại từ cần điền, tìm quanh ô trống theo thứ tự bài, chép đúng từ và đúng giới hạn số từ.',
+      how:['Đọc ghi chú trước để đoán loại từ cần điền (danh từ, số, tính từ…).','Tìm vị trí theo từ khóa quanh ô trống; đáp án theo thứ tự trong bài.','Chép đúng từ trong bài, tuân thủ giới hạn từ.'],
+      traps:['Vượt quá giới hạn số từ.','Sai chính tả hoặc sai dạng từ (số ít/số nhiều).','Số: “two” và “2” thường đều được nhưng hãy chép đúng như bài.'],
+      ex:{ q:'Adults are nocturnal and spend the night eating the leaf tips of a single shrub species.', s:'Adults feed on leaf tips during the ____ (ONE WORD ONLY).', a:'night', w:'Chỉ được điền một từ nên chọn “night”, không điền “the night”. Từ cần điền là danh từ chỉ thời gian.' } },
+    summary: { icon:'🧩', name:'Hoàn thành tóm tắt',
+      quick:'Đọc tóm tắt để đoán loại từ, tìm phần bài được tóm tắt, rồi đọc lại cả câu sau khi điền.',
+      how:['Đọc đoạn tóm tắt để nắm ý chung và xác định loại từ cần điền.','Tìm phần bài đọc được tóm tắt, ô trống thường theo thứ tự bài; tìm từ đồng nghĩa với phần xung quanh ô trống.','Đọc lại cả câu sau khi điền để chắc đúng ngữ pháp và nghĩa.'],
+      traps:['Điền từ có trong bài nhưng sai chỗ.','Không khớp ngữ pháp với câu (thiếu mạo từ, sai số ít/nhiều).','Vượt giới hạn từ cho phép.'],
+      ex:{ q:'The first indication of survival came in 1964, when a dead insect was found on Ball’s Pyramid.', s:'In 1964, a ____ insect was found on Ball’s Pyramid.', a:'dead', w:'Trước danh từ “insect” cần một tính từ, và từ cần điền khớp với chi tiết trong bài.' } }
+  };
+  const tipSeen = t => !!(store.tips && store.tips.seen && store.tips.seen[t]);
+  function tipMark(t){ if(!TIPS[t] || tipSeen(t)) return; store.tips.seen[t] = 1; persist(); updTipDot(); }
+  function tipQuick(t){
+    const x = TIPS[t]; if(!x) return '';
+    return '<div class="tp-quick" hidden><b>' + x.icon + ' ' + esc(x.name) + '</b><p>' + esc(x.quick) + '</p><button type="button" class="tp-more" data-more="' + t + '">Xem ví dụ &amp; bẫy hay gặp ›</button></div>';
+  }
+  function tipBody(type, compact){
+    const t = TIPS[type]; if(!t) return '';
+    let h = '<div class="tp-body"><p class="tp-sum">' + esc(t.quick) + '</p><h5>Cách làm</h5><ol>' + t.how.map(x => '<li>'+esc(x)+'</li>').join('') + '</ol><h5>Bẫy hay gặp</h5><ul class="tp-traps">' + t.traps.map(x => '<li>'+esc(x)+'</li>').join('') + '</ul>';
+    if(!compact && t.ex) h += '<h5>Ví dụ</h5><div class="tp-ex"><div><i>Bài đọc</i><q>' + esc(t.ex.q) + '</q></div><div><i>Câu hỏi</i><span>' + esc(t.ex.s) + '</span></div><div class="tp-ex-a"><i>Đáp án</i><b>' + esc(t.ex.a) + '</b></div><p>' + esc(t.ex.w) + '</p></div>';
+    return h + '</div>';
+  }
+  function presentTypes(){ return cur ? Array.from(new Set(cur.groups.map(g => g.type))).filter(t => TIPS[t]) : []; }
+  function updTipDot(){
+    const b = $('rdTipBtn'); if(b) b.classList.toggle('tp-new', presentTypes().some(t => !tipSeen(t)));
+    testEl.querySelectorAll('.tp-chip').forEach(c => c.classList.toggle('new', !tipSeen(c.dataset.tip)));
+  }
+  scr.insertAdjacentHTML('beforeend', '<div id="rdTip" class="rd-voc tp-modal" hidden></div>');
+  const TP = $('rdTip'); let tpOpener = null;
+  function tpRender(focus){
+    const present = presentTypes(), all = present.concat(Object.keys(TIPS).filter(t => present.indexOf(t) < 0));
+    const nSeen = Object.keys(TIPS).filter(tipSeen).length, tot = Object.keys(TIPS).length;
+    const qs = cur ? cur.total : 13, per = Math.round(20 / qs * 10) / 10;
+    TP.innerHTML = '<div class="vc-box tp-box" role="dialog" aria-modal="true" aria-labelledby="tpTitle"><button type="button" class="tp-grip" aria-label="Kéo xuống để đóng" data-a="x"><i></i></button>' +
+      '<div class="tp-h"><div><h2 id="tpTitle">💡 Mẹo làm bài Reading</h2><span class="tp-prog" aria-label="Đã xem '+nSeen+' trên '+tot+' dạng câu">Đã xem dạng câu: <b>'+nSeen+'/'+tot+'</b></span></div><button type="button" class="tp-x" data-a="x" aria-label="Đóng">✕</button></div>' +
+      '<div class="tp-tabs" role="tablist"><button type="button" role="tab" data-t="flow">Quy trình</button><button type="button" role="tab" data-t="types">Theo dạng câu</button><button type="button" role="tab" data-t="app">Dùng app</button></div>' +
+      '<div class="tp-pane" data-pane="flow" hidden><div class="tp-time" aria-label="Phân bổ thời gian"><div class="tp-tl"><i style="flex:2">Lướt</i><i style="flex:15">Làm bài</i><i style="flex:3">Kiểm tra</i></div><p>20 phút · '+qs+' câu · khoảng <b>'+String(per).replace('.', ',')+' phút/câu</b></p></div><ol class="tp-steps">' + TIP_STEPS.map(x => '<li><b>'+esc(x[0])+'</b><span>'+esc(x[1])+'</span></li>').join('') + '</ol></div>' +
+      '<div class="tp-pane" data-pane="types" hidden>' + (present.length ? '<p class="tp-lead">Dạng có trong bài này được xếp lên đầu. Chạm để mở; những dạng đã xem sẽ có dấu ✓.</p>' : '') + all.map(t => '<details class="tp-acc" data-type="'+t+'"'+(t === focus ? ' open' : '')+'><summary><span class="tp-ic">'+TIPS[t].icon+'</span><span class="tp-nm">'+esc(TIPS[t].name)+'</span>'+(present.indexOf(t) >= 0 ? '<em>trong bài này</em>' : '')+'<span class="tp-ck'+(tipSeen(t) ? ' on' : '')+'" aria-hidden="true">✓</span></summary>'+tipBody(t)+'</details>').join('') + '</div>' +
+      '<div class="tp-pane" data-pane="app" hidden><ul class="tp-app"><li><b>Tra từ:</b> chạm vào một từ trong bài để xem nghĩa, bấm ☆ để lưu vào sổ từ vựng.</li><li><b>Highlight:</b> bôi đen đoạn văn rồi chọn màu. Dùng màu khác nhau cho từ khóa, bằng chứng và từ mới.</li><li><b>Nhảy câu:</b> bấm số câu ở thanh dưới để đến thẳng câu hỏi đó.</li><li><b>Điện thoại:</b> chuyển qua lại giữa tab “Bài đọc” và “Câu hỏi”.</li><li><b>Xem giải thích:</b> sau khi nộp bài, bấm “📍 Xem vị trí trong bài” để thấy câu chứa đáp án ngay trong bài đọc.</li></ul></div></div>';
+  }
+  const TP_TABS = ['flow', 'types', 'app'];
+  function tpTab(t){
+    store.tips.tab = t; persist();
+    TP.querySelectorAll('.tp-tabs button').forEach(b => { const on = b.dataset.t === t; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
+    TP.querySelectorAll('.tp-pane').forEach(p => { p.hidden = p.dataset.pane !== t; if(p.dataset.pane === t) p.scrollTop = 0; });
+  }
+  function openTips(focus){
+    tpOpener = document.activeElement; tpRender(focus);
+    TP.hidden = false;
+    tpTab(focus ? 'types' : (store.tips.tab || 'flow'));
+    if(focus){ tipMark(focus); const d = TP.querySelector('.tp-acc[open]'); if(d) setTimeout(() => d.scrollIntoView({ block:'start', behavior:'smooth' }), 120); }
+    const x = TP.querySelector('.tp-x'); if(x) x.focus();
+  }
+  function closeTips(){ TP.hidden = true; updTipDot(); if(tpOpener && tpOpener.focus) try{ tpOpener.focus(); }catch(_){} }
+  TP.addEventListener('click', e => {
+    if(e.target === TP){ closeTips(); return; }
+    const t = e.target.closest('[data-t]'); if(t){ tpTab(t.dataset.t); return; }
+    if(e.target.closest('[data-a="x"]')) closeTips();
+  });
+  /* one accordion open at a time; opening marks the type as seen */
+  TP.addEventListener('toggle', e => {
+    const d = e.target; if(!d.classList || !d.classList.contains('tp-acc') || !d.open) return;
+    TP.querySelectorAll('.tp-acc[open]').forEach(o => { if(o !== d) o.open = false; });
+    tipMark(d.dataset.type);
+    const ck = d.querySelector('.tp-ck'); if(ck) ck.classList.add('on');
+    const pr = TP.querySelector('.tp-prog b'); if(pr) pr.textContent = Object.keys(TIPS).filter(tipSeen).length + '/' + Object.keys(TIPS).length;
+  }, true);
+  document.addEventListener('keydown', e => { if(!TP.hidden && e.key === 'Escape') closeTips(); });
+  /* touch: swipe down on the header / grip to close, swipe sideways on a pane to change tab */
+  let tpT = null;
+  TP.addEventListener('touchstart', e => {
+    const box = TP.querySelector('.tp-box'); if(!box) return; const t = e.touches[0];
+    tpT = { x:t.clientX, y:t.clientY, drag: !!e.target.closest('.tp-grip,.tp-h'), pane: !!e.target.closest('.tp-pane') && !e.target.closest('details[open] summary ~ *') , dy:0 };
+  }, { passive:true });
+  TP.addEventListener('touchmove', e => {
+    if(!tpT || !tpT.drag) return; const dy = e.touches[0].clientY - tpT.y; tpT.dy = dy;
+    const box = TP.querySelector('.tp-box'); if(box && dy > 0){ box.style.transition = 'none'; box.style.transform = 'translateY(' + dy + 'px)'; }
+  }, { passive:true });
+  TP.addEventListener('touchend', e => {
+    if(!tpT) return; const box = TP.querySelector('.tp-box'), t = e.changedTouches[0], dx = t.clientX - tpT.x, dy = t.clientY - tpT.y;
+    if(box){ box.style.transition = ''; box.style.transform = ''; }
+    if(tpT.drag && dy > 90){ tpT = null; closeTips(); return; }
+    if(tpT.pane && Math.abs(dx) > 70 && Math.abs(dy) < 45){
+      const cur_ = TP_TABS.indexOf(store.tips.tab || 'flow'), nx = Math.max(0, Math.min(2, cur_ + (dx < 0 ? 1 : -1))); if(nx !== cur_) tpTab(TP_TABS[nx]);
+    }
+    tpT = null;
+  });
+  testEl.addEventListener('click', e => {
+    if(e.target.closest('#rdTipBtn')){ tap(); openTips(); return; }
+    const m = e.target.closest('.tp-more'); if(m){ tap(); openTips(m.dataset.more); return; }
+    const c = e.target.closest('.tp-chip'); if(c){
+      tap(); const q = c.parentElement.querySelector('.tp-quick'); if(!q) return;
+      q.hidden = !q.hidden; c.setAttribute('aria-expanded', String(!q.hidden)); if(!q.hidden) tipMark(c.dataset.tip);
+    }
+  });
+  listEl.addEventListener('click', e => { if(e.target.closest('#rdTipList')){ tap(); openTips(); } });
+  new MutationObserver(() => { updTipDot(); updVocBadge(); }).observe(testEl, { childList:true });
+  new MutationObserver(() => updVocBadge()).observe(listEl, { childList:true });
+
   /* vocab notebook */
   const vb = { tab:'list', q:'', sort:'new', filter:'all', queue:[], idx:0, shown:false, undo:null, opener:null };
   function updVocBadge(){ const n = Object.keys(store.vocab).length; document.querySelectorAll('[data-vbn]').forEach(el => { el.textContent = n ? n : ''; el.hidden = !n; }); }
@@ -13443,6 +13984,431 @@ peRenderDashboard();
 
   // entry points
   const hc = $('rdHomeCard'); if(hc) hc.addEventListener('click', openReading);
+})();
+
+/* ================= READING GUIDE (logic) ================= */
+(function(){
+  const $ = id => document.getElementById(id);
+  /* ====== CONTENT ====== */
+  const TF = (t, f, n) => [ {k:'TRUE', t:'TRUE', why:t}, {k:'FALSE', t:'FALSE', why:f}, {k:'NOT GIVEN', t:'NOT GIVEN', why:n} ];
+  const SEAL = `Harbour seals at Karrow Bay were counted every spring from 2010 to 2022. In 2010 the survey found 412 animals; by 2022 the figure had fallen to 187. Researchers believe that fewer sand eels, the seals' main prey, is the most likely cause, although disturbance from boats may also play a part. A ban on motorised boats in the inner bay came into force in 2019, but numbers there had already been falling for several years before that.`;
+
+  const CHAPTERS = [
+  /* ---------------------------------------------------- 1 */
+  { id:'c1', icon:'🧭', title:'Reversed Reading là gì?', sub:'Đọc câu hỏi trước, tìm có mục tiêu · 3 bước · keyword & paraphrase',
+    blocks:[
+    {t:'p', x:'Cách đọc truyền thống là đọc hết bài từ trên xuống rồi mới làm câu hỏi. Cách này bắt não nhớ rất nhiều thông tin chưa được gắn nhãn, nên khi gặp câu hỏi bạn thường phải đọc lại nhiều lần — tốn thời gian và năng lượng.'},
+    {t:'p', x:'**Reversed Reading (đọc ngược)** đảo thứ tự: **đọc câu hỏi trước → rút keyword → vào bài đọc tìm đúng vùng chứa thông tin**. Bạn không “đọc để nhớ tất cả” mà “đọc để trả lời một câu hỏi cụ thể”.'},
+    {t:'callout', kind:'tip', title:'Mục tiêu thực tế', x:'Không có phương pháp nào đảm bảo điểm tuyệt đối. Điều phương pháp này giúp được: (1) **làm nhanh hơn**, (2) **ít bị bẫy** vì đã biết mình cần kiểm tra điều gì, (3) **bớt mệt** để còn sức cho Writing và Speaking.'},
+    {t:'h', x:'Khi nào hợp, khi nào cần điều chỉnh?'},
+    {t:'table', head:['Dạng bài','Reversed Reading','Lưu ý'], rows:[
+      ['True / False / Not Given','Rất hợp','Đi thẳng từ câu hỏi vào bài, thường theo thứ tự.'],
+      ['Điền từ / ghi chú','Rất hợp','Đoán loại từ cần điền, tìm quanh keyword.'],
+      ['Matching Information / Names','Hợp','Đánh dấu tên riêng, mốc thời gian trước.'],
+      ['Matching Headings','Cần điều chỉnh','Nên lướt 30–60 giây (câu đầu mỗi đoạn) trước, vì heading là ý chính cả đoạn.'],
+      ['Multiple Choice','Hợp, có điều kiện','Đọc cả câu hỏi lẫn 4 lựa chọn; cẩn thận bẫy dùng đúng từ nhưng sai ý.']
+    ]},
+    {t:'h', x:'Quy trình 3 bước'},
+    {t:'steps', items:[
+      ['Rút keyword từ câu hỏi','Có hai loại: **keyword cố định** (tên riêng, năm, con số, thuật ngữ — ít bị đổi từ) và **keyword ranh giới** (so sánh, phủ định, mức độ, tần suất, nguyên nhân — như more than half, never, mainly, because).'],
+      ['Dự đoán điều cần tìm','Tự hỏi: nếu câu này TRUE thì bài phải nói gì? Nếu FALSE thì mâu thuẫn sẽ nằm ở từ nào? Nếu NOT GIVEN thì chi tiết nào bài không đề cập?'],
+      ['Quét theo vùng, kiểm tra rồi mới chốt','Quét theo thứ tự từ trên xuống, tới vùng có keyword thì **đọc hết câu đó và câu liền kề**, so sánh ý nghĩa rồi chốt trước khi sang câu sau.']
+    ]},
+    {t:'rule', n:1, old:'“Mỗi câu hỏi chỉ có đúng MỘT vị trí chứa đáp án; IELTS không bao giờ cần nối thông tin.”',
+      nw:'Thường bằng chứng nằm gọn trong 1–2 câu liền nhau. Nhưng có câu cần **ghép hai dữ kiện ở gần nhau** (ví dụ số liệu + quy luật), và Matching Headings đòi hiểu ý chính cả đoạn chứ không chỉ một câu.',
+      ex:'Thường gặp — Nhận định: “Counts were carried out in spring each year.” Bài: “…counted every spring from 2010 to 2022.” → một câu là đủ.',
+      counter:'Phản ví dụ — Bài: “The festival began in 1998. Attendance has doubled every decade since.” Để kết luận “đến 2018 gấp ít nhất 4 lần” phải ghép **cả hai câu** (bài tập ở Chương 2).'},
+    {t:'rule', n:2, old:'“Quét tới keyword là chốt đáp án ngay tại chỗ.”',
+      nw:'Khi chạm keyword, hãy đọc **hết câu chứa nó và câu kế bên** rồi mới chốt. Keyword (nhất là năm, tên riêng) có thể xuất hiện nhiều lần với nội dung khác nhau.',
+      ex:'Nhận định: “The seal count fell below 200 in 2022.” Bài: “A storm in 2022 damaged two survey boats. The count that year found 187 animals.” → “2022” xuất hiện ở câu đầu nhưng số liệu nằm ở câu kế.',
+      counter:'Phản ví dụ — nếu câu chứa keyword đã trả lời đầy đủ (có cả số liệu / mức độ) thì chốt luôn, đừng đọc lan man cả đoạn.'},
+    {t:'rule', n:3, old:'“Tuyệt đối không đọc lướt bài trước khi xem câu hỏi.”',
+      nw:'Đừng đọc **từng chữ** cả bài trước khi xem câu hỏi. Nhưng lướt **30–60 giây** (tiêu đề, câu đầu mỗi đoạn) để nắm bố cục là hợp lý, đặc biệt trước Matching Headings.',
+      ex:'True/False/Not Given: đọc câu hỏi, vào thẳng bài — không cần lướt.',
+      counter:'Matching Headings: lướt câu đầu mỗi đoạn trước, vì heading mô tả ý chính, không phải một chi tiết.'},
+    {t:'rule', n:4, old:'“Làm xong cả 3 passage trong 30–35 phút.”',
+      nw:'Đề thật cho **60 phút / 3 bài**, tức khoảng 20 phút mỗi bài là mốc tham khảo. Khi đã quen kỹ thuật, bạn sẽ nhanh dần; đừng ép tốc độ quá sớm vì đọc ẩu dễ dính bẫy. Dùng thời gian dư để rà lại câu Not Given và câu bạn chưa chắc.',
+      ex:'Giai đoạn đầu: tập 20 phút/bài, ghi lại thời gian từng dạng câu.',
+      counter:'Nếu một câu mất quá ~1,5 phút: đánh dấu, làm câu khác rồi quay lại.'},
+    {t:'h', x:'Thực hành: rút keyword'},
+    {t:'kw', id:'kw1', title:'Chọn keyword cho câu nhận định',
+      sentence:'Between 2015 and 2020, more than half of the city\'s small bakeries closed because of rising rents.',
+      fixed:['2015','2020','bakeries'], bound:['half','rising'], usable:['small','closed','rents','because','more'],
+      why:{'2015':'Mốc thời gian — keyword cố định, rất ít bị đổi từ.','2020':'Mốc thời gian — keyword cố định.','bakeries':'Danh từ chính — nhưng bài có thể viết “bread shops”, nên vẫn cần để ý paraphrase.','half':'Keyword ranh giới: nếu bài nói “a third” hay “almost all” thì nhận định sẽ FALSE.','rising':'Keyword ranh giới: nếu bài nói tiền thuê giảm hoặc không đổi thì nhận định FALSE.'}},
+    {t:'h', x:'Thực hành: nhận diện paraphrase'},
+    {t:'p', x:'Bài đọc hiếm khi lặp nguyên từ. Paraphrase đúng giữ **nguyên nghĩa**; paraphrase “bẫy” đổi nghĩa hoặc thêm chi tiết không có.'},
+    {t:'mc', id:'pp1', title:'Câu nào là paraphrase đúng?',
+      passage:'“Numbers dropped steadily over a decade.”', q:'Chọn câu giữ nguyên nghĩa của câu trên.',
+      opts:[
+        {k:'A', t:'There was a sudden fall in numbers.', why:'Sai: “steadily” là giảm đều, từ từ; “sudden” là đột ngột — đối lập.'},
+        {k:'B', t:'Numbers fell slowly over ten years.', why:'Đúng: dropped ≈ fell, steadily ≈ slowly (đều, từ từ), a decade ≈ ten years.'},
+        {k:'C', t:'Numbers rose gradually over ten years.', why:'Sai: “dropped” là giảm, còn “rose” là tăng — đổi chiều thông tin.'},
+        {k:'D', t:'Numbers fell by ten per cent.', why:'Sai: “a decade” là 10 năm, không phải 10% — dùng lại con số nhưng đổi nghĩa.'}],
+      ans:'B'}
+    ]},
+
+  /* ---------------------------------------------------- 2 */
+  { id:'c2', icon:'✅', title:'True / False / Not Given', sub:'Phủ định chính xác · phân biệt False và Not Given · Order Bounding',
+    blocks:[
+    {t:'h', x:'Ba đáp án nghĩa là gì?'},
+    {t:'table', head:['Đáp án','Khi nào chọn'], rows:[
+      ['TRUE (YES)','Bài nói **cùng ý** với nhận định (có thể khác từ).'],
+      ['FALSE (NO)','Bài nói **ngược / mâu thuẫn** với nhận định. Bạn phải chỉ ra được từ hoặc cụm gây mâu thuẫn.'],
+      ['NOT GIVEN','Bài **không đủ thông tin** để xác nhận hay phủ nhận: không nhắc tới, hoặc chỉ nói được một phần của nhận định.']
+    ]},
+    {t:'callout', kind:'note', title:'Thứ tự', x:'Trong dạng này, đáp án **thường** xuất hiện theo thứ tự từ trên xuống dưới của bài: vị trí của câu 4 thường nằm sau câu 3. Đây là xu hướng rất hữu ích, nhưng hãy coi là mặc định chứ không phải luật.'},
+    {t:'h', x:'Kỹ thuật phủ định chính xác'},
+    {t:'p', x:'Đừng phủ định cả câu một cách mơ hồ. Hãy **chọn đúng từ ranh giới** (mức độ, so sánh, tần suất, phạm vi) rồi hình dung “nếu FALSE thì bài phải nói gì”. Sau đó mới đối chiếu bài đọc.'},
+    {t:'table', head:['Nhận định','Từ ranh giới','Nếu FALSE, bài nói…','Bài đọc (ví dụ)','Kết luận'], rows:[
+      ['Most customers noticed the redesign straight away.','most / straight away','Ít người để ý, hoặc rất lâu sau mới để ý','“The change was so subtle that few shoppers noticed it for months.”','FALSE'],
+      ['The new laptop is heavier than the model it replaced.','heavier','Nhẹ hơn hoặc bằng','“At 1.1 kg, the new model is 200 g lighter than its predecessor.”','FALSE'],
+      ['The committee approved the plan unanimously.','unanimously','Có người phản đối','“The plan was approved by seven votes to two.”','FALSE'],
+      ['The plan was backed by a majority of the committee.','majority','—','“…approved by seven votes to two.”','TRUE']
+    ]},
+    {t:'h', x:'Phân biệt FALSE và NOT GIVEN'},
+    {t:'p', x:'Thay vì áp một thuật toán cứng, hãy tự hỏi lần lượt ba câu:'},
+    {t:'flow', items:[
+      {q:'Bài có nói về đúng đối tượng / chủ đề của nhận định không?', no:'Không → thường là **NOT GIVEN**.', yes:'Có → sang câu 2.'},
+      {q:'Bài có nói đúng chi tiết mà nhận định khẳng định (mức độ, nguyên nhân, thời gian, so sánh…) không?', no:'Chỉ nói chủ đề chung, không nói chi tiết đó → **NOT GIVEN**.', yes:'Có → sang câu 3.'},
+      {q:'Ý nghĩa của bài so với nhận định thế nào?', no:'Trái ngược → **FALSE**.', yes:'Cùng ý (kể cả khác từ) → **TRUE**.'}
+    ]},
+    {t:'rule', n:5, old:'“Nếu bài không chứa keyword của nhận định thì chốt NOT GIVEN ngay.”',
+      nw:'Keyword **có thể bị paraphrase**. Chỉ chọn NOT GIVEN khi bạn đã tìm cả từ đồng nghĩa trong đúng vùng mà vẫn **không có thông tin xác nhận hay mâu thuẫn**.',
+      ex:'Nhận định: “A shortage of food is the likeliest explanation for the decline.” Bài: “fewer sand eels, the seals’ main prey, is the most likely cause”. Không trùng keyword nào nhưng ý giống hệt → TRUE.',
+      counter:'Phản ví dụ — Nhận định: “The ban caused a recovery.” Bài chỉ nói số lượng đã giảm trước lệnh cấm, không nói gì sau đó → NOT GIVEN.'},
+    {t:'h', x:'Order Bounding — dùng câu sau làm mốc chặn'},
+    {t:'p', x:'Khi nghi ngờ một câu là NOT GIVEN, bạn dễ rơi vào bẫy “tự nghi ngờ” và quét ngược lên nhiều lần. Kỹ thuật này giúp bạn biết **mình đã quét tới đâu**: lấy keyword của câu **kế tiếp** làm mốc chặn dưới.'},
+    {t:'rule', n:6, old:'“Chạm keyword câu sau mà chưa thấy dữ kiện câu này → chốt NOT GIVEN ngay, tuyệt đối không đọc ngược.”',
+      nw:'Dùng mốc chặn để **khoanh vùng**. Khi đã chạm mốc mà chưa thấy, hãy đánh dấu “nghi NOT GIVEN”, **rà lại một lần** vùng giữa hai mốc (paraphrase mạnh dễ khiến bạn bỏ sót), rồi mới chốt.',
+      ex:'Nhận định 3 không có thông tin; quét tới tên riêng của nhận định 4 vẫn chưa thấy → rà nhanh vùng giữa hai mốc, vẫn không có → NOT GIVEN.',
+      counter:'Phản ví dụ — thứ tự đôi khi lệch (hiếm nhưng có): thông tin câu 3 có thể nằm ngay sau mốc của câu 4. Nếu cả hai cùng không thấy, hãy rà cả đoạn một lần thay vì đoán.'},
+    {t:'h', x:'Thực hành: 5 nhận định, 1 đoạn văn'},
+    {t:'qgroup', passage:SEAL, ptitle:'Đoạn văn', items:[
+      {id:'t1', q:'Counts were carried out in spring each year between 2010 and 2022.', ans:'TRUE',
+        opts:TF('Đúng: “counted every spring from 2010 to 2022” ≈ “carried out in spring each year between 2010 and 2022”. counted ≈ counts carried out, every ≈ each, from…to ≈ between.','Sai: không có chi tiết nào mâu thuẫn — bài không nói có năm bị bỏ hay đếm vào mùa khác.','Sai: bài nói rõ cả tần suất (every spring) lẫn khoảng năm, nên có đủ thông tin.')},
+      {id:'t2', q:'The number of seals counted in 2022 was less than half the number counted in 2010.', ans:'TRUE',
+        opts:TF('Đúng: nửa của 412 là 206; 187 < 206 nên “less than half” đúng. Cần tự tính, nhưng cả hai số liệu nằm trong cùng một câu.','Sai: chỉ FALSE nếu số năm 2022 từ 206 trở lên (ví dụ 250). Ở đây là 187.','Sai: bài có đủ hai con số để so sánh.')},
+      {id:'t3', q:'Disturbance from boats is the main reason for the decline.', ans:'FALSE',
+        opts:TF('Sai: bài có nhắc thuyền gây xáo trộn, nhưng chỉ là “may also play a part”. Đây là bẫy trùng keyword nhưng sai mức độ.','Đúng: nguyên nhân khả dĩ nhất là ít sand eels; thuyền chỉ là yếu tố phụ. Từ ranh giới “main” mâu thuẫn với “may also play a part”.','Sai: bài có nói về nguyên nhân chính lẫn vai trò của thuyền, nên đủ thông tin để kết luận.')},
+      {id:'t4', q:'A shortage of food is the likeliest explanation for the decline.', ans:'TRUE',
+        opts:TF('Đúng: không trùng keyword nào, nhưng “fewer sand eels, the seals’ main prey” = thiếu thức ăn, và “most likely cause” = “likeliest explanation”.','Sai: bài không hề loại trừ thức ăn; trái lại còn coi đây là nguyên nhân khả dĩ nhất.','Sai (bẫy hay gặp): thấy không có chữ “food” hay “shortage” nên chọn NOT GIVEN — nhưng paraphrase đã diễn đạt đúng ý đó.')},
+      {id:'t5', q:'The 2019 ban on motorised boats led to a recovery in numbers in the inner bay.', ans:'NOT GIVEN',
+        opts:TF('Sai: bài không hề nói số lượng hồi phục.','Sai: bài chỉ nói số lượng đã giảm **trước** 2019; không nói gì về việc tiếp tục giảm **sau** lệnh cấm, nên không thể bảo nhận định mâu thuẫn.','Đúng: bài nhắc lệnh cấm nhưng không nói kết quả sau đó — thiếu chính chi tiết mà nhận định khẳng định (“led to a recovery”).')}
+    ]},
+    {t:'h', x:'Thực hành: khi cần ghép hai thông tin'},
+    {t:'qgroup', passage:'The harbour festival began in 1998. Attendance has doubled every decade since.', ptitle:'Đoạn văn', items:[
+      {id:'f1', q:'Attendance in 2018 was at least four times the 1998 figure.', ans:'TRUE',
+        opts:TF('Đúng: 1998 → 2008 gấp đôi → 2018 gấp đôi lần nữa = gấp 4. Phải ghép **hai câu liền kề** — đây là phản ví dụ cho quy tắc “chỉ một vị trí”.','Sai: chỉ FALSE nếu mốc gấp đôi diễn ra chậm hơn (ví dụ mỗi 20 năm).','Sai: bài không nêu số người cụ thể, nhưng cho đủ quy luật để tính, nên không phải NOT GIVEN.')}
+    ]}
+    ]},
+
+  /* ---------------------------------------------------- 3 */
+  { id:'c3', icon:'🔗', title:'Matching Headings & Information', sub:'Coi heading là câu hỏi · lọc keyword khó paraphrase · “dead give-away”',
+    blocks:[
+    {t:'h', x:'Tư duy “coi heading là câu hỏi”'},
+    {t:'p', x:'Đừng đọc hết đoạn rồi tự tóm tắt rồi so với heading. Hãy **biến mỗi heading thành vài câu hỏi cụ thể**; đoạn nào trả lời trọn vẹn các câu hỏi đó thì là đáp án.'},
+    {t:'table', head:['Heading','Câu hỏi đặt ra cho bài đọc'], rows:[
+      ['A surprising source of waste','(1) Nguồn lãng phí cụ thể là gì? (2) Vì sao “bất ngờ” — ai đó từng nghĩ khác?'],
+      ['A cold test before approval','(1) Thứ gì được thử nghiệm? (2) Lạnh bao nhiêu độ, kéo dài bao lâu? (3) Sau đó có được duyệt không?'],
+      ['Improvements lead to bigger orders','(1) Cải tiến cụ thể nào? (2) Đơn hàng tăng ra sao?'],
+      ['A possible solution to current problems','(1) Vấn đề hiện nay là gì? (2) Giải pháp được đề xuất là gì?']
+    ]},
+    {t:'callout', kind:'warn', title:'Heading phải bao quát cả đoạn', x:'Heading đúng mô tả **ý chính** của đoạn. Heading “bẫy” thường chứa đúng từ khóa của đoạn nhưng chỉ khớp một chi tiết nhỏ hoặc sai trọng tâm.'},
+    {t:'h', x:'Keyword khó bị paraphrase'},
+    {t:'ul', items:[
+      '**Tính từ chỉ tính chất / so sánh**: cold – freezing, quiet – silent, clean – zero emissions, fast – swift.',
+      '**Thời gian / mốc lịch sử**: today – current, early 20th century, overnight – an hour.',
+      '**Danh từ cụ thể, thuật ngữ**: tên riêng, con số, tên công nghệ.'
+    ]},
+    {t:'p', x:'Đây là xu hướng, không phải luật: tên riêng và con số ổn định nhất; tính từ thì vẫn có thể bị đổi (cold → chilly → freezing), nên hãy nghĩ trước vài từ đồng nghĩa.'},
+    {t:'rule', n:7, old:'“Đáp án nổ ngay tại chỗ từ đặc trưng xuất hiện lần đầu tiên.”',
+      nw:'Từ hiếm / đặc trưng xuất hiện lần đầu là **manh mối tốt để định vị đoạn**, nhưng phải kiểm tra xem đoạn đó nói về nó là **chủ đề chính** hay chỉ nhắc thoáng qua.',
+      ex:'Heading “A surprising source of waste”: đoạn B mở đầu bằng “Few people expected packaging to account for so much waste…” → từ “expected”, “waste” xuất hiện cùng nhau và là trọng tâm đoạn.',
+      counter:'Phản ví dụ — đoạn C chỉ nhắc “waste” trong một mệnh đề phụ, còn trọng tâm là cách phân loại rác → không phải đáp án dù có từ khóa.'},
+    {t:'h', x:'Thực hành: chọn heading'},
+    {t:'mc', id:'h1', title:'Chọn heading phù hợp nhất cho đoạn văn',
+      passage:'After years of decline, overnight rail services across Europe are returning. Several governments have funded new sleeper routes, and operators report that many bookings come from travellers who would previously have flown. Yet the revival has not been smooth: carriages are old, spare parts are scarce, and new rolling stock will not be delivered until the end of the decade.',
+      q:'Heading nào mô tả đúng ý chính của cả đoạn?',
+      opts:[
+        {k:'A', t:'Why flying remains cheaper than rail', why:'Sai: đoạn có nhắc “flown” nhưng không hề nói về giá. Heading lấy một từ khóa rồi gán ý khác.'},
+        {k:'B', t:'A revival that faces practical difficulties', why:'Đúng: bao quát cả hai nửa của đoạn — dịch vụ đang quay lại (returning, funded routes) và khó khăn thực tế (old carriages, scarce parts, late delivery).'},
+        {k:'C', t:'Governments end funding for sleeper routes', why:'Sai: đoạn nói ngược lại — governments “have funded” các tuyến mới.'},
+        {k:'D', t:'Passengers complain about overnight comfort', why:'Sai: đoạn không nói hành khách phàn nàn về sự thoải mái; “old carriages” là vấn đề thiết bị, không phải lời phàn nàn của khách.'}],
+      ans:'B'},
+    {t:'h', x:'Thực hành: Matching Information'},
+    {t:'qgroup', passage:[
+        {l:'A', t:'The scheme began as a pilot in two districts, where households were given free compost bins and a weekly collection of food waste.'},
+        {l:'B', t:'Within a year, the amount of food waste going to landfill had halved in the pilot districts. Council officers had expected a fall of about a third.'},
+        {l:'C', t:'When the scheme was extended citywide, however, a shortage of collection lorries meant that many streets were missed, and complaints rose sharply. The council has since delayed the rollout in the north of the city.'}],
+      ptitle:'Ba đoạn văn', items:[
+      {id:'mi1', q:'Which paragraph mentions a reason why part of the plan was delayed?', ans:'C',
+        opts:[{k:'A',t:'Đoạn A',why:'Sai: đoạn A chỉ mô tả giai đoạn thí điểm, chưa có trì hoãn.'},{k:'B',t:'Đoạn B',why:'Sai: đoạn B nói về kết quả tích cực, không có trì hoãn.'},{k:'C',t:'Đoạn C',why:'Đúng: “delayed the rollout” và lý do là thiếu xe thu gom (“a shortage of collection lorries”).'}]},
+      {id:'mi2', q:'Which paragraph says the results were better than predicted?', ans:'B',
+        opts:[{k:'A',t:'Đoạn A',why:'Sai: đoạn A chưa nói gì về kết quả.'},{k:'B',t:'Đoạn B',why:'Đúng: “halved” (giảm một nửa) so với dự đoán “about a third” — tốt hơn dự kiến. Cần so hai con số, đây là paraphrase của “better than predicted”.'},{k:'C',t:'Đoạn C',why:'Sai: đoạn C nói về vấn đề khi mở rộng, kết quả xấu đi chứ không tốt hơn dự kiến.'}]}
+    ]}
+    ]},
+
+  /* ---------------------------------------------------- 4 */
+  { id:'c4', icon:'☑️', title:'Multiple Choice', sub:'Định hình chức năng phương án · loại trừ bẫy · critical points',
+    blocks:[
+    {t:'p', x:'Multiple Choice thường có nhiều “nhiễu” nhất. Trước khi đọc bài, hãy **nhìn mỗi phương án xem nó đang làm chức năng gì** (register) để biết cần tìm loại bằng chứng nào.'},
+    {t:'table', head:['Chức năng','Nghĩa','Cần tìm trong bài'], rows:[
+      ['Compare','So sánh hai đối tượng / quan điểm','Cả hai đối tượng cùng được nhắc, có điểm giống / khác'],
+      ['Justify','Đưa lý do bảo vệ một quan điểm','Từ chỉ nguyên nhân: because, since, so that'],
+      ['Criticise','Chỉ ra điểm yếu','however, fails to, overlooks'],
+      ['Outline','Phác thảo các nét chính','Danh sách các ý / giai đoạn'],
+      ['Disprove','Bác bỏ niềm tin phổ biến','Từ trái ngược: contrary to, in fact'],
+      ['Represent an exception','Là ngoại lệ so với quy luật chung','apart from, setting aside, except']
+    ]},
+    {t:'h', x:'Loại trừ phương án nhiễu'},
+    {t:'rule', n:8, old:'“Hai phương án song song về ngữ nghĩa thì cả hai đều là bẫy, loại bỏ ngay.”',
+      nw:'Hai phương án gần như cùng ý là **dấu hiệu để nghi ngờ**: chúng không thể cùng đúng (chỉ có 1 đáp án), nên thường **một trong hai đúng hoặc cả hai sai**. Hãy kiểm chứng cả hai với bài thay vì loại cả hai chỉ vì giống nhau.',
+      ex:'Hai lựa chọn: “The study was too small to be reliable” và “The sample was not large enough to draw firm conclusions”. Cùng ý → bài nói “only 12 participants” thì một trong hai (hoặc cả hai) nên được xem xét kỹ.',
+      counter:'Phản ví dụ — nếu bài nói rõ “the sample was too small”, thì chính một trong hai phương án song song là đáp án đúng; loại cả hai là mất điểm.'},
+    {t:'ul', items:[
+      '**Suy diễn cực đoan**: lựa chọn chứa prove, always, never, only, all thường vượt quá bằng chứng. Nhưng nếu chính bài cũng dùng từ mạnh (“no”, “never”) thì vẫn có thể đúng — luôn đối chiếu.',
+      '**Đúng sự thật nhưng không có trong bài**: không chọn chỉ vì nghe hợp lý.',
+      '**Dùng đúng từ trong bài nhưng sai ý**: từ lặp lại không có nghĩa là đúng.'
+    ]},
+    {t:'h', x:'Critical points cần bám sát'},
+    {t:'ul', items:['Tên riêng, tên tác phẩm, mốc thời gian.','Cụm điều kiện / ngoại lệ: **setting aside, apart from, except, fit so well, prevalent**.','Từ đổi hướng: however, yet, although, nevertheless.']},
+    {t:'h', x:'Thực hành 1'},
+    {t:'mc', id:'mc1', title:'Điều tác giả nói về nghiên cứu của Moreau',
+      passage:'Moreau\'s survey of 3,000 commuters found that people who cycled to work took fewer sick days than those who drove. Critics point out that healthier people may simply be more likely to choose cycling in the first place, and Moreau herself accepts this. She argues, however, that the pattern held even among commuters who had been cycling for less than a year, which makes it harder to explain away.',
+      q:'What is the writer\'s main point about Moreau\'s findings?',
+      opts:[
+        {k:'A', t:'They prove that cycling improves health.', why:'Sai: “prove” quá mạnh. Bài chỉ nói có mô hình (pattern), thậm chí thừa nhận một cách giải thích khác.'},
+        {k:'B', t:'They may partly reflect existing health differences, but this cannot be the whole explanation.', why:'Đúng: Moreau chấp nhận lời phê bình, nhưng nhóm mới đạp xe dưới một năm vẫn có kết quả tương tự → “harder to explain away”.'},
+        {k:'C', t:'They were rejected by Moreau herself.', why:'Sai: Moreau chỉ chấp nhận **một lời phê bình**, không bác bỏ phát hiện của mình.'},
+        {k:'D', t:'They apply only to experienced cyclists.', why:'Sai: ngược lại — mô hình vẫn đúng cả với người đạp xe dưới một năm.'}],
+      ans:'B'},
+    {t:'h', x:'Thực hành 2: nhận diện ngoại lệ'},
+    {t:'mc', id:'mc2', title:'Brightwell được nhắc tới để làm gì?',
+      passage:'With the exception of a handful of celebrated inventors such as Brightwell, whose name appears in every textbook, most pioneers of early aviation are now forgotten.',
+      q:'The writer mentions Brightwell as…',
+      opts:[
+        {k:'A', t:'a typical pioneer of early aviation', why:'Sai: “most pioneers … are now forgotten” — Brightwell là trường hợp **không** điển hình.'},
+        {k:'B', t:'an exception to a general pattern', why:'Đúng: “with the exception of … such as Brightwell” — nổi tiếng trong khi đa số bị lãng quên.'},
+        {k:'C', t:'someone whose work was misunderstood', why:'Sai: bài không nói công trình của ông bị hiểu lầm.'},
+        {k:'D', t:'a pioneer who deserves more recognition', why:'Sai: bài nói tên ông đã “appear in every textbook” — ông đã được ghi nhận rồi.'}],
+      ans:'B'}
+    ]},
+
+  /* ---------------------------------------------------- 5 */
+  { id:'c5', icon:'🏷️', title:'Matching Names (nối người với nhận định)', sub:'Sườn logic · tìm quanh tên riêng · bẫy “researcher degrees of freedom”',
+    blocks:[
+    {t:'p', x:'Dạng này nhanh nhất khi bạn nhận ra “**sườn logic**” (structural anchors) của nhận định. Những từ phủ định, hạn định hay chất lượng thường **khó bị paraphrase hoàn toàn**, nên dễ tìm tương đương trong bài.'},
+    {t:'ul', items:['**NOT / NOT SIMPLY / NOT JUST**','**NO / NO EFFECT**','**WITHOUT**','**INCORRECTLY / MISUNDERSTOOD**','**FAIL**','**SUBTLE / SUBTLY**']},
+    {t:'table', head:['Sườn logic trong nhận định','Tương đương trong bài (ví dụ)'], rows:[
+      ['Not simply about making pupils feel good','“…was never just a way of boosting morale”'],
+      ['Had no effect on exam results','“…found no measurable change in exam scores”'],
+      ['Has been interpreted incorrectly','“…is widely misunderstood”'],
+      ['Was delivered without pupils being aware','“…introduced in a subtle way”'],
+      ['Was not rigorous enough','“…gave researchers too many choices about analysis”']
+    ]},
+    {t:'h', x:'Quy trình'},
+    {t:'steps', items:[
+      ['Đánh dấu tên riêng','Quét bài và đánh dấu mọi lần xuất hiện của từng người.'],
+      ['Rút sườn logic','Với mỗi nhận định, tìm từ phủ định / hạn định / tính chất.'],
+      ['Đối chiếu quanh tên','Kiểm tra vùng quanh mỗi tên. Lưu ý một người có thể xuất hiện nhiều lần, ý liên quan có thể ở lần nhắc thứ hai trở đi.']
+    ]},
+    {t:'callout', kind:'note', title:'“Researcher degrees of freedom” nghĩa là gì?', x:'Trong ngữ cảnh nghiên cứu, cụm này chỉ **số lựa chọn linh hoạt** nhà nghiên cứu có khi thiết kế thí nghiệm hoặc xử lý dữ liệu (chọn biến nào, loại dữ liệu nào, kiểm định nào). Quá nhiều lựa chọn khiến dễ “tìm ra” kết quả mong muốn → phương pháp chưa đủ chặt chẽ. Đừng nhầm với công thức bậc tự do n−1 trong thống kê: đó là một khái niệm khác.'},
+    {t:'h', x:'Thực hành'},
+    {t:'qgroup', passage:'Teachers often read Dr Alvarez\'s work as a call to praise pupils more, but she insists it was never just a way of boosting morale. Professor Brandt tracked 900 pupils for a year and found no measurable change in their exam scores. Dr Chen, a statistician, argues that earlier studies in this field gave researchers too many choices about how to analyse their data, which made positive results easy to find.', ptitle:'Đoạn văn', items:[
+      {id:'nm1', q:'Her ideas are often interpreted incorrectly.', ans:'Alvarez',
+        opts:[{k:'Alvarez',t:'Dr Alvarez',why:'Đúng: “Teachers often read … as a call to praise more, but she insists it was never just…” — công trình bị hiểu sai (sườn logic: incorrectly ≈ read as … but).'},{k:'Brandt',t:'Prof. Brandt',why:'Sai: Brandt chỉ được nhắc về kết quả theo dõi 900 học sinh.'},{k:'Chen',t:'Dr Chen',why:'Sai: Chen phê bình các nghiên cứu trước đó, không nói về việc ý tưởng của mình bị hiểu sai.'}]},
+      {id:'nm2', q:'Her study found no effect on exam results.', ans:'Brandt',
+        opts:[{k:'Alvarez',t:'Dr Alvarez',why:'Sai: bài không nói Alvarez tiến hành khảo sát về điểm thi.'},{k:'Brandt',t:'Prof. Brandt',why:'Đúng: “found no measurable change in their exam scores” — NO EFFECT ≈ no measurable change.'},{k:'Chen',t:'Dr Chen',why:'Sai: Chen là nhà thống kê phê bình phương pháp, không báo cáo kết quả điểm thi.'}]},
+      {id:'nm3', q:'Her argument is that earlier research was not rigorous enough.', ans:'Chen',
+        opts:[{k:'Alvarez',t:'Dr Alvarez',why:'Sai: Alvarez bàn về cách hiểu công trình của mình.'},{k:'Brandt',t:'Prof. Brandt',why:'Sai: Brandt chỉ báo cáo một kết quả thực nghiệm.'},{k:'Chen',t:'Dr Chen',why:'Đúng: “too many choices about how to analyse their data” ≈ phương pháp chưa đủ chặt (not rigorous enough).'}]}
+    ]}
+    ]},
+
+  /* ---------------------------------------------------- 6 */
+  { id:'c6', icon:'📌', title:'Tổng kết & mẹo vào phòng thi', sub:'Bảng tra cứu · quy tắc mới thay cho quy tắc tuyệt đối · quản lý thời gian',
+    blocks:[
+    {t:'h', x:'Bảng tổng hợp kỹ thuật'},
+    {t:'table', head:['Dạng bài','Tư duy cốt lõi','Hành động'], rows:[
+      ['True / False / Not Given','Kiểm tra mâu thuẫn trực tiếp; phân biệt FALSE và NOT GIVEN bằng ba câu hỏi.','1) Phủ định chính xác từ ranh giới. 2) Tìm cả paraphrase trước khi chọn NOT GIVEN. 3) Dùng câu sau làm mốc chặn, rồi rà lại một lần.'],
+      ['Matching Headings','Coi mỗi heading là câu hỏi.','1) Lướt câu đầu mỗi đoạn. 2) Tách heading thành câu hỏi. 3) Chọn heading bao quát ý chính, không chỉ một chi tiết.'],
+      ['Matching Information','Định vị chi tiết.','1) Đọc hết nhận định trước. 2) Rút keyword (tên, mốc thời gian, so sánh). 3) Quét theo thứ tự, đọc hết câu rồi chốt.'],
+      ['Multiple Choice','Định hình chức năng từng phương án.','1) Nhận diện compare / justify / criticise… 2) Kiểm chứng phương án giống nhau thay vì loại ngay. 3) Cảnh giác từ cực đoan và từ đổi hướng.'],
+      ['Matching Names','Bám sườn logic.','1) Đánh dấu tên. 2) Rút sườn logic (not, no, without, incorrectly…). 3) Khớp tại vùng quanh tên.']
+    ]},
+    {t:'h', x:'Quy tắc cũ → quy tắc mới'},
+    {t:'rules-summary'},
+    {t:'h', x:'Quản lý thời gian & tâm lý'},
+    {t:'ul', items:[
+      '**Đừng đọc từng chữ cả bài trước khi xem câu hỏi.** Chuyển sang truy vấn có mục tiêu: đọc câu hỏi → keyword → tìm vùng.',
+      '**Dùng mốc chặn** khi nghi Not Given, nhưng rà lại một lần trước khi chốt.',
+      '**Mốc tham khảo:** khoảng 20 phút/bài; nhanh hơn khi đã quen. Câu nào quá ~1,5 phút thì đánh dấu và quay lại.',
+      '**Không bỏ trống.** Luôn điền một đáp án; kiểm tra chính tả, số ít/số nhiều và giới hạn số từ ở cuối giờ.'
+    ]},
+    {t:'cta'}
+    ]}
+  ];
+
+  /* ====== ENGINE ====== */
+  const gdScr = $('gdScreen'), gdRoot = $('gdRoot');
+  if(!gdScr) return;
+  const GLS = 'efb_guide_v1';
+  let gst = {}; try{ gst = JSON.parse(localStorage.getItem(GLS)) || {}; }catch(e){}
+  gst.done = gst.done || {};
+  const gsave = () => { try{ localStorage.setItem(GLS, JSON.stringify(gst)); }catch(e){} };
+  const gesc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const fm = s => gesc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/\{\{(.+?)\}\}/g, '<mark class="gd-k">$1</mark>').replace(/\n/g, '<br>');
+  const gtap = () => { try{ if(typeof sfx !== 'undefined' && sfx.tap) sfx.tap(); }catch(e){} };
+
+  const QR = {}, RULES = [];
+  CHAPTERS.forEach(c => {
+    c.quizIds = [];
+    c.blocks.forEach(b => {
+      if(b.t === 'mc' || b.t === 'kw'){ QR[b.id] = b; c.quizIds.push(b.id); }
+      if(b.t === 'qgroup') b.items.forEach(i => { QR[i.id] = i; c.quizIds.push(i.id); });
+      if(b.t === 'rule') RULES.push(b);
+    });
+  });
+  const TOTAL_Q = Object.keys(QR).length;
+  const doneCount = ids => ids.filter(id => gst.done[id]).length;
+
+  function passageHtml(p, title){
+    const body = Array.isArray(p) ? p.map(x => '<p>' + (x.l ? '<span class="gd-pl">'+x.l+'</span>' : '') + fm(x.t) + '</p>').join('') : '<p>' + fm(p) + '</p>';
+    return '<div class="gd-pass">' + (title ? '<div class="gd-pass-t">📄 ' + gesc(title) + '</div>' : '') + body + '</div>';
+  }
+  function quizHtml(q, opt){
+    opt = opt || {};
+    const d = gst.done[q.id];
+    const head = '<div class="gd-qh"><span class="gd-qbadge">✍️ Bài tập</span>' + (q.title ? '<b>' + gesc(q.title) + '</b>' : '') + (d ? '<em class="gd-done">' + (d === 2 ? '✓ đúng' : '✓ đã làm') + '</em>' : '') + '</div>';
+    if(q.sentence !== undefined){
+      const toks = q.sentence.split(' ').map((w, i) => '<button type="button" class="gd-tok" data-i="' + i + '">' + gesc(w) + '</button>').join(' ');
+      return '<div class="gd-quiz" data-id="' + q.id + '">' + head +
+        '<p class="gd-qq">Chạm vào <b>3–5 từ</b> bạn sẽ dùng làm keyword để tìm trong bài:</p><div class="gd-toks">' + toks + '</div>' +
+        '<button type="button" class="gd-btn gd-check">Kiểm tra</button><div class="gd-fb" hidden></div></div>';
+    }
+    return '<div class="gd-quiz" data-id="' + q.id + '">' + head + (q.passage && !opt.noPassage ? passageHtml(q.passage) : '') +
+      '<p class="gd-qq">' + fm(q.q) + '</p><div class="gd-opts">' +
+      q.opts.map(o => '<button type="button" class="gd-opt" data-k="' + gesc(o.k) + '"><span class="gd-ol">' + (o.k.length <= 1 ? gesc(o.k) : '•') + '</span><span>' + gesc(o.t) + '</span></button>').join('') +
+      '</div><div class="gd-fb" hidden></div></div>';
+  }
+  function tableHtml(b){
+    return '<div class="gd-tw"><table class="gd-table"><thead><tr>' + b.head.map(h => '<th>' + fm(h) + '</th>').join('') + '</tr></thead><tbody>' +
+      b.rows.map(r => '<tr>' + r.map((c, i) => '<td data-label="' + gesc(b.head[i]) + '">' + fm(c) + '</td>').join('') + '</tr>').join('') + '</tbody></table></div>';
+  }
+  function ruleHtml(b, compact){
+    return '<div class="gd-rule"><div class="gd-rule-h"><span>Quy tắc #' + b.n + '</span></div>' +
+      '<div class="gd-old"><i>Cách nói tuyệt đối</i>' + fm(b.old) + '</div>' +
+      '<div class="gd-new"><i>Nên hiểu là</i>' + fm(b.nw) + '</div>' +
+      (compact ? '' : '<div class="gd-ex"><i>✅ Ví dụ</i>' + fm(b.ex) + '</div><div class="gd-cx"><i>⚠️ Phản ví dụ</i>' + fm(b.counter) + '</div>') + '</div>';
+  }
+  function blockHtml(b){
+    switch(b.t){
+      case 'h': return '<h3 class="gd-h">' + fm(b.x) + '</h3>';
+      case 'p': return '<p class="gd-p">' + fm(b.x) + '</p>';
+      case 'ul': return '<ul class="gd-ul">' + b.items.map(i => '<li>' + fm(i) + '</li>').join('') + '</ul>';
+      case 'steps': return '<ol class="gd-steps">' + b.items.map(i => '<li><b>' + fm(i[0]) + '</b><span>' + fm(i[1]) + '</span></li>').join('') + '</ol>';
+      case 'callout': return '<div class="gd-callout ' + b.kind + '"><b>' + fm(b.title) + '</b><p>' + fm(b.x) + '</p></div>';
+      case 'table': return tableHtml(b);
+      case 'flow': return '<div class="gd-flow">' + b.items.map((i, n) => '<div class="gd-fl"><div class="gd-fq"><span>' + (n + 1) + '</span>' + fm(i.q) + '</div><div class="gd-fa"><div class="no">' + fm(i.no) + '</div><div class="yes">' + fm(i.yes) + '</div></div></div>').join('') + '</div>';
+      case 'rule': return ruleHtml(b);
+      case 'rules-summary': return '<div class="gd-rules-sum">' + RULES.map(r => ruleHtml(r, true)).join('') + '</div>';
+      case 'kw': case 'mc': return quizHtml(b);
+      case 'qgroup': return '<div class="gd-group">' + passageHtml(b.passage, b.ptitle) + b.items.map((q, i) => quizHtml(Object.assign({ title:'Câu ' + (i + 1) }, q), { noPassage:true })).join('') + '</div>';
+      case 'cta': return '<div class="gd-cta"><b>Sẵn sàng áp dụng?</b><p>Chọn một passage và thử làm theo 3 bước. Sau khi nộp bài, dùng nút “Xem vị trí trong bài” để đối chiếu bằng chứng.</p><button type="button" class="gd-btn" id="gdToReading">📖 Làm bài Reading ngay</button></div>';
+    }
+    return '';
+  }
+
+  /* ---------- views ---------- */
+  let gv = { ch:-1 };
+  function setActive(on){ document.querySelectorAll('.sb-item').forEach(b => b.classList.toggle('active', on && b.dataset.nav === 'guide')); }
+  function homeView(){
+    const pct = Math.round(doneCount(Object.keys(QR)) / TOTAL_Q * 100);
+    gdRoot.innerHTML = '<div class="gd-wrap"><div class="rd-head"><button type="button" class="rd-back" id="gdHome">← Trang chủ</button><h1 class="rd-h1">🧭 Hướng dẫn làm Reading</h1></div>' +
+      '<p class="rd-sub">Phương pháp đọc ngược (Reversed Reading), cách xử lý từng dạng câu hỏi, kèm quy tắc có điều kiện, phản ví dụ và bài tập tương tác để bạn tự thử trước khi xem giải thích.</p>' +
+      '<div class="gd-prog"><div><b>Bài tập đã làm</b><span>' + doneCount(Object.keys(QR)) + ' / ' + TOTAL_Q + '</span></div><div class="gd-bar"><i style="width:' + pct + '%"></i></div></div>' +
+      '<div class="gd-grid">' + CHAPTERS.map((c, i) => {
+        const dn = doneCount(c.quizIds);
+        return '<button type="button" class="gd-chcard" data-ch="' + i + '"><span class="gd-chn">' + (i + 1) + '</span><span class="gd-chb"><b>' + c.icon + ' ' + gesc(c.title) + '</b><small>' + gesc(c.sub) + '</small>' +
+          (c.quizIds.length ? '<em>' + dn + '/' + c.quizIds.length + ' bài tập</em>' : '<em>Bảng tổng hợp</em>') + '</span><i>›</i></button>';
+      }).join('') + '</div></div>';
+    gv.ch = -1; gdScr.scrollTop = 0;
+  }
+  function chapterView(i){
+    const c = CHAPTERS[i]; gv.ch = i;
+    gdRoot.innerHTML = '<div class="gd-bar-top"><button type="button" class="rd-back" id="gdList">← Các chương</button><span>Chương ' + (i + 1) + '/' + CHAPTERS.length + '</span></div>' +
+      '<div class="gd-wrap"><h1 class="gd-title">' + c.icon + ' ' + gesc(c.title) + '</h1><p class="gd-sub">' + gesc(c.sub) + '</p>' +
+      c.blocks.map(blockHtml).join('') +
+      '<div class="gd-pn">' + (i > 0 ? '<button type="button" class="gd-btn alt" data-ch="' + (i - 1) + '">‹ ' + gesc(CHAPTERS[i - 1].title) + '</button>' : '<span></span>') +
+      (i < CHAPTERS.length - 1 ? '<button type="button" class="gd-btn" data-ch="' + (i + 1) + '">' + gesc(CHAPTERS[i + 1].title) + ' ›</button>' : '') + '</div></div>';
+    gdScr.scrollTop = 0;
+  }
+  function openGuide(ch){
+    gtap(); if(window.rdClose) window.rdClose();
+    gdScr.hidden = false; setActive(true);
+    if(typeof ch === 'number') chapterView(ch); else homeView();
+  }
+  function gdClose(){ gdScr.hidden = true; }
+  window.openGuide = openGuide; window.gdClose = gdClose;
+
+  /* ---------- quiz logic ---------- */
+  function mark(id, correct){ const was = gst.done[id]; gst.done[id] = correct ? 2 : (was === 2 ? 2 : 1); gsave(); }
+  function answerMc(el, k){
+    const q = QR[el.dataset.id]; if(!q || el.classList.contains('answered')) return;
+    el.classList.add('answered');
+    const ok = k === q.ans; mark(q.id, ok);
+    el.querySelectorAll('.gd-opt').forEach(b => { b.disabled = true; if(b.dataset.k === q.ans) b.classList.add('right'); else if(b.dataset.k === k) b.classList.add('wrong'); });
+    const right = q.opts.find(o => o.k === q.ans);
+    const fb = el.querySelector('.gd-fb');
+    fb.innerHTML = '<div class="gd-verdict ' + (ok ? 'ok' : 'bad') + '">' + (ok ? '✅ Chính xác!' : '❌ Chưa đúng — bạn chọn <b>' + gesc(k) + '</b>, đáp án là <b>' + gesc(right.t) + '</b>.') + '</div>' +
+      '<div class="gd-why"><h5>Vì sao đúng, vì sao các lựa chọn còn lại sai?</h5>' +
+      q.opts.map(o => '<div class="gd-wi ' + (o.k === q.ans ? 'right' : (o.k === k ? 'wrong' : '')) + '"><b>' + (o.k === q.ans ? '✓' : '✗') + ' ' + gesc(o.t) + (o.k === k ? ' <em>bạn chọn</em>' : '') + '</b><span>' + fm(o.why) + '</span></div>').join('') + '</div>' +
+      '<button type="button" class="gd-btn alt gd-retry">🔁 Làm lại</button>';
+    fb.hidden = false; refreshProgress();
+  }
+  const normW = w => w.toLowerCase().replace(/[^a-z0-9]/g, '');
+  function checkKw(el){
+    const q = QR[el.dataset.id]; if(!q || el.classList.contains('answered')) return;
+    const toks = Array.from(el.querySelectorAll('.gd-tok')), picked = toks.filter(t => t.classList.contains('sel'));
+    if(picked.length < 1){ const fb = el.querySelector('.gd-fb'); fb.innerHTML = '<div class="gd-verdict bad">Hãy chạm chọn ít nhất vài từ trước khi kiểm tra.</div>'; fb.hidden = false; return; }
+    el.classList.add('answered');
+    const key = t => normW(t.textContent), good = q.fixed.concat(q.bound);
+    let nf = 0, nb = 0, filler = 0;
+    toks.forEach(t => {
+      const w = key(t), on = t.classList.contains('sel'); t.disabled = true;
+      if(good.indexOf(w) >= 0){ t.classList.add(on ? 'good' : 'miss'); if(on){ if(q.fixed.indexOf(w) >= 0) nf++; else nb++; } }
+      else if(on){ if(q.usable.indexOf(w) >= 0) t.classList.add('usable'); else { t.classList.add('filler'); filler++; } }
+    });
+    const ok = nf >= 2 && nb >= 1 && filler === 0; mark(q.id, ok);
+    const fb = el.querySelector('.gd-fb');
+    fb.innerHTML = '<div class="gd-verdict ' + (ok ? 'ok' : 'bad') + '">' + (ok ? '✅ Rất tốt! Bạn có cả keyword cố định lẫn keyword ranh giới.' : '❌ Chưa tối ưu — xem gợi ý bên dưới.') + '</div>' +
+      '<div class="gd-legend"><span class="good">xanh: keyword nên có</span><span class="usable">vàng: dùng được nhưng dễ bị paraphrase / phụ trợ</span><span class="miss">nét đứt: bạn bỏ sót</span><span class="filler">đỏ: từ chức năng, ít giá trị</span></div>' +
+      '<div class="gd-why"><h5>Keyword nên chọn và vì sao</h5>' + good.map(w => '<div class="gd-wi right"><b>' + gesc(w) + ' <em>' + (q.fixed.indexOf(w) >= 0 ? 'cố định' : 'ranh giới') + '</em></b><span>' + fm(q.why[w]) + '</span></div>').join('') +
+      '<div class="gd-wi"><b>Các từ như between, of, the, than</b><span>Từ chức năng xuất hiện khắp nơi, không giúp định vị. Từ như closed, rents, because dùng được, nhưng bài hay viết lại (shut down, rent…).</span></div></div>' +
+      '<button type="button" class="gd-btn alt gd-retry">🔁 Làm lại</button>';
+    fb.hidden = false; refreshProgress();
+  }
+  function refreshProgress(){
+    const h = gdRoot.querySelector('.gd-prog'); if(h) return;
+  }
+
+  gdScr.addEventListener('click', e => {
+    const t = e.target;
+    const opt = t.closest('.gd-opt'); if(opt){ gtap(); answerMc(opt.closest('.gd-quiz'), opt.dataset.k); return; }
+    const tok = t.closest('.gd-tok'); if(tok){ if(!tok.disabled) tok.classList.toggle('sel'); return; }
+    const chk = t.closest('.gd-check'); if(chk){ gtap(); checkKw(chk.closest('.gd-quiz')); return; }
+    const rt = t.closest('.gd-retry'); if(rt){
+      const qz = rt.closest('.gd-quiz'), q = QR[qz.dataset.id], inGroup = !!qz.closest('.gd-group');
+      const tmp = document.createElement('div'); tmp.innerHTML = quizHtml(inGroup ? Object.assign({ title: q.title || '' }, q) : q, { noPassage: inGroup });
+      qz.replaceWith(tmp.firstChild); return; }
+    const ch = t.closest('[data-ch]'); if(ch){ gtap(); chapterView(+ch.dataset.ch); return; }
+    if(t.closest('#gdList')){ gtap(); homeView(); return; }
+    if(t.closest('#gdHome')){ gtap(); gdClose(); setActive(false); if(typeof closeLevelView === 'function') closeLevelView(); return; }
+    if(t.closest('#gdToReading')){ gtap(); gdClose(); if(window.openReading) window.openReading(); return; }
+  });
+
+  // entry from the Reading list
+  const rl = $('rdList'); if(rl) rl.addEventListener('click', e => { if(e.target.closest('#rdGuideList')){ openGuide(); } });
+
 })();
 </script>
 
