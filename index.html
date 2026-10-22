@@ -7548,6 +7548,145 @@ mark.hl{color:inherit;border-radius:3px;animation:rdPop .35s}
 .ac-link-tx{ flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; } .ac-link-tx b{ font-size:15px; color:var(--c-ink-900); } .ac-link-tx small{ font-size:12.5px; color:var(--c-ink-500); }
 .ac-link-go{ font-size:26px; color:var(--c-purple-600); }
 @media (min-width:1024px){ .ac-link{ display:none !important; } }
+
+/* ================= MOBILE POLISH (phones & small tablets) ================= */
+html{ -webkit-tap-highlight-color:transparent; }
+@keyframes scrIn{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:none; } }
+@keyframes tabPop{ 0%{ transform:scale(.8); } 60%{ transform:scale(1.12); } 100%{ transform:scale(1); } }
+.rd-screen:not([hidden]){ animation:scrIn .28s cubic-bezier(.22,1,.36,1) both; }
+.tabbar{ display:none; }
+@media (max-width:1023px){
+  .tabbar{ position:fixed; z-index:320; left:10px; right:10px; bottom:calc(10px + env(safe-area-inset-bottom,0px)); display:grid; grid-template-columns:repeat(5,1fr); gap:2px; padding:6px;
+    background:rgba(255,255,255,.92); -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px); border:1px solid rgba(139,95,199,.18); border-radius:22px;
+    box-shadow:0 14px 30px -12px rgba(58,28,134,.45); }
+  .tb-item{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; min-height:52px; padding:4px 2px; border:0; border-radius:16px; background:transparent; color:#7A6C9C; font-family:inherit; cursor:pointer; touch-action:manipulation; transition:background .18s, color .18s, transform .12s; }
+  .tb-item:active{ transform:scale(.92); }
+  .tb-ico{ font-size:21px; line-height:1; filter:grayscale(.85) opacity(.8); transition:filter .18s; }
+  .tb-lb{ font-size:10.5px; font-weight:700; letter-spacing:.01em; white-space:nowrap; }
+  .tb-item.active{ background:linear-gradient(180deg,#F1EAFF,#E8DDFF); color:#4C2A9E; }
+  .tb-item.active .tb-ico{ filter:none; animation:tabPop .32s ease-out; }
+  .tb-item.active .tb-lb{ font-weight:800; }
+  /* hide while practising / taking a test */
+  body.in-practice .tabbar, body:has(.rd-screen.testing:not([hidden])) .tabbar{ display:none; }
+  .stage{ padding-bottom:calc(150px + env(safe-area-inset-bottom,0px)) !important; }
+  body.in-practice .stage{ padding-bottom:calc(84px + env(safe-area-inset-bottom,0px)) !important; }
+  .rd-screen:not(.testing){ padding-bottom:calc(96px + env(safe-area-inset-bottom,0px)); }
+  body:not(.in-practice) .efb-actions{ bottom:calc(84px + env(safe-area-inset-bottom,0px)) !important; }
+  .efb-actions .efb-sound{ width:44px !important; height:44px !important; padding:0 !important; margin-left:auto; }
+}
+@media (max-width:640px){
+  /* header: slimmer, calmer */
+  .efb-header{ padding-top:10px !important; padding-bottom:10px !important; box-shadow:0 10px 24px -18px rgba(74,45,125,.5) !important; }
+  /* home */
+  .d-top .d-btn{ box-shadow:0 10px 18px -10px rgba(91,51,184,.7); }
+  .sp-home-card, .rd-home-card, .skill-row > button{ border-width:1.5px !important; border-radius:20px !important; box-shadow:0 14px 26px -20px rgba(91,51,184,.55) !important; transition:transform .14s ease, box-shadow .2s ease; }
+  .d-card{ border-radius:20px !important; }
+  .d-stats{ gap:10px; } .d-stats .d-card{ padding:12px !important; }
+  /* shared press feedback (subtle) */
+  .d-btn, .promo-btn, .rd-big, .gd-btn, .gd-chcard, .rd-card, .tp-banner, .menu-card, .sp-home-card, .ac-link, .efb-btn, .mini-btn, .rd-back{ transition:transform .14s ease, box-shadow .2s ease, background .2s ease; }
+  .d-btn:active, .promo-btn:active, .rd-big:active, .gd-btn:active, .gd-chcard:active, .rd-card:active, .tp-banner:active, .menu-card:active, .sp-home-card:active, .ac-link:active, .efb-btn:active, .mini-btn:active, .rd-back:active{ transform:scale(.97); }
+  /* reading list */
+  .rd-card{ border-width:1.5px !important; border-color:#CDBBF0 !important; border-radius:22px !important; padding:16px !important; min-height:0 !important; }
+  .rd-card .rd-go{ min-height:40px; display:inline-flex; align-items:center; padding:0 18px !important; }
+  .rd-grid{ gap:14px !important; }
+  .rd-h1{ font-size:22px !important; }
+  /* section headings */
+  .d-section h2{ font-size:20px !important; }
+  /* achievements & guide */
+  .ac-card, .gd-sec{ border-width:1.5px !important; }
+  .gd-btn, .rd-big{ min-height:48px; }
+}
+@media (max-width:640px){
+  .menu-screen:not(.in-level) .learning-level{ min-height:300px; border-width:0 !important; border-radius:24px; box-shadow:0 18px 32px -20px rgba(40,25,70,.55); }
+  .menu-screen:not(.in-level) .level-header, .menu-screen:not(.in-level) .level-progress-card{ border:1px solid rgba(255,255,255,.75) !important; background:rgba(255,255,255,.78) !important; box-shadow:0 8px 20px -12px rgba(40,25,70,.5) !important; }
+  .menu-screen:not(.in-level) .level-progress-card{ border-radius:16px !important; }
+}
+@media (hover:none){ .rd-card:hover, .efb-btn:hover, .mini-btn:hover, .menu-card:hover{ transform:none !important; } }
+@media (prefers-reduced-motion:reduce){ .rd-screen:not([hidden]), .tb-item.active .tb-ico{ animation:none !important; } }
+
+/* ===== Reading test: phone-first experience ===== */
+.rd-passage p{ font-size:var(--rd-fs,16px) !important; }
+.rd-passage p.rd-hint{ font-size:13.5px !important; line-height:1.55 !important; margin-bottom:14px !important; }
+.rd-ptag{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.rd-fsz{ display:inline-flex; gap:6px; }
+.rd-fsz button{ min-width:40px; min-height:34px; border:1.5px solid var(--rd-line); background:#fff; color:var(--rd-g-dark); border-radius:10px; font:inherit; font-weight:800; font-size:13px; cursor:pointer; touch-action:manipulation; transition:transform .12s, background .15s; }
+.rd-fsz button:active{ transform:scale(.92); background:var(--rd-g-pale); }
+.rd-prog{ height:4px; background:#EFE8FB; overflow:hidden; }
+.rd-prog i{ display:block; height:100%; width:0; background:linear-gradient(90deg,#8A5CF0,#B58CFF); border-radius:0 4px 4px 0; transition:width .35s cubic-bezier(.22,1,.36,1); }
+.rd-test.res .rd-prog, .rd-test.rev .rd-prog{ display:none !important; }
+@media (max-width:899px){
+  .rd-tabs{ gap:6px; }
+  .rd-tabs button{ padding:8px 4px; font-size:13px; white-space:nowrap; transition:background .18s, color .18s, transform .12s; }
+  .rd-tabs button:active{ transform:scale(.96); }
+  .rd-panes[data-show="both"]{ grid-template-rows:minmax(0,1fr) minmax(0,1fr); gap:8px; }
+  .rd-panes[data-show="both"] .rd-pane{ padding:12px 12px 20px; }
+  .rd-panes[data-show="both"] .rd-ptitle, .rd-panes[data-show="both"] .rd-hint{ display:none; }
+  .rd-panes[data-show="both"] .rd-passage{ box-shadow:inset 0 -10px 12px -12px rgba(76,42,158,.35); }
+  .rd-panes[data-show="both"] .rd-questions{ border:2px solid #CDBBF0; }
+  .rd-submit{ white-space:nowrap; }
+}
+
+/* ===== top header: floating rounded bar (no flat top edge) ===== */
+.efb-header{ top:8px !important; margin:0 auto 12px !important; border-radius:22px !important; padding:10px 16px !important; border:1px solid rgba(139,95,199,.16) !important; box-shadow:0 14px 28px -18px rgba(94,60,150,.55), inset 0 1px 0 #fff !important; }
+@media (max-width:640px){ .efb-header{ top:6px !important; border-radius:20px !important; margin-bottom:10px !important; } }
+
+/* ===== Reading list: sections Passage 1 / 2 / 3 ===== */
+.rd-sec{ margin:26px 0 0; }
+.rd-sec-h{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin:0 2px 12px; }
+.rd-sec-h h2{ margin:0; font-size:20px; font-weight:800; display:flex; align-items:center; gap:10px; }
+.rd-sec-h h2::before{ content:""; width:5px; height:22px; border-radius:4px; background:linear-gradient(180deg,#8A5CF0,#B58CFF); }
+.rd-sec-c{ font-size:12px; font-weight:800; padding:4px 11px; border-radius:99px; background:var(--rd-g-pale); color:var(--rd-g-dark); white-space:nowrap; }
+.rd-sec-c.soon{ background:#FFF3C4; color:#7A5A00; }
+.rd-soon{ display:flex; align-items:center; gap:14px; padding:18px; border:2px dashed #CDBBF0; border-radius:20px; background:rgba(255,255,255,.55); color:var(--rd-mute); }
+.rd-soon > span{ width:46px; height:46px; border-radius:14px; background:#F1EAFF; display:grid; place-items:center; font-size:22px; flex:0 0 auto; }
+.rd-soon b{ display:block; color:var(--rd-ink); font-size:15px; } .rd-soon small{ font-size:13px; }
+
+.rd-pn-list{ display:flex; flex-direction:column; gap:12px; margin-top:18px; }
+.rd-pn{ display:flex; align-items:center; gap:14px; width:100%; text-align:left; padding:16px 18px; border:1.5px solid #CDBBF0; border-radius:22px; background:#fff; font-family:inherit; color:var(--rd-ink); cursor:pointer; box-shadow:0 14px 26px -20px rgba(91,51,184,.55); transition:transform .14s ease, box-shadow .2s ease; touch-action:manipulation; }
+.rd-pn:active{ transform:scale(.98); }
+.rd-pn-n{ flex:0 0 auto; width:52px; height:52px; border-radius:16px; background:linear-gradient(135deg,#8A5CF0,#6A3FD0); color:#fff; display:grid; place-items:center; font-size:24px; font-weight:800; box-shadow:0 10px 18px -10px rgba(76,42,158,.8); }
+.rd-pn-b{ flex:1; min-width:0; display:flex; flex-direction:column; gap:3px; }
+.rd-pn-b b{ font-size:18px; } .rd-pn-b small{ font-size:13px; color:var(--rd-mute); font-weight:600; }
+.rd-pn-bar{ display:block; height:6px; border-radius:99px; background:#EFE8FB; overflow:hidden; margin-top:6px; }
+.rd-pn-bar i{ display:block; height:100%; border-radius:99px; background:linear-gradient(90deg,#2FB67C,#6FD3A6); }
+.rd-pn-go{ font-size:28px; color:var(--rd-g); }
+.rd-pn.soon{ border-style:dashed; background:rgba(255,255,255,.55); box-shadow:none; cursor:default; }
+.rd-pn.soon .rd-pn-n{ background:#E6DDF7; color:#8C7DB3; box-shadow:none; }
+.rd-sec-top{ display:flex; align-items:center; gap:10px; margin:6px 0 16px; flex-wrap:wrap; }
+.rd-sec-t{ margin:0; font-size:22px; font-weight:800; }
+.rd-sec-top .rd-sec-c{ margin-left:auto; }
+
+.rd-rows{ display:flex; flex-direction:column; gap:10px; }
+.rd-row{ display:flex; align-items:center; gap:12px; width:100%; text-align:left; padding:12px 14px; border:1.5px solid #D9CCF3; border-radius:18px; background:#fff; font-family:inherit; color:var(--rd-ink); cursor:pointer; box-shadow:0 10px 20px -18px rgba(91,51,184,.6); transition:transform .14s ease, border-color .2s; touch-action:manipulation; animation:rdUp .4s cubic-bezier(.22,1,.36,1) both; animation-delay:calc(var(--i,0)*40ms); }
+.rd-row:active{ transform:scale(.98); border-color:var(--rd-g); }
+.rd-row-e{ flex:0 0 auto; width:48px; height:48px; border-radius:14px; background:var(--rd-g-pale); display:grid; place-items:center; font-size:24px; }
+.rd-row-b{ flex:1; min-width:0; display:flex; flex-direction:column; gap:1px; }
+.rd-row-b b{ font-size:15.5px; line-height:1.3; }
+.rd-row-b small{ font-size:12px; color:var(--rd-mute); font-weight:600; }
+.rd-row-b em{ font-style:normal; font-size:11.5px; font-weight:700; color:var(--rd-g-dark); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.rd-row-r{ flex:0 0 auto; display:flex; flex-direction:column; align-items:flex-end; gap:4px; }
+.rd-row-r small{ font-size:11.5px; font-weight:700; color:var(--rd-mute); }
+.rd-pill.done{ background:#DDF5EA; color:#1E8A5C; } .rd-pill.doing{ background:#FFF3C4; color:#7A5A00; }
+@media (min-width:700px){ .rd-rows{ display:grid; grid-template-columns:repeat(2,1fr); } }
+
+.rd-timer::before{ content:"⏳ "; }
+.rd-timer.warn{ background:#FFF3C4; color:#7A5A00; }
+.rd-timer.danger{ background:#FBE9EE; color:#B93851; animation:timerPulse 1s ease-in-out infinite; }
+@keyframes timerPulse{ 50%{ transform:scale(1.07); } }
+.rd-toast{ position:fixed; z-index:500; left:50%; bottom:calc(90px + env(safe-area-inset-bottom,0px)); transform:translate(-50%,16px); max-width:calc(100vw - 32px); padding:12px 18px; border-radius:16px; background:#2A2140; color:#fff; font-weight:700; font-size:14px; box-shadow:0 16px 30px -12px rgba(20,8,60,.6); opacity:0; pointer-events:none; transition:opacity .25s, transform .25s; text-align:center; }
+.rd-toast.show{ opacity:1; transform:translate(-50%,0); }
+@media (prefers-reduced-motion:reduce){ .rd-timer.danger{ animation:none; } }
+
+/* ===== video card ===== */
+.vd-card{ background:#fff; border:1.5px solid var(--rd-line); border-radius:20px; padding:12px; margin:0 0 16px; box-shadow:0 14px 26px -22px rgba(91,51,184,.6); }
+.vd-head{ display:flex; align-items:center; gap:8px; margin:2px 4px 10px; font-size:15px; }
+.vd-frame{ position:relative; aspect-ratio:16/9; border-radius:14px; overflow:hidden; background:#2A2140; }
+.vd-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+.vd-play{ position:absolute; inset:0; width:100%; height:100%; border:0; padding:0; cursor:pointer; background-size:cover; background-position:center; background-color:#3A2A66; display:grid; place-items:center; touch-action:manipulation; }
+.vd-play::after{ content:""; position:absolute; inset:0; background:linear-gradient(180deg,rgba(20,8,60,.05),rgba(20,8,60,.4)); }
+.vd-btn{ position:relative; z-index:1; width:64px; height:64px; border-radius:50%; background:rgba(255,255,255,.95); color:#6A3FD0; display:grid; place-items:center; box-shadow:0 12px 24px -8px rgba(20,8,60,.6); transition:transform .15s; padding-left:4px; box-sizing:border-box; }
+.vd-play:active .vd-btn{ transform:scale(.92); }
+.vd-link{ display:inline-block; margin:10px 4px 2px; font-size:13px; font-weight:800; color:var(--rd-g-dark); text-decoration:none; }
 </style>
 </head>
 <body>
@@ -7675,7 +7814,7 @@ mark.hl{color:inherit;border-radius:3px;animation:rdPop .35s}
       </button>
       <button type="button" class="rd-home-card" id="rdHomeCard">
         <span class="rd-hc-ico">📖</span>
-        <span><b>Luyện Reading</b><span class="rd-hc-sub">4 passage · 13–14 câu mỗi bài · chấm điểm ngay</span></span>
+        <span><b>Luyện Reading</b><span class="rd-hc-sub">Passage 1 · 8 bài · 13–14 câu mỗi bài · chấm điểm ngay</span></span>
         <span class="rd-hc-go">Làm bài →</span>
       </button>
     </div>
@@ -8180,6 +8319,14 @@ mark.hl{color:inherit;border-radius:3px;animation:rdPop .35s}
 </div>
 
 <div class="rd-screen gd-screen" id="gdScreen" hidden><div id="gdRoot"></div></div>
+
+<nav class="tabbar" id="tabbar" aria-label="Điều hướng nhanh">
+  <button type="button" class="tb-item active" data-nav="home"><span class="tb-ico">🏠</span><span class="tb-lb">Trang chủ</span></button>
+  <button type="button" class="tb-item" data-nav="speaking"><span class="tb-ico">🎙️</span><span class="tb-lb">Speaking</span></button>
+  <button type="button" class="tb-item" data-nav="reading"><span class="tb-ico">📖</span><span class="tb-lb">Reading</span></button>
+  <button type="button" class="tb-item" data-nav="guide"><span class="tb-ico">🧭</span><span class="tb-lb">Hướng dẫn</span></button>
+  <button type="button" class="tb-item" data-nav="achievements"><span class="tb-ico">🏆</span><span class="tb-lb">Thành tích</span></button>
+</nav>
 
 <script>
 const DIALOGUE_SETS = [
@@ -13125,7 +13272,7 @@ peRenderDashboard();
   const fmt = sec => String(Math.floor(sec/60)).padStart(2,'0') + ':' + String(sec%60).padStart(2,'0');
 
   /* ---------- list ---------- */
-  const pnOf = t => (t && t.pn) || 1;
+  const pnOf = t => 1;   // all current passages live in the "Passage 1" section; Passage 2 & 3 are coming later
   const wordLimit = ins => { const m = /(ONE|TWO|THREE)\s+WORDS?/i.exec(ins || ''); return m ? { ONE:1, TWO:2, THREE:3 }[m[1].toUpperCase()] : 0; };
   function gMeta(g){
     const lim = wordLimit(g.instr), lt = lim ? ' Write NO MORE THAN '+({1:'ONE WORD',2:'TWO WORDS',3:'THREE WORDS'}[lim])+' for each answer.' : '';
@@ -13155,25 +13302,41 @@ peRenderDashboard();
   function renderList(){
     listEl.innerHTML =
       '<div class="rd-head"><button type="button" class="rd-back" id="rdHome">← Trang chủ</button><h1 class="rd-h1">📖 Reading</h1><button type="button" class="rd-exit vb-open" id="rdVocBtn" aria-label="Mở sổ từ vựng" style="margin-left:auto">📒 Sổ từ vựng<span class="vb-n" data-vbn hidden></span></button></div>' +
-      '<p class="rd-sub">Chọn một passage để luyện đọc hiểu. Bài được lưu tự động nên bạn có thể thoát và làm tiếp sau.</p>' +
+      (secPn ? '' : '<p class="rd-sub">Chọn một passage để luyện đọc hiểu. Bài được lưu tự động nên bạn có thể thoát và làm tiếp sau.</p>' +
       '<button type="button" class="tp-banner" id="rdTipList"><span class="tp-ban-ico">💡</span><span class="tp-ban-tx"><b>Hướng dẫn &amp; mẹo làm bài</b><small>Làm Reading nhanh và chắc hơn với quy trình và mẹo từng dạng câu.</small><span class="tp-ban-tags"><em>⏱ 20 phút/bài</em><em>🧩 5 dạng câu</em><em>✅ Có ví dụ</em></span></span><span class="tp-ban-go"><span class="tp-ring" style="--p:'+Math.round(Object.keys(TIPS).filter(tipSeen).length / Object.keys(TIPS).length * 100)+'"><b>'+Object.keys(TIPS).filter(tipSeen).length+'/'+Object.keys(TIPS).length+'</b></span><small>đã xem</small></span></button>' +
-      '<button type="button" class="tp-banner gd-banner" id="rdGuideList"><span class="tp-ban-ico">🧭</span><span class="tp-ban-tx"><b>Hướng dẫn Reversed Reading</b><small>Chiến thuật từng dạng câu, ví dụ &amp; bài tập tương tác</small></span><i>›</i></button>' +
-      '<div class="rd-grid">' + DATA.map((t,i)=>{
-        const s = statusOf(t);
-        return '<button type="button" class="rd-card" style="--i:'+i+'" data-open="'+i+'">' +
-          '<div class="rd-card-top"><div class="rd-emoji">'+t.emoji+'</div><span class="rd-pill">'+s.pill+'</span></div>' +
-          '<div class="rd-tag">Passage '+pnOf(t)+' · '+esc(t.tag)+'</div>' +
-          '<h3>'+esc(t.title)+'</h3>' +
-          '<ul class="rd-qtypes">'+qtypeRows(t).map(r => '<li><span class="rd-qr">'+rngOf(r)+'</span><span class="rd-qb"><b>'+esc(r.m.label)+'</b><small>'+esc(r.m.desc)+'</small></span></li>').join('')+'</ul>' +
-          '<div class="rd-meta"><span>'+s.meta+'</span><span class="rd-go">Làm bài</span></div></button>';
-      }).join('') + '</div>';
+      '<button type="button" class="tp-banner gd-banner" id="rdGuideList"><span class="tp-ban-ico">🧭</span><span class="tp-ban-tx"><b>Hướng dẫn Reversed Reading</b><small>Chiến thuật từng dạng câu, ví dụ &amp; bài tập tương tác</small></span><i>›</i></button>') +
+      (secPn ? sectionView(secPn) : overview());
+  }
+  let secPn = 0;   // 0 = overview (Passage 1/2/3), n = list of passages inside section n
+  const rdCardHtml = ({ t, i }) => {
+    const s = statusOf(t), kinds = qtypeRows(t).map(r => r.m.label).filter((x, n, arr) => arr.indexOf(x) === n).join(' · ');
+    const tone = s.pill === 'Đã làm' ? 'done' : s.pill === 'Đang làm dở' ? 'doing' : '';
+    return '<button type="button" class="rd-row" style="--i:'+i+'" data-open="'+i+'">' +
+      '<span class="rd-row-e">'+t.emoji+'</span>' +
+      '<span class="rd-row-b"><b>'+esc(t.title)+'</b><small>'+esc(t.tag)+'</small><em>'+esc(kinds)+'</em></span>' +
+      '<span class="rd-row-r"><span class="rd-pill '+tone+'">'+s.pill+'</span><small>'+(s.pill === 'Đã làm' ? esc(s.meta.replace('Điểm cao nhất ', 'Cao nhất ')) : t.total + ' câu')+'</small></span></button>';
+  };
+  const itemsOf = pn => DATA.map((t,i) => ({ t, i })).filter(x => pnOf(x.t) === pn);
+  function overview(){
+    return '<div class="rd-pn-list">' + [1,2,3].map(pn => {
+      const items = itemsOf(pn), done = items.filter(x => statusOf(x.t).pill === 'Đã làm').length;
+      const pct = items.length ? Math.round(done / items.length * 100) : 0;
+      if(!items.length) return '<div class="rd-pn soon"><span class="rd-pn-n">'+pn+'</span><span class="rd-pn-b"><b>Passage '+pn+'</b><small>Đang cập nhật — sẽ sớm có mặt</small></span><span class="rd-sec-c soon">Sắp ra mắt</span></div>';
+      return '<button type="button" class="rd-pn" data-pn="'+pn+'"><span class="rd-pn-n">'+pn+'</span><span class="rd-pn-b"><b>Passage '+pn+'</b><small>'+items.length+' bài · '+done+' đã làm</small><span class="rd-pn-bar"><i style="width:'+pct+'%"></i></span></span><span class="rd-pn-go" aria-hidden="true">›</span></button>';
+    }).join('') + '</div>';
+  }
+  function sectionView(pn){
+    const items = itemsOf(pn);
+    return '<div class="rd-sec-top"><button type="button" class="rd-back" id="rdSecBack">← Các passage</button><h2 class="rd-sec-t">Passage '+pn+'</h2><span class="rd-sec-c">'+items.length+' bài</span></div>' +
+      '<div class="rd-rows">' + items.map(rdCardHtml).join('') + '</div>';
   }
 
   function setActiveSidebar(on){
     document.querySelectorAll('.sb-item').forEach(b => b.classList.toggle('active', on && b.dataset.nav === 'reading'));
   }
-  function openReading(){
+  function openReading(keep){
     tap();
+    if(!keep) secPn = 0;
     stopTimer();
     renderList();
     testEl.hidden = true; listEl.hidden = false;
@@ -13181,7 +13344,7 @@ peRenderDashboard();
     setActiveSidebar(true);
   }
   function rdClose(){
-    if(cur && !submitted) saveDraft();
+    if(cur && !submitted){ if(hasAnswers()) submit(true); else { delete store.drafts[cur.id]; persist(); } }
     stopTimer();
     scr.hidden = true; scr.classList.remove('testing');
     cur = null;
@@ -13235,9 +13398,10 @@ peRenderDashboard();
     testEl.innerHTML =
       '<div class="rd-bar"><button type="button" class="rd-exit" id="rdExit">← Thoát</button>' +
         '<div class="rd-bar-title">Reading · Passage '+pnOf(cur)+' — '+esc(cur.title)+'</div><button type="button" class="rd-exit tp-btn" id="rdTipBtn" aria-label="Mẹo làm bài">💡 <span class="vb-t">Mẹo</span></button><button type="button" class="rd-exit vb-open" id="rdVocBtn" aria-label="Mở sổ từ vựng">📒 <span class="vb-t">Sổ từ</span><span class="vb-n" data-vbn hidden></span></button><div class="rd-timer" id="rdTimer">00:00</div></div>' +
-      '<div class="rd-tabs" id="rdTabs"><button type="button" class="on" data-p="read">📄 Bài đọc</button><button type="button" data-p="q">✍️ Câu hỏi</button></div>' +
+      '<div class="rd-tabs" id="rdTabs"><button type="button" class="on" data-p="read">📄 Bài đọc</button><button type="button" data-p="q">✍️ Câu hỏi</button><button type="button" data-p="both" aria-label="Xem song song bài đọc và câu hỏi">⬍ Song song</button></div>' +
+      '<div class="rd-prog" id="rdProg" aria-hidden="true"><i></i></div>' +
       '<div class="rd-panes" id="rdPanes" data-show="read">' +
-        '<section class="rd-pane rd-passage" id="rdPassage"><div class="rd-ptag">Reading Passage '+pnOf(cur)+'</div><h2 class="rd-ptitle">'+esc(cur.title)+'</h2>'+(cur.sub ? '<p class="rd-psub">'+esc(cur.sub)+'</p>' : '')+'<p class="rd-hint">💡 Chạm vào một từ để tra nghĩa · bôi đen đoạn văn để highlight</p>'+paras+'</section>' +
+        '<section class="rd-pane rd-passage" id="rdPassage"><div class="rd-ptag"><span>Reading Passage '+pnOf(cur)+'</span><span class="rd-fsz" role="group" aria-label="Cỡ chữ"><button type="button" data-fs="-1" aria-label="Giảm cỡ chữ">A−</button><button type="button" data-fs="1" aria-label="Tăng cỡ chữ">A+</button></span></div><h2 class="rd-ptitle">'+esc(cur.title)+'</h2>'+(cur.sub ? '<p class="rd-psub">'+esc(cur.sub)+'</p>' : '')+'<p class="rd-hint">💡 Chạm vào một từ để tra nghĩa · bôi đen đoạn văn để highlight</p>'+paras+'</section>' +
         '<section class="rd-pane rd-questions" id="rdQs"><div id="rdResult"></div>' + cur.groups.map((g,gi) => '<div class="rd-grp" data-g="'+gi+'">'+groupHtml(g)+'<div class="rd-exp-slot"></div></div>').join('') + '</section>' +
       '</div>' +
       '<div class="rd-foot"><div class="rd-chips" id="rdChips">'+chips+'</div><button type="button" class="rd-submit" id="rdSubmit">Nộp bài</button></div>';
@@ -13248,13 +13412,40 @@ peRenderDashboard();
     updVocBadge();
     listEl.hidden = true; testEl.hidden = false; scr.classList.add('testing'); scr.hidden = false; scr.scrollTop = 0;
     testEl.classList.remove('res','review','rev');
+    paneScroll.read = 0; paneScroll.q = 0; applyFs();
+    try{ if(localStorage.getItem('efb_rd_view') === 'both') setTab('both'); }catch(_){}
     startTimer();
   }
 
   /* ---------- timer / draft ---------- */
-  function startTimer(){
+  const LIMIT = 20 * 60;   // 20 minutes per passage
+  function hasAnswers(){ if(!cur) return false; for(let n = 1; n <= cur.total; n++) if(isAnswered(n)) return true; return false; }
+  function rdToast(msg){
+    let t = document.getElementById('rdToast');
+    if(!t){ t = document.createElement('div'); t.id = 'rdToast'; t.className = 'rd-toast'; t.setAttribute('role','status'); document.body.appendChild(t); }
+    t.textContent = msg; t.classList.remove('show'); void t.offsetWidth; t.classList.add('show');
+    clearTimeout(rdToast._t); rdToast._t = setTimeout(()=> t.classList.remove('show'), 3600);
+  }
+  function timeUp(){
     stopTimer();
-    const tick = ()=>{ const el = $('rdTimer'); if(el && !submitted) el.textContent = fmt(Math.floor((Date.now() - t0)/1000)); };
+    const ask = $('rdAsk'); if(ask) ask.remove();
+    const ex = $('rdExitAsk'); if(ex) ex.remove();
+    submit(true);
+    rdToast('⏰ Hết giờ! Bài đã được nộp tự động.');
+  }
+  function startTimer(){
+    stopTimer(); let n = 0;
+    const tick = ()=>{
+      if(submitted || !cur) return;
+      const used = Math.floor((Date.now() - t0)/1000), left = LIMIT - used, el = $('rdTimer');
+      if(el){
+        el.textContent = fmt(Math.max(0, left));
+        el.classList.toggle('warn', left <= 300 && left > 60);
+        el.classList.toggle('danger', left <= 60);
+      }
+      if(left <= 0){ timeUp(); return; }
+      if(++n % 5 === 0 && hasAnswers()) saveDraft();   // keep the elapsed time safe if the page is closed
+    };
     tick(); timerId = setInterval(tick, 1000);
   }
   function stopTimer(){ if(timerId){ clearInterval(timerId); timerId = null; } }
@@ -13300,6 +13491,7 @@ peRenderDashboard();
       c.classList.toggle('ok', !!m && m[n] === true);
       c.classList.toggle('bad', !!m && m[n] === false);
     });
+    updateProgress();
   }
   function syncOpts(){
     testEl.querySelectorAll('.rd-opt').forEach(l => l.classList.toggle('sel', l.querySelector('input').checked));
@@ -13414,7 +13606,7 @@ peRenderDashboard();
     if(chip){
       const n = chip.dataset.n;
       const panes = $('rdPanes');
-      if(panes && matchMedia('(max-width:899px)').matches) setTab('q');
+      if(panes && matchMedia('(max-width:899px)').matches && panes.dataset.show === 'read') setTab('q');
       const row = testEl.querySelector('[data-qrow~="'+n+'"]');
       if(row){
         setTimeout(()=>{
@@ -13426,7 +13618,7 @@ peRenderDashboard();
       return;
     }
     const tab = e.target.closest('#rdTabs button'); if(tab){ setTab(tab.dataset.p); return; }
-    if(e.target.closest('#rdExit')){ tap(); if(!submitted) saveDraft(); stopTimer(); cur = null; openReading(); return; }
+    if(e.target.closest('#rdExit')){ tap(); leaveTest(); return; }
     if(e.target.closest('#rdSubmit')){ if(submitted) showResult(); else submit(false); return; }
     if(e.target.closest('#rdReview')){ tap(); showReview(); return; }
     const rsc = e.target.closest('.rs-cell'); if(rsc){ tap(); const q = +rsc.dataset.n; showReview(); rvShow(q); return; }
@@ -13438,20 +13630,68 @@ peRenderDashboard();
     if(e.target.closest('#rvClose')){ tap(); showResult(); return; }
     if(e.target.closest('#rdBackRes')){ tap(); showResult(); return; }
     if(e.target.closest('#rdRetry')){ tap(); openTest(curIdx, true); return; }
-    if(e.target.closest('#rdToList')){ tap(); cur = null; openReading(); return; }
+    if(e.target.closest('#rdToList')){ tap(); cur = null; openReading(true); return; }
   });
+  const paneScroll = { read:0, q:0 };
   function setTab(p){
     const panes = $('rdPanes'); if(!panes) return;
+    const ps = $('rdPassage'), qs = $('rdQs'), was = panes.dataset.show;
+    if(ps && was !== 'q') paneScroll.read = ps.scrollTop;
+    if(qs && was !== 'read') paneScroll.q = qs.scrollTop;
     panes.dataset.show = p;
     testEl.querySelectorAll('#rdTabs button').forEach(b => b.classList.toggle('on', b.dataset.p === p));
+    try{ localStorage.setItem('efb_rd_view', p); }catch(_){}
+    const back = () => {
+      if(ps && p !== 'q') ps.scrollTo({ top:paneScroll.read, behavior:'instant' });
+      if(qs && p !== 'read') qs.scrollTo({ top:paneScroll.q, behavior:'instant' });
+    };
+    back(); requestAnimationFrame(back);
+  }
+  /* passage font size (saved on this device) */
+  const FS_MIN = 14, FS_MAX = 22;
+  function applyFs(){ let v = 16; try{ v = +localStorage.getItem('efb_rd_fs') || 16; }catch(_){} v = Math.max(FS_MIN, Math.min(FS_MAX, v)); testEl.style.setProperty('--rd-fs', v + 'px'); return v; }
+  testEl.addEventListener('click', e => {
+    const f = e.target.closest('.rd-fsz button'); if(!f) return;
+    let v = applyFs() + (+f.dataset.fs) * 1; v = Math.max(FS_MIN, Math.min(FS_MAX, v));
+    try{ localStorage.setItem('efb_rd_fs', String(v)); }catch(_){}
+    applyFs(); tap();
+  });
+  function updateProgress(){
+    if(!cur || submitted) return;
+    let n = 0; for(let i = 1; i <= cur.total; i++) if(isAnswered(i)) n++;
+    const bar = $('rdProg'); if(bar) bar.firstElementChild.style.width = (n / cur.total * 100) + '%';
+    const sb = $('rdSubmit'); if(sb) sb.textContent = 'Nộp bài · ' + n + '/' + cur.total;
   }
 
   listEl.addEventListener('click', e => {
     if(e.target.closest('#rdHome')){ tap(); rdClose(); if(typeof closeLevelView === 'function') closeLevelView(); return; }
+    const pnb = e.target.closest('[data-pn]'); if(pnb){ tap(); secPn = +pnb.dataset.pn; renderList(); scr.scrollTop = 0; return; }
+    if(e.target.closest('#rdSecBack')){ tap(); secPn = 0; renderList(); scr.scrollTop = 0; return; }
     const c = e.target.closest('[data-open]'); if(c){ tap(); openTest(+c.dataset.open, false); }
   });
 
   /* ---------- submit & marking ---------- */
+  /* leaving mid-test counts as handing the paper in (if at least one answer was given) */
+  function leaveTest(){
+    if(submitted){ stopTimer(); cur = null; openReading(true); return; }
+    if(!hasAnswers()){ stopTimer(); delete store.drafts[cur.id]; persist(); cur = null; openReading(true); return; }
+    let n = 0; for(let i = 1; i <= cur.total; i++) if(isAnswered(i)) n++;
+    let el = $('rdExitAsk'); if(el) el.remove();
+    el = document.createElement('div'); el.id = 'rdExitAsk'; el.className = 'rd-voc';
+    el.innerHTML = '<div class="vc-box rd-ask" role="dialog" aria-modal="true"><div class="ask-ico">🚪</div><h3>Thoát và nộp bài?</h3>' +
+      '<p>Bạn đã trả lời <b>'+n+'/'+cur.total+'</b> câu. Thoát lúc này sẽ <b>tính là nộp bài</b>, những câu bỏ trống không được tính điểm.</p>' +
+      '<div class="ask-btns"><button type="button" class="rd-big alt" data-k="back">Làm tiếp</button><button type="button" class="rd-big" data-k="go">Nộp &amp; thoát</button></div></div>';
+    el.addEventListener('click', ev => {
+      const b = ev.target.closest('button');
+      if(ev.target === el || (b && b.dataset.k === 'back')){ el.remove(); return; }
+      if(b && b.dataset.k === 'go'){
+        el.remove(); submit(true);
+        const r = lastRes; cur = null; openReading(true);
+        if(r) rdToast('✅ Đã nộp bài: ' + r.score + '/' + r.total + ' câu đúng.');
+      }
+    });
+    scr.appendChild(el);
+  }
   function askSubmit(list){
     let el = $('rdAsk'); if(el) el.remove();
     el = document.createElement('div'); el.id = 'rdAsk'; el.className = 'rd-voc';
@@ -13473,7 +13713,7 @@ peRenderDashboard();
     const blank = left.length;
     if(blank && !force){ askSubmit(left); return; }
     submitted = true; stopTimer();
-    const secs = Math.floor((Date.now() - t0)/1000);
+    const secs = Math.min(LIMIT, Math.floor((Date.now() - t0)/1000));
     const m = marks(); let score = 0; for(const n in m) if(m[n]) score++;
     // visual marking
     testEl.querySelectorAll('select,input[type=text],input[type=radio]').forEach(el => { el.disabled = true; });
@@ -14462,11 +14702,17 @@ peRenderDashboard();
   /* ---------- views ---------- */
   let gv = { ch:-1 };
   function setActive(on){ document.querySelectorAll('.sb-item').forEach(b => b.classList.toggle('active', on && b.dataset.nav === 'guide')); }
+  const GUIDE_VIDEO = 'XDblta4m-Q8';   // YouTube video id shown at the top of the guide
+  function videoHtml(){
+    return '<div class="vd-card"><div class="vd-head"><span>🎬</span><b>Video hướng dẫn</b></div>' +
+      '<div class="vd-frame"><button type="button" class="vd-play" data-vid="' + GUIDE_VIDEO + '" aria-label="Phát video hướng dẫn" style="background-image:url(https://i.ytimg.com/vi/' + GUIDE_VIDEO + '/hqdefault.jpg)"><span class="vd-btn" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></span></button></div>' +
+      '<a class="vd-link" href="https://youtu.be/' + GUIDE_VIDEO + '" target="_blank" rel="noopener">Mở trên YouTube ↗</a></div>';
+  }
   function homeView(){
     const pct = Math.round(doneCount(Object.keys(QR)) / TOTAL_Q * 100);
     gdRoot.innerHTML = '<div class="gd-wrap"><div class="rd-head"><button type="button" class="rd-back" id="gdHome">← Trang chủ</button><h1 class="rd-h1">🧭 Hướng dẫn làm Reading</h1></div>' +
       '<p class="rd-sub">Đọc ngược (Reversed Reading) và cách xử lý từng dạng câu hỏi, kèm bài tập tương tác.</p>' +
-      '<div class="gd-prog"><div><b>Bài tập đã làm</b><span>' + doneCount(Object.keys(QR)) + ' / ' + TOTAL_Q + '</span></div><div class="gd-bar"><i style="width:' + pct + '%"></i></div></div>' +
+      videoHtml() + '<div class="gd-prog"><div><b>Bài tập đã làm</b><span>' + doneCount(Object.keys(QR)) + ' / ' + TOTAL_Q + '</span></div><div class="gd-bar"><i style="width:' + pct + '%"></i></div></div>' +
       '<div class="gd-grid">' + CHAPTERS.map((c, i) => {
         const dn = doneCount(c.quizIds);
         return '<button type="button" class="gd-chcard" data-ch="' + i + '"><span class="gd-chn">' + (i + 1) + '</span><span class="gd-chb"><b>' + c.icon + ' ' + gesc(c.title) + '</b><small>' + gesc(c.sub) + '</small>' +
@@ -14557,6 +14803,10 @@ peRenderDashboard();
 
   gdScr.addEventListener('click', e => {
     const t = e.target;
+    const vp = t.closest('.vd-play'); if(vp){
+      gtap(); const fr = vp.parentElement;
+      fr.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + vp.dataset.vid + '?autoplay=1&rel=0&playsinline=1" title="Video hướng dẫn" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>';
+      return; }
     const tg = t.closest('.gd-toggle'); if(tg){
       const open = tg.dataset.open === '1';
       gdRoot.querySelectorAll('.gd-sec').forEach(d => d.open = open);
@@ -14578,6 +14828,18 @@ peRenderDashboard();
   // entry from the Reading list
   const rl = $('rdList'); if(rl) rl.addEventListener('click', e => { if(e.target.closest('#rdGuideList')){ openGuide(); } });
 
+})();
+
+/* ---- mobile tab bar: reuse the sidebar handlers, mirror the active state ---- */
+(function(){
+  const tabs = Array.from(document.querySelectorAll('.tb-item')), side = Array.from(document.querySelectorAll('.sb-item'));
+  tabs.forEach(t => t.addEventListener('click', () => {
+    const src = side.find(b => b.dataset.nav === t.dataset.nav);
+    if(src) src.click();
+  }));
+  const sync = () => { const on = side.find(b => b.classList.contains('active')); tabs.forEach(t => t.classList.toggle('active', !!on && t.dataset.nav === on.dataset.nav)); };
+  side.forEach(b => new MutationObserver(sync).observe(b, { attributes:true, attributeFilter:['class'] }));
+  sync();
 })();
 </script>
 
