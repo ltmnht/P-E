@@ -15382,14 +15382,38 @@ function slAnalyze(text, ctx){
 
   /* ---------- media ---------- */
   function stopSR(){ listening = false; if(SRobj){ try{ SRobj.onend = null; SRobj.stop(); }catch(e){} SRobj = null; } }
+  /* chống lặp từ của Web Speech API (Android hay trả kết quả cộng dồn / trùng) */
+  const wnorm = w => w.toLowerCase().replace(/[^a-z0-9']/g, '');
+  function collapsePieces(ps){
+    const out = [];
+    ps.forEach(t => {
+      const last = out.length ? out[out.length - 1] : '';
+      const tl = t.toLowerCase(), ll = last.toLowerCase();
+      if(!last) out.push(t);
+      else if(tl.startsWith(ll) || tl.includes(ll) && tl.length > ll.length) out[out.length - 1] = t;   // kết quả sau chứa kết quả trước (cộng dồn)
+      else if(ll.endsWith(tl) || ll.includes(tl)) { /* trùng, bỏ */ }
+      else out.push(dropOverlap(last, t));
+    });
+    return out.filter(Boolean).join(' ');
+  }
+  function dropOverlap(prev, t){
+    const pw = prev.split(/\s+/), tw = t.split(/\s+/);
+    for(let k = Math.min(pw.length, tw.length); k >= 1; k--){
+      let same = true;
+      for(let j = 0; j < k; j++){ if(wnorm(pw[pw.length - k + j]) !== wnorm(tw[j])){ same = false; break; } }
+      if(same && (k >= 2 || tw.length === 1)) return tw.slice(k).join(' ');
+    }
+    return t;
+  }
+  function joinSpeech(base, add){ if(!base) return add; if(!add) return base; return (base + ' ' + dropOverlap(base, add)).replace(/\s+/g,' ').trim(); }
   function startSR(item, ans, setMsg){
     if(!SR){ setMsg('Trình duyệt chưa hỗ trợ nhận diện giọng nói — bạn có thể tự gõ câu trả lời.'); return; }
     let base = ans.value.trim();
-    const r = new SR(); r.lang = store.opts.lang; r.continuous = true; r.interimResults = true; r.maxAlternatives = 1;
+    const r = new SR(); r.lang = store.opts.lang; r.continuous = !isAndroid; r.interimResults = true; r.maxAlternatives = 1;
     r.onresult = e => {
-      let fin = '', itm = '';
-      for(let i = 0; i < e.results.length; i++){ const t = e.results[i][0].transcript; if(e.results[i].isFinal) fin += t + ' '; else itm += t; }
-      const out = ((base ? base + ' ' : '') + fin + itm).replace(/\s+/g,' ').trim();
+      const pieces = [];
+      for(let i = 0; i < e.results.length; i++){ const t = (e.results[i][0].transcript || '').replace(/\s+/g,' ').trim(); if(t) pieces.push(t); }
+      const out = joinSpeech(base, collapsePieces(pieces));
       ans.value = out; item.text = out; item.src = item.src === 'voice' ? 'voice' : (base ? 'mixed' : 'voice'); ans.scrollTop = ans.scrollHeight; wc();
     };
     r.onerror = e => {
@@ -15632,14 +15656,19 @@ function slAnalyze(text, ctx){
       if(btn){ btn.textContent = '🎤 Nói tiếp'; btn.classList.remove('rec'); }
       setMsg('Đã dừng. Bạn có thể sửa lại nội dung rồi bấm “Phân tích”.'); const tl = $('slTLab'); if(tl) tl.textContent = 'Đã nói'; return;
     }
-    it._t0 = Date.now(); const remain = Math.max(1, S.lim.talk - it.secs);
-    if(btn){ btn.textContent = '⏹ Dừng'; btn.classList.add('rec'); }
-    const tl = $('slTLab'); if(tl) tl.textContent = 'Thời gian còn lại';
     startRec(it, setMsg);
     startSR(it, ans, setMsg);
     if(!SR) setMsg('Đồng hồ đang chạy — hãy nói rồi tự gõ lại ý chính (trình duyệt không hỗ trợ nhận diện).');
+    runTimer(it, true);
+  }
+  // đồng hồ nói: chạy khi bấm mic HOẶC ngay khi bắt đầu gõ
+  function runTimer(it, withMic){
+    const btn = $('slMic'), ans = $('slAns');
+    it._t0 = Date.now(); const remain = Math.max(1, S.lim.talk - it.secs);
+    if(btn){ btn.textContent = withMic ? '⏹ Dừng' : '⏸ Tạm dừng'; btn.classList.toggle('rec', !!withMic); }
+    const tl = $('slTLab'); if(tl) tl.textContent = 'Thời gian còn lại';
     tStart(remain, (l, tot) => { const t = $('slTime'), b = $('slBar'); if(t) t.textContent = fmt(l); if(b) b.style.width = Math.max(0, l / tot * 100) + '%'; if(b) b.classList.toggle('low', l < 10); },
-      () => { beep(); const spent = (Date.now() - it._t0) / 1000; it.secs += spent; it._t0 = 0; stopAll(); it.text = ans.value; if(btn){ btn.textContent = '🎤 Nói tiếp'; btn.classList.remove('rec'); } setMsg('⏰ Hết thời gian nói. Bấm “Phân tích” để xem nhận xét.'); const tl = $('slTLab'); if(tl) tl.textContent = 'Hết giờ'; });
+      () => { beep(); const spent = (Date.now() - it._t0) / 1000; it.secs += spent; it._t0 = 0; stopAll(); if(ans) it.text = ans.value; const bt = $('slMic'); if(bt){ bt.textContent = '🎤 Nói tiếp'; bt.classList.remove('rec'); } setMsg('⏰ Hết thời gian nói. Bấm “Phân tích” để xem nhận xét.'); const t2 = $('slTLab'); if(t2) t2.textContent = 'Hết giờ'; });
   }
   function analyze(){
     const it = curItem(), ans = $('slAns');
@@ -15688,7 +15717,7 @@ function slAnalyze(text, ctx){
     else if(a === 'clear'){ if(confirm('Xóa toàn bộ lịch sử Speaking Lab trên thiết bị này?')){ store.att = []; save(); render(); } }
   });
   scr.addEventListener('input', e => {
-    if(e.target.id === 'slAns' && S){ const it = curItem(); it.text = e.target.value; if(!listening && it.src === 'voice') it.src = 'mixed'; wc(); }
+    if(e.target.id === 'slAns' && S){ const it = curItem(); it.text = e.target.value; if(S.phase === 'answer' && !T && !listening && !it._t0 && it.secs < S.lim.talk - 0.5 && e.target.value.trim()) runTimer(it, false); if(!listening && it.src === 'voice') it.src = 'mixed'; wc(); }
     else if(e.target.id === 'slNotes' && S){ curItem().notes = e.target.value; }
   });
   scr.addEventListener('change', e => {
