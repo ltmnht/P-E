@@ -7743,6 +7743,7 @@ html{ -webkit-tap-highlight-color:transparent; }
 </style>
 <style id="slCss">
 /* ================= SPEAKING LAB ================= */
+.sl-beta{ display:inline-block; vertical-align:middle; margin-left:6px; padding:2px 8px; border-radius:99px; background:#FFE9A8; color:#7A5200; border:1.5px solid #F2C94C; font-size:10.5px; font-weight:800; letter-spacing:.06em; line-height:1.4; }
 .sl-entry{ display:flex; align-items:center; gap:12px; width:100%; margin-top:14px; padding:14px 16px; border:2px solid #7c4ddb; border-radius:22px; text-align:left; cursor:pointer;
   background:linear-gradient(135deg,#FFFDFF,#E7DEFA); color:#2D2A26; font-family:var(--font, inherit); box-shadow:0 12px 26px -18px rgba(91,51,184,.6); box-sizing:border-box; }
 .sl-entry:active{ transform:scale(.985); }
@@ -8063,7 +8064,7 @@ html{ -webkit-tap-highlight-color:transparent; }
       <p id="spSub" data-hub="Chọn hình thức luyện nói phù hợp với bạn." data-shadow="Chọn cấp độ phù hợp với bạn để luyện nói cùng Pear 🍐 và Egg 🥚.">Chọn hình thức luyện nói phù hợp với bạn.</p>
       <div class="sp-hub">
       <button type="button" class="sl-entry sh-entry" id="shEntry"><span class="sl-entry-ico">🗣️</span><span class="sl-entry-tx"><b>Shadowing</b><small>Nghe và nói theo hội thoại cùng Pear 🍐 &amp; Egg 🥚 · 3 cấp độ</small></span><span class="sl-entry-go">Vào học ›</span></button>
-      <button type="button" class="sl-entry" id="slEntry"><span class="sl-entry-ico">🎤</span><span class="sl-entry-tx"><b>Speaking Lab · IELTS</b><small>Luyện Part 1·2·3: nói hoặc gõ, ghi âm nghe lại, nhận phân tích tự động</small></span><span class="sl-entry-go">Vào luyện ›</span></button>
+      <button type="button" class="sl-entry" id="slEntry"><span class="sl-entry-ico">🎤</span><span class="sl-entry-tx"><b>Speaking Lab · IELTS <span class="sl-beta">BETA</span></b><small>Luyện Part 1·2·3: nói hoặc gõ, ghi âm nghe lại, nhận phân tích tự động</small></span><span class="sl-entry-go">Vào luyện ›</span></button>
       </div>
     </div>
 
@@ -15356,6 +15357,8 @@ function slAnalyze(text, ctx){
 
   /* ---------- state ---------- */
   let spoke = false; let V = 'home', homePart = 1, S = null, T = null, SRobj = null, listening = false, MR = null, stream = null, chunks = [];
+  // Invalidates pending getUserMedia requests when the learner stops or leaves the session.
+  let recToken = 0;
   const bank = { 1:SL_P1, 2:SL_P2, 3:SL_P2 };
 
   /* ---------- stats ---------- */
@@ -15402,24 +15405,53 @@ function slAnalyze(text, ctx){
     catch(e){ listening = false; setMsg('Không khởi động được nhận diện giọng nói.'); }
   }
   async function startRec(item, setMsg){
-    if(!store.opts.rec || !canRec) return;
+    // Android Chrome may share one exclusive microphone channel between SpeechRecognition
+    // and getUserMedia. Keep recognition reliable rather than opening a second stream.
+    if(!store.opts.rec || !canRec || (isAndroid && SR)) return;
+    const token = ++recToken;
+    let localStream = null;
     try{
-      stream = await navigator.mediaDevices.getUserMedia({ audio:true });
+      localStream = await navigator.mediaDevices.getUserMedia({ audio:true });
+      // The learner may have stopped, navigated away, or changed question while permission
+      // was pending. Do not start a recorder after that session has already ended.
+      if(token !== recToken || !listening || !S || V !== 'run' || S.phase !== 'answer'){
+        localStream.getTracks().forEach(t => t.stop());
+        return;
+      }
       const types = ['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg;codecs=opus'];
       const mt = types.find(t => MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(t));
-      MR = mt ? new MediaRecorder(stream, { mimeType:mt }) : new MediaRecorder(stream);
-      chunks = [];
-      MR.ondataavailable = e => { if(e.data && e.data.size) chunks.push(e.data); };
-      MR.onstop = () => {
-        if(chunks.length){ if(item.audioUrl) URL.revokeObjectURL(item.audioUrl); item.audioUrl = URL.createObjectURL(new Blob(chunks, { type: MR && MR.mimeType || 'audio/webm' })); const a = $('slAudioBox'); if(a) renderAudio(item); }
+      const recorder = mt ? new MediaRecorder(localStream, { mimeType:mt }) : new MediaRecorder(localStream);
+      const localChunks = [];
+      stream = localStream;
+      MR = recorder;
+      recorder.ondataavailable = e => { if(e.data && e.data.size) localChunks.push(e.data); };
+      recorder.onstop = () => {
+        if(localChunks.length){
+          if(item.audioUrl) URL.revokeObjectURL(item.audioUrl);
+          // Capture the actual recorder MIME type; MR may already refer to a later session.
+          item.audioUrl = URL.createObjectURL(new Blob(localChunks, { type: recorder.mimeType || localChunks[0].type || 'audio/webm' }));
+          const a = $('slAudioBox'); if(a && S && S.items.includes(item)) renderAudio(item);
+        }
+        if(MR === recorder) MR = null;
+        if(stream === localStream) stream = null;
       };
-      MR.start();
-    }catch(e){ MR = null; stream = null; setMsg('Không ghi âm được (' + (e && e.name || 'lỗi') + '). Vẫn có thể nhận diện hoặc tự gõ.'); }
+      recorder.start();
+    }catch(e){
+      if(localStream) localStream.getTracks().forEach(t => t.stop());
+      if(token === recToken){
+        if(stream === localStream) stream = null;
+        if(MR && MR.state === 'inactive') MR = null;
+        setMsg('Không ghi âm được (' + (e && e.name || 'lỗi') + '). Vẫn có thể nhận diện hoặc tự gõ.');
+      }
+    }
   }
   function stopRec(){
-    try{ if(MR && MR.state !== 'inactive') MR.stop(); }catch(e){}
-    if(stream){ stream.getTracks().forEach(t => t.stop()); stream = null; }
+    // Invalidate any getUserMedia request that has not resolved yet.
+    recToken++;
+    const recorder = MR;
     MR = null;
+    try{ if(recorder && recorder.state !== 'inactive') recorder.stop(); }catch(e){}
+    if(stream){ stream.getTracks().forEach(t => t.stop()); stream = null; }
   }
   function stopAll(){ tStop(); stopSR(); stopRec(); try{ if(canTTS && spoke){ spoke = false; speechSynthesis.cancel(); } }catch(e){} }
   function speak(text){
@@ -15453,7 +15485,7 @@ function slAnalyze(text, ctx){
     }).join('');
     const langs = [['en-US','Giọng Mỹ'],['en-GB','Giọng Anh'],['en-AU','Giọng Úc'],['en-IN','Giọng Ấn']].map(l => '<option value="' + l[0] + '"' + (store.opts.lang === l[0] ? ' selected' : '') + '>' + l[1] + '</option>').join('');
     return '<div class="sl-wrap">' +
-      '<div class="rd-head"><button type="button" class="rd-back" data-a="exit">← Speaking</button><h1 class="rd-h1">🎙️ Speaking Lab</h1></div>' +
+      '<div class="rd-head"><button type="button" class="rd-back" data-a="exit">← Speaking</button><h1 class="rd-h1">🎙️ Speaking Lab <span class="sl-beta">BETA</span></h1></div>' +
       '<p class="rd-sub">Luyện IELTS Speaking theo chủ đề: nói hoặc gõ câu trả lời, nhận phân tích tự động và câu mẫu tham khảo.</p>' +
       '<div class="sl-stats"><div><b>' + st.n + '</b><small>câu đã luyện</small></div><div><b>' + st.streak + '🔥</b><small>ngày liên tiếp</small></div><div><b>' + st.avgWords + '</b><small>từ TB/câu</small></div><div><b>' + (st.n ? st.avgIdx : '—') + '</b><small>chỉ số TB*</small></div></div>' +
       '<div class="sl-tabs">' + tabs + '</div>' +
